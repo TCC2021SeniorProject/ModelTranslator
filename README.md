@@ -187,18 +187,18 @@ This will not be permanent until the completion of the project.
 ## Contact
 
 #### Director
->  Dr. Siddhartha Bhattacharyya
+>  Dr. Siddhartha Bhattacharyya </br>
 email:[sbhattacharyya@fit.edu](sbhattacharyya@fit.edu)
 
 #### Developers
-> Sung-Jun Baek
-email:[roni2006@hanmail.net](roni2006@hanmail.net)
-GitHub Link: [https://github.com/MarcoBackman](https://github.com/MarcoBackman)
+> Sung-Jun Baek </br>
+email:[roni2006@hanmail.net](roni2006@hanmail.net) </br>
+GitHub Link: [https://github.com/MarcoBackman](https://github. com/MarcoBackman)
 
-> Caelan Shoop
+> Caelan Shoop </br>
 email:[cshoop2018@my.fit.edu](cshoop2018@my.fit.edu)
 
-> Cameron Wright 
+> Cameron Wright </br>
 email:[cameron2018@my.fit.edu](cameron2018@my.fit.edu)
 
 

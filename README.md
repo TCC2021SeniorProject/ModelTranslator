@@ -91,7 +91,7 @@ To get a local copy up and running follow these simple example steps.
 Knowledgement of UPPAAL model diagram is required.
 * npm
   ```sh
-  npm install npm@latest -g
+  
   ```
 
 ### Demo Installation
@@ -130,8 +130,8 @@ _For more examples, please refer to the [Design Documentation](https://docs.goog
 _For more plans, please see the [plan documentation](https://drive.google.com/file/d/1UHxCx8l3Wgu_6PQxfjx6K0d7gkP5ybov/view)_
 
 ### Task 1 check list
-- [] Update mark down documentation
-- [] Make UPPAAL parser
+- [x] Update mark down documentation
+- [x] Make UPPAAL parser
 - [] Make Python code generator/converter
 - [] Test simple diagram
 

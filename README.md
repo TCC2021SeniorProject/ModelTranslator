@@ -131,10 +131,13 @@ _For more examples, please refer to the [Design Documentation](https://docs.goog
 _For more plans, please see the [plan documentation](https://drive.google.com/file/d/1UHxCx8l3Wgu_6PQxfjx6K0d7gkP5ybov/view)_
 
 ### Task 1 check list
-- [x] Update mark down documentation
-- [x] Make UPPAAL parser
-- [ ] Make Python code generator/converter
-- [ ] Test simple diagram
+- [x] Update mark down documentation.
+- [x] Make UPPAAL parser.
+- [ ] Program is able to traverse all the nodes through tranistion objects.
+- [ ] Program is able to identify the validity of the model.
+- [ ] Program is able to validate the node function (e.g. starting node, termination node, logic node, process node, etc)
+- [ ] Make Python code generator/converter.
+- [ ] Test simple diagram.
 
 
 ### Task 2 check list

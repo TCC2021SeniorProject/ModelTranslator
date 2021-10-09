@@ -132,21 +132,21 @@ _For more plans, please see the [plan documentation](https://drive.google.com/fi
 ### Task 1 check list
 - [x] Update mark down documentation
 - [x] Make UPPAAL parser
-- [] Make Python code generator/converter
-- [] Test simple diagram
+- [ ] Make Python code generator/converter
+- [ ] Test simple diagram
 
 
 ### Task 2 check list
-- [] Make complex diagram 1
-- [] Update(enhance) UPPAAL parser
-- [] Update(enhance) Python code generator/converter
-- [] Test complex diagram 1
+- [ ] Make complex diagram 1
+- [ ] Update(enhance) UPPAAL parser
+- [ ] Update(enhance) Python code generator/converter
+- [ ] Test complex diagram 1
 
 ### Task 3 check list
-- [] Make complex diagram 2
-- [] Update(enhance) UPPAAL parser
-- [] Update(enhance) Python code generator/converter
-- [] Test complex diagram 2
+- [ ] Make complex diagram 2
+- [ ] Update(enhance) UPPAAL parser
+- [ ] Update(enhance) Python code generator/converter
+- [ ] Test complex diagram 2
 
 See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
 

@@ -193,7 +193,7 @@ email:[sbhattacharyya@fit.edu](sbhattacharyya@fit.edu)
 #### Developers
 > Sung-Jun Baek </br>
 email:[roni2006@hanmail.net](roni2006@hanmail.net) </br>
-GitHub Link: [https://github.com/MarcoBackman](https://github. com/MarcoBackman)
+GitHub Link: [https://github.com/MarcoBackman](https://github.com/MarcoBackman)
 
 > Caelan Shoop </br>
 email:[cshoop2018@my.fit.edu](cshoop2018@my.fit.edu)

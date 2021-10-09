@@ -171,6 +171,9 @@ Don't forget to give the project a star! Thanks again!
 <p align="right">(<a href="#top">back to top</a>)</p>
 CONTRIBUTING -->
 
+## Coding Style Convention
+
+**See the following link: [Style Guide for Python Code](https://www.python.org/dev/peps/pep-0008/)**
 
 <!-- LICENSE -->
 ## License

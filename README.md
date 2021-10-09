@@ -131,13 +131,24 @@ _For more examples, please refer to the [Design Documentation](https://docs.goog
 
 _For more plans, please see the [plan documentation](https://drive.google.com/file/d/1UHxCx8l3Wgu_6PQxfjx6K0d7gkP5ybov/view)_
 
-- [x] Add Changelog
-- [x] Add back to top links
-- [] Add Additional Templates w/ Examples
-- [] Add "components" document to easily copy & paste sections of the readme
-- [] Multi-language Support
-    - [] Chinese
-    - [] Spanish
+### Task 1 check list
+- [] Update mark down documentation
+- [] Make UPPAAL parser
+- [] Make Python code generator/converter
+- [] Test simple diagram
+
+
+### Task 2 check list
+- [] Make complex diagram 1
+- [] Update(enhance) UPPAAL parser
+- [] Update(enhance) Python code generator/converter
+- [] Test complex diagram 1
+
+### Task 3 check list
+- [] Make complex diagram 2
+- [] Update(enhance) UPPAAL parser
+- [] Update(enhance) Python code generator/converter
+- [] Test complex diagram 2
 
 See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
 

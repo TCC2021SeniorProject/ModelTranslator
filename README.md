@@ -3,14 +3,15 @@
 
 ![Generic badge](https://img.shields.io/badge/Status-Under_development-blue) ![Generic badge](https://img.shields.io/badge/Stability-Unstable-red)
 
-
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
+  <img src="img/title.png"></br></br></br>
+  <a href="">
     <img src="img/icon/translatorColorIcon.png" alt="Logo" width="80" height="80">
   </a>
 
+  
   <h3 align="center">MODEL TRANSLATOR</h3>
 
   <p align="center">

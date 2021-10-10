@@ -2,12 +2,9 @@
 <!-- PROJECT LOGO -->
 <br /></br>
 <div align="center">
-  <img src="img/title.png">
-  <a href="">
-    <img src="img/icon/translatorColorIcon.png" alt="Logo" width="80" height="80">
-  </a>
-
-  
+  <img src="img/title.png">  
+</div>
+<div align="center">  
   <!-- PROJECT SHIELDS -->
   <p align="center">
     </br>
@@ -16,7 +13,12 @@
   </p>
   
   <h3 align="center">MODEL TRANSLATOR</h3>
-
+  <div align="center">
+     <a href="">
+      <img src="img/icon/translatorColorIcon.png" alt="Logo" width="80" height="80">
+    </a>
+  </div>
+  </br>
   <p align="center">
     Translate XML model into Python code
     <br />
@@ -61,6 +63,7 @@
 -->
 
 <!-- ABOUT THE PROJECT -->
+
 ## About The Project
 
 This project will assist developers on establishing IoT system.

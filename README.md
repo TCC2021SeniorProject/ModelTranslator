@@ -1,16 +1,19 @@
 
-<!-- PROJECT SHIELDS -->
-
-![Generic badge](https://img.shields.io/badge/Status-Under_development-blue) ![Generic badge](https://img.shields.io/badge/Stability-Unstable-red)
-
 <!-- PROJECT LOGO -->
-<br />
+<br /></br>
 <div align="center">
-  <img src="img/title.png"></br></br></br>
+  <img src="img/title.png">
   <a href="">
     <img src="img/icon/translatorColorIcon.png" alt="Logo" width="80" height="80">
   </a>
 
+  
+  <!-- PROJECT SHIELDS -->
+  <p align="center">
+    </br>
+    <img alt="Carthage compatible" src="https://img.shields.io/badge/Status-Under_development-blue" />
+    <img alt="Carthage compatible" src="https://img.shields.io/badge/Stability-Unstable-red" />
+  </p>
   
   <h3 align="center">MODEL TRANSLATOR</h3>
 

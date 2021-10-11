@@ -136,7 +136,7 @@ _For more examples, please refer to the [Design Documentation](https://docs.goog
 
 _For more plans, please see the [plan documentation](https://drive.google.com/file/d/1UHxCx8l3Wgu_6PQxfjx6K0d7gkP5ybov/view)_
 
-### Task 1 check list
+### Task 1 check list - Due October 16.
 - [x] Update mark down documentation.
 - [x] Make UPPAAL parser.
 - [ ] Program is able to traverse all the nodes through tranistion objects.
@@ -146,13 +146,13 @@ _For more plans, please see the [plan documentation](https://drive.google.com/fi
 - [ ] Test simple diagram.
 
 
-### Task 2 check list
+### Task 2 check list - Due October 23.
 - [ ] Make complex diagram 1
 - [ ] Update(enhance) UPPAAL parser
 - [ ] Update(enhance) Python code generator/converter
 - [ ] Test complex diagram 1
 
-### Task 3 check list
+### Task 3 check list - Due October 23.
 - [ ] Make complex diagram 2
 - [ ] Update(enhance) UPPAAL parser
 - [ ] Update(enhance) Python code generator/converter
@@ -162,24 +162,6 @@ See the [open issues](https://github.com/othneildrew/Best-README-Template/issues
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-
-
-<!--
-## Contributing
-
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-CONTRIBUTING -->
 
 ## Coding Style Convention
 

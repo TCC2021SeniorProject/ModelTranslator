@@ -172,14 +172,16 @@ See the [open issues](https://github.com/othneildrew/Best-README-Template/issues
 
 To view the specific testing details, **[click here](https://docs.google.com/document/d/e/2PACX-1vQC5scu0DfEu0nLqPVWZzML1m6oMh8Q2Oo86GEyt_GFx_NB7BA3BZWF44hMv6tEFyhgTrATsf8TUQL3/pub)**
 
-- [ ] Task case 1 (Due Oct 9)
-- [ ] Task case 2 (Due Oct 17)
-- [ ] Task case 3 (Due Oct 23)
-- [ ] Task case 4 (Due Nov 21)
-- [ ] Task case 5 (Due Oct 10)
-- [ ] Task case 6 (Due Oct 24)
-- [ ] Task case 7 (Due Dec 12)
-- [ ] Task case 8 (Due Dec 12)
+*MCCD* refers to Main Control Center Device.
+
+- [ ] Task case 1 (Due Oct  9): Produce code from a simple model
+- [ ] Task case 2 (Due Oct 17): Model comparatively massive size diagram
+- [ ] Task case 3 (Due Oct 23): Build infinite loops / Redundant transitions.
+- [ ] Task case 4 (Due Nov 21): Change models to python codes that MCCD accepts.
+- [ ] Task case 5 (Due Oct 10): Simple signalling to the device
+- [ ] Task case 6 (Due Oct 24): Complex signalling to the device
+- [ ] Task case 7 (Due Dec 12):	Handling devices via web application on MCCD
+- [ ] Task case 8 (Due Dec 12): MCCD can be postponed until the device finishes its current job
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>

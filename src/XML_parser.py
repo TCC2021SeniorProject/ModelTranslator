@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as ET
 from node import Node
 from transition import Transition
+from model import Model
 
 class LoadXML():
 
@@ -16,7 +17,9 @@ class LoadXML():
     def getContent(self):
         return self.content
 
+#Parse XML elements into objects for model class
 class ParseXML():
+    model = Model()
     nodes = []
     transitions = []
 
@@ -44,7 +47,12 @@ class ParseXML():
         for elem in self.root.iter():
             print(elem.tag)
             print(elem.attrib)
-            
+    
+    def inject_into_model(self):
+        self.model.set_nodes(self.nodes)
+        self.model.set_transitions(self.transitions)
+
+    #refacctor required
     def print_template(self):
         for elem in self.root.findall('template'):
             for child in elem.findall(".//*"):
@@ -89,9 +97,6 @@ class ParseXML():
                         print("from " + source + " to " + target + ", at node:" + id)
                         self.add_transition_by_id(id, temp_transition)
                         
-                        
-
-                        
 class CheckValidXML():
     def check_valid_XML():
         print("Check valid XML structure")
@@ -109,10 +114,10 @@ class CheckValidXML():
         print("Checking transition")
 
 
-def main():
+def make_model():
     xml_class = LoadXML()
     parser_class = ParseXML()
     parser_class.parse_XML_into_tree("./data/testCase1.xml")
     parser_class.print_template()
 
-main()
+make_model()

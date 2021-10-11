@@ -160,6 +160,22 @@ _For more plans, please see the [plan documentation](https://drive.google.com/fi
 
 See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
 
+</br>
+## Testing Schedules
+<div align="elft">
+  <img width="500px" src="img/testSchedule.png">  
+</div>
+
+- [ ] Task case 1 (Due Oct 9)
+- [ ] Task case 2 (Due Oct 17)
+- [ ] Task case 3 (Due Oct 23)
+- [ ] Task case 4 (Due Nov 21)
+- [ ] Task case 5 (Due Oct 10)
+- [ ] Task case 6 (Due Oct 24)
+- [ ] Task case 7 (Due Dec 12)
+- [ ] Task case 8 (Due Dec 12)
+
+
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 

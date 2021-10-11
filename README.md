@@ -167,6 +167,10 @@ See the [open issues](https://github.com/othneildrew/Best-README-Template/issues
 
 **See the following link: [Style Guide for Python Code](https://www.python.org/dev/peps/pep-0008/)**
 
+**Follow rules for better readability: [Clean Code by Robert C. Martin](https://gist.github.com/wojteklu/73c6914cc446146b8b533c0988cf8d29)**
+</br>
+
+
 <!-- LICENSE -->
 ## License
 

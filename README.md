@@ -10,6 +10,7 @@
     </br>
     <img alt="Carthage compatible" src="https://img.shields.io/badge/Status-Under_development-blue" />
     <img alt="Carthage compatible" src="https://img.shields.io/badge/Stability-Unstable-red" />
+    <img alt="Carthage compatible" src="https://img.shields.io/badge/Documentation-not ready-green" />
   </p>
   
   <h3 align="center">MODEL TRANSLATOR</h3>

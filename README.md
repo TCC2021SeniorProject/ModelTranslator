@@ -161,10 +161,16 @@ _For more plans, please see the [plan documentation](https://drive.google.com/fi
 See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
 
 </br>
+
 ## Testing Schedules
+
+</br>
 <div align="elft">
   <img width="500px" src="img/testSchedule.png">  
 </div>
+</br>
+
+To view the specific testing details, **[click here](https://docs.google.com/document/d/e/2PACX-1vQC5scu0DfEu0nLqPVWZzML1m6oMh8Q2Oo86GEyt_GFx_NB7BA3BZWF44hMv6tEFyhgTrATsf8TUQL3/pub)**
 
 - [ ] Task case 1 (Due Oct 9)
 - [ ] Task case 2 (Due Oct 17)

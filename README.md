@@ -199,9 +199,9 @@ _For more plans, please see the [plan documentation](https://drive.google.com/fi
 ### Task 1 check list - Due October 16.
 - [x] Update mark down documentation.
 - [x] Make UPPAAL parser.
-- [ ] Program is able to traverse all the nodes through tranistion objects.
-- [ ] Program is able to identify the validity of the model.
-- [ ] Program is able to validate the node function (e.g. starting node, termination node, logic node, process node, etc)
+- [x] Program is able to traverse all the nodes through tranistion objects.
+- [x] Program is able to identify the validity of the model.
+- [x] Program is able to validate the node function (e.g. starting node, termination node, logic node, process node, etc)
 - [ ] Make Python code generator/converter.
 - [ ] Test simple diagram.
 

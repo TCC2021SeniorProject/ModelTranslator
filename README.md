@@ -111,7 +111,7 @@ Knowledgement of UPPAAL model diagram is required.
 
 ### Result of running XML_parser.py
 
-0. When you produce a model such like this in UPPAAL
+0. When producing a model such like this in UPPAAL
   <div align="center">
     <img width="500" src="img/UPPAAL_simple_model.png">  
   </div>
@@ -218,7 +218,7 @@ _For more plans, please see the [plan documentation](https://drive.google.com/fi
 - [ ] Update(enhance) Python code generator/converter
 - [ ] Test complex diagram 2
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/TCC2021SeniorProject/ModelTranslator/issues) for a full list of proposed features (and known issues).
 
 </br>
 

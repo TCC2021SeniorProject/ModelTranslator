@@ -209,7 +209,7 @@ _For more plans, please see the [plan documentation](https://drive.google.com/fi
 - [ ] Update(enhance) Python code generator/converter
 - [ ] Test complex diagram 2
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/TCC2021SeniorProject/ModelTranslator/issues) for a full list of proposed features (and known issues).
 
 </br>
 

@@ -111,7 +111,7 @@ Knowledgement of UPPAAL model diagram is required.
 
 ### Result of running XML_parser.py
 
-0. When you produce a model such like this in UPPAAL
+0. When producing a model such like this in UPPAAL
   <div align="center">
     <img width="500" src="img/UPPAAL_simple_model.png">  
   </div>

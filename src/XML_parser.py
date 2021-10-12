@@ -151,10 +151,10 @@ def check_loop(model):
 def check_transition(model):
     print("Checking transition")
 
-def make_model():
+def make_model(fileName):
     xml_class = LoadXML()
     parser_class = ParseXML()
-    parser_class.parse_XML_into_tree("./data/testCase1.xml")
+    parser_class.parse_XML_into_tree(fileName)
     parser_class.print_refined_data()
     parser_class.convert_to_object()
     model = parser_class.get_model()
@@ -181,12 +181,20 @@ def check_model(model):
 #  the conditions on each node and transition
 #  Since the node has to visit all the nodes,
 #  DFS traverse is used
+#  Refactor needed - this will never end when there is a loop
 def non_conditional_traverse(node : Node):
     #type initialization
     transition : Transition
     transitions : list
     transitions = node.get_transitions()
     end_state : Node
+
+    #base case
+    if node.isVisited():
+        return
+    else:
+        node.set_visited()
+
     for transition in transitions:
         print("Going from " + transition.get_from_id()
          + " to " + transition.get_to_id())
@@ -196,7 +204,7 @@ def non_conditional_traverse(node : Node):
     return node
 
 
-model = make_model()
+model = make_model("./data/testCase2.xml")
 valid_model = check_model(model)
 found_end_state : Node
 if (valid_model):

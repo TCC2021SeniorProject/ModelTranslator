@@ -166,6 +166,8 @@ Knowledgement of UPPAAL model diagram is required.
   <img src="img/XML_to_graph.png">  
 </div>
 
+3. Then the parser automatically checks all the required data such as a starting state, an end state, infinity, and connectionless transitions.
+
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 

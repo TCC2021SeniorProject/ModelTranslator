@@ -2,10 +2,13 @@ from node import Node
 from transition import Transition
 
 class Model():
+    START_STATE_TEXT = "START"
+    END_STATE_TEXT = "END"
+
     #defines required variables with no initial value
     def __init__(self):
-        self.begin_state          #begins the process
-        self.end_state            #ends the process
+        self.begin_state = None   #begins the process
+        self.end_state = None     #ends the process
 
         self.valid_graph = False  #unverified graph is set to false
         self.nodes = []
@@ -20,17 +23,31 @@ class Model():
     def set_end_state(self, node):
         self.end_state = node
 
-    def get_begin(self):
+    def get_start(self):
         return self.begin_state
 
     def get_end(self):
         return self.end_state
+
+    def add_node(self, node):
+        self.nodes.append(node)
 
     def set_nodes(self, nodes):
         self.nodes = nodes
 
     def set_transitions(self, transitions):
         self.transitions = transitions
+
+    def get_node_by_id(self, id):
+        if (len(self.nodes) == 0):
+            print("Getting node by index failed, empty list")
+            return
+        node : Node
+        for node in self.nodes:
+            if (node.get_id() == id):
+                return node
+        print("No node matching to the given id")
+        return None
 
     def get_node_by_index(self, index):
         if (len(self.nodes) == 0):
@@ -55,3 +72,21 @@ class Model():
 
     def get_number_of_transition(self):
         return len(self.transitions)
+
+    """
+        Start/End state will be identified by the name in the XML test
+        "Start", "End" with case insensitive, but exact word match
+    """
+    #will return True if start state exists
+    def find_start(self):
+        if self.begin_state == None:
+            return False
+        else:
+            return True
+
+    #will return True if end state exists
+    def find_end(self):
+        if self.end_state == None:
+            return False
+        else:
+            return True

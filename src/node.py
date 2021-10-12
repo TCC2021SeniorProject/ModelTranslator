@@ -3,13 +3,14 @@ from transition import Transition
 class Node():
 
     '''
-        id is a non-duplicable number.
+        id is a unique number that can't be duplicated.
         name is a duplicable text field.
         transition is a list with priority
     '''
     def __init__(self, id, name):
         self.id = id
         self.name = name
+        self.visited = False
         self.transition_list = []
         print("\tNode added")
     
@@ -36,3 +37,15 @@ class Node():
 
     def isEmpty(self):
         return (len(self.transition_list) == 0)
+
+    def get_transitions(self):
+        return self.transition_list
+
+    def set_visited(self):
+        self.visited = True
+
+    def set_unvisited(self):
+        self.visited = False
+    
+    def isVisited(self):
+        return self.visited

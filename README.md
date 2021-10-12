@@ -162,11 +162,20 @@ Knowledgement of UPPAAL model diagram is required.
 2. After running XML_parser, this will parse crutial data to graph objects. Below image is output lines as a result of conversion
 
 </br>
-<div align="center">
+<div align="left">
   <img src="img/XML_to_graph.png">  
 </div>
+</br>
+</br>
 
 3. Then the parser automatically checks all the required data such as a starting state, an end state, infinity, and connectionless transitions.
+
+</br>
+<div align="left">
+  <img src="img/verify.png">  
+</div>
+</br>
+</br>
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 

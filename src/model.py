@@ -7,7 +7,7 @@ class Model():
 
     #defines required variables with no initial value
     def __init__(self):
-        self.begin_state = None   #begins the process
+        self.start_state = None   #starts the process
         self.end_state = None     #ends the process
 
         self.valid_graph = False  #unverified graph is set to false
@@ -17,14 +17,14 @@ class Model():
     def set_valid_graph(self):
         self.valid_graph = True
 
-    def set_begin_state(self, node):
-        self.begin_state = node
+    def set_start_state(self, node):
+        self.start_state = node
     
     def set_end_state(self, node):
         self.end_state = node
 
     def get_start(self):
-        return self.begin_state
+        return self.start_state
 
     def get_end(self):
         return self.end_state
@@ -34,6 +34,9 @@ class Model():
 
     def set_nodes(self, nodes):
         self.nodes = nodes
+
+    def get_nodes(self):
+        return self.nodes
 
     def set_transitions(self, transitions):
         self.transitions = transitions
@@ -73,13 +76,9 @@ class Model():
     def get_number_of_transition(self):
         return len(self.transitions)
 
-    """
-        Start/End state will be identified by the name in the XML test
-        "Start", "End" with case insensitive, but exact word match
-    """
     #will return True if start state exists
     def find_start(self):
-        if self.begin_state == None:
+        if self.start_state == None:
             return False
         else:
             return True

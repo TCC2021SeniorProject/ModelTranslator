@@ -19,7 +19,6 @@ class LoadXML():
 
 #Parse XML elements into objects for model class
 class ParseXML():
-    #Refactor: vague variable naming
     #XML data coverted into node, transition objects
     data_injected = False #injected into model object
     model = Model()
@@ -32,156 +31,108 @@ class ParseXML():
         self.tree = ET.parse(fileName)
         self.root = self.tree.getroot()
 
-    #print all XML attributes - debugging purposes
-    def print(self):
-        for elem in self.root.iter():
-            print(elem.tag)
-            print(elem.attrib)
+    def identify_location_tag(self, line):
+        return {
+            'location' : True
+        }.get(line.tag, False)
 
-    #refactor required - Violates Function rules #2 (Do one thing) 
-    def print_refined_data(self):
-        for elem in self.root.findall('template'):
-            for child in elem.findall(".//*"):
-                #skip template tag
-                if (child.tag == 'template'):
-                    continue
-                elif (child.tag == 'declaration'):
-                    continue
-                elif (child.tag == 'location'):
-                    for name_tag in child.findall("name"):
-                        id = child.attrib.get("id")
-                        print(id, end = '')
-                        print(", ", end = '')
-                        print(name_tag.tag , end = '')
-                        print(": ", end = '')
-                        print(name_tag.text)
-                elif (child.tag == 'transition'):
-                    source = ""
-                    target = ""
-                    for transition in child.iter():
-                        if (transition.tag == 'transition'):
-                            continue
-                        elif (transition.tag == 'source'):
-                            source = transition.attrib.get('ref')
-                        elif (transition.tag == 'target'):
-                            target = transition.attrib.get('ref')
-                    # data currupted - skip this data
-                    if (source == "" or target == ""):
-                        continue
-                    else:
-                        #insert transition to the target node
-                        print("from " + source + " to " + target + ", at node:" + id)
-    
-    #Refactor required - too complicted readability
+    def identify_transition_tag(self, line):
+        return {
+            'transition' : True
+        }.get(line.tag, False)
+
+    def set_node(self, line):
+        node : Node
+        id = line.attrib.get("id")
+        for sub_tag in line:
+            if sub_tag.tag == 'name':
+                text = sub_tag.text
+                node = Node(id, text)
+            elif sub_tag.tag == 'committed':
+                #Update required
+                node.set_commit("??")
+        return node
+                
+
+    def set_transition(self, line, model : Model):
+        #Initial declaration
+        source : Node
+        target : Node
+        select = ""
+        guard = ""
+        synchronisation = ""
+        assignment = ""
+        temp_transition = Transition()
+        
+        for sub_tag in line:
+            if (sub_tag.tag == 'source'):
+                source_text = sub_tag.attrib.get('ref')
+                source = model.get_node_by_id(source_text)
+            elif (sub_tag.tag == 'target'):
+                target_text = sub_tag.attrib.get('ref')
+                target = model.get_node_by_id(target_text)
+            elif (sub_tag.tag == 'label'):
+                if sub_tag.attrib.get('kind') == "select":
+                    select = sub_tag.text
+                if sub_tag.attrib.get('guard'):
+                    guard = sub_tag.text
+                if sub_tag.attrib.get('synchronisation'):
+                    synchronisation = sub_tag.text
+                if sub_tag.attrib.get('assignment'):
+                    assignment = sub_tag.text
+        temp_transition.set_from(source)
+        temp_transition.set_to(target)
+        temp_transition.set_name(select)
+        temp_transition.set_guard(guard)
+        temp_transition.set_sync(synchronisation)
+        temp_transition.set_assign(assignment)
+        return source, temp_transition
+
+    def identify_start_end_node(self, node : Node, model : Model):
+        if node.get_name().upper() == model.START_STATE_TEXT:
+            print(node.get_id() + ": setting start node")
+            model.set_start_state(node)
+        elif node.get_name().upper() == model.END_STATE_TEXT:
+            print(node.get_id() + ": Setting end node")
+            model.set_end_state(node)
+        return model
+
     def convert_to_object(self):
         for elem in self.root.findall('template'):
             for child in elem.findall(".//*"):
-                #skip template tag
-                if (child.tag == 'template'):
-                    continue
-                elif (child.tag == 'declaration'):
-                    continue
-                elif (child.tag == 'location'):
-                    for name_tag in child.findall("name"):
-                        id = child.attrib.get("id")
-                        name = name_tag.text
-                        # make and add node
-                        temp_node = Node(id, name)
-                        self.model.add_node(temp_node)
-                        #identify start/end state
-                        if name.upper() == self.model.START_STATE_TEXT:
-                            if self.model.get_start() == None:
-                                self.model.set_begin_state(temp_node)
-                            else: #Initial and termination state must be only one
-                                print("More than one begin state, Skipping")
-                        elif name.upper() == self.model.END_STATE_TEXT:
-                            if self.model.get_end() == None:
-                                self.model.set_end_state(temp_node)
-                            else: #Initial and termination state must be only one
-                                print("More than one end state, Skipping")
-
-                elif (child.tag == 'transition'):
-                    temp_transition = Transition()
-                    source = ""
-                    target = ""
-                    for transition in child.iter():
-                        if (transition.tag == 'transition'):
+                for lines in child.iter():
+                    #location tag match
+                    if self.identify_location_tag(lines):
+                        node = self.set_node(lines)
+                        if node == None:
                             continue
-                        elif (transition.tag == 'source'):
-                            source = transition.attrib.get('ref')
-                        elif (transition.tag == 'target'):
-                            target = transition.attrib.get('ref')
-                    # data currupted - skip this data
-                    if (source == "" or target == ""):
-                        continue
-                    # connect transition with the given node
-                    else:
-                        #setup transition object
-                        temp_transition = Transition()
-                        source_node = self.model.get_node_by_id(source)
-                        temp_transition.set_from(source_node)
-                        target_node = self.model.get_node_by_id(target)
-                        temp_transition.set_to(target_node)
-                        #Insert transition to departure node
-                        source_node.add_transition(temp_transition)
+                        self.model = self.identify_start_end_node(node, self.model)
+                        self.model.add_node(node)
+                    elif self.identify_transition_tag(lines):
+                            node, transition = self.set_transition(lines, self.model)
+                            #Source node as a departure transition
+                            if not (node == None):
+                                node.add_transition(transition)
 
 def check_start_node(model : Model):
     print("Checking start node")
     if (model.get_start()):
+        print("\tStart state check pass")
         return True
     else:
+        print("\tStart state check failed")
         return False
 
 def check_end_node(model : Model):
     print("Checking end node")
     if (model.get_end()):
+        print("\tEnd state check pass")
         return True
     else:
+        print("\tEnd state check failed")
         return False
 
-def check_end_state_reachable(model):
-    print("Check reachable to the end state")
-
-def check_valid_XML(model):
-    print("Check valid XML structure")
-
-def check_loop(model):
-    print("Checking infinite loop")
-    
-def check_transition(model):
-    print("Checking transition")
-
-def make_model(fileName):
-    xml_class = LoadXML()
-    parser_class = ParseXML()
-    parser_class.parse_XML_into_tree(fileName)
-    parser_class.print_refined_data()
-    parser_class.convert_to_object()
-    model = parser_class.get_model()
-    return model
-
-#If one of the functions returns False error_codes stays False
-def check_model(model):
-    error_code = True
-    error_code = error_code and check_start_node(model)
-    error_code = error_code and check_end_node(model)
-    #error_code = error_code and check_valid_XML(model)
-    #error_code = error_code and check_end_state_reachable(model)
-    #error_code = error_code and check_loop(model)
-    #error_code = error_code and check_transition(model)
-
-    if (error_code):
-        print("Pass")
-        return True
-    else:
-        print("No pass")
-        return False
-
-# Traverse the graph without concidering
-#  the conditions on each node and transition
-#  Since the node has to visit all the nodes,
-#  DFS traverse is used
-#  Refactor needed - this will never end when there is a loop
+#  DFS traverse is used - Flooding traverse
 def non_conditional_traverse(node : Node):
     #type initialization
     transition : Transition
@@ -196,24 +147,51 @@ def non_conditional_traverse(node : Node):
         node.set_visited()
 
     for transition in transitions:
-        print("Going from " + transition.get_from_id()
+        print("\tGoing from " + transition.get_from_id()
          + " to " + transition.get_to_id())
         if node.get_name().upper() == "END":
             end_state = node
         non_conditional_traverse(transition.get_to_node())
     return node
 
-
-model = make_model("./data/testCase2.xml")
-valid_model = check_model(model)
-found_end_state : Node
-if (valid_model):
-    print("Starting DFS traverse")
+#Check the graph is traversable from the start to the end
+def check_graph_validity(model):
+    print("Check graph validation")
     found_end_state = non_conditional_traverse(model.get_start())
-else:
-    print("Invalid model, terminating")
+    if (found_end_state):
+        print("\tGraph validity pass")
+        return True
+    else:
+        print("\tGraph validity unpass")
+        return False
 
-if (found_end_state):
-    print("Connected succussfully")
-else:
-    print("Did not reach to end state")
+def check_loop(model):
+    print("Checking infinite loops")
+    
+def check_transition(model):
+    print("Checking invalid transitions")
+
+#Only passes when everything passes
+def check_model(model):
+    error_code = True
+    error_code = error_code and check_start_node(model)
+    error_code = error_code and check_end_node(model)
+    error_code = error_code and check_graph_validity(model)
+    #error_code = error_code and check_loop(model)
+    #error_code = error_code and check_transition(model)
+
+    if (error_code):
+        print("All vailitity passed")
+        return True
+    else:
+        print("Error, no pass")
+        return False
+
+def generate_model(file_name):
+    parser_class = ParseXML()
+    parser_class.parse_XML_into_tree(file_name)
+    parser_class.convert_to_object()
+    return parser_class.get_model()
+
+model = generate_model("./data/testCase2.xml")
+valid_model = check_model(model)

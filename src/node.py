@@ -10,9 +10,10 @@ class Node():
     def __init__(self, id, name):
         self.id = id
         self.name = name
+        self.commit : str
         self.visited = False
         self.transition_list = []
-        print("\tNode added")
+        print("Node added")
     
     def get_id(self):
         return self.id
@@ -26,11 +27,11 @@ class Node():
         transition.set_to(to_id)
         transition.set_name(name)
         self.transition_list.append(transition)
-        print("\tTransition added")
+        print("Transition added")
 
     def add_transition(self, transition):
         self.transition_list.append(transition)
-        print("\tTransition added")
+        print("Transition added")
 
     def transition_count(self):
         return len(self.transition_list)
@@ -49,3 +50,9 @@ class Node():
     
     def isVisited(self):
         return self.visited
+
+    def set_commit(self, commit):
+        self.commit = commit
+
+    def get_commit(self):
+        return self.commit

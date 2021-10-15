@@ -1,4 +1,4 @@
-from transition import Transition
+from objects.transition import Transition
 
 class Node():
 

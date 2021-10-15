@@ -5,7 +5,7 @@
 """
 class Transition():
     def __init__(self):
-        from node import Node #Avoid cross importation as possible
+        from objects.node import Node #Avoid cross importation as possible
         self.name  : str
         self.guard : str
         self.sync  : str

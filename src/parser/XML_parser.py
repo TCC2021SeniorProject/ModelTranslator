@@ -1,10 +1,9 @@
 import xml.etree.ElementTree as ET
-from node import Node
-from transition import Transition
-from model import Model
+from objects.node import Node
+from objects.transition import Transition
+from objects.model import Model
 
 class LoadXML():
-
     def __init__(self):
         self.content = ""
 
@@ -52,7 +51,6 @@ class ParseXML():
                 #Update required
                 node.set_commit("??")
         return node
-                
 
     def set_transition(self, line, model : Model):
         #Initial declaration
@@ -187,11 +185,11 @@ def check_model(model):
         print("Error, no pass")
         return False
 
+#Returns True/False of the model validity
 def generate_model(file_name):
     parser_class = ParseXML()
     parser_class.parse_XML_into_tree(file_name)
     parser_class.convert_to_object()
-    return parser_class.get_model()
-
-model = generate_model("./data/testCase2.xml")
-valid_model = check_model(model)
+    model = parser_class.get_model()
+    valid_model = check_model(model)
+    return valid_model

@@ -1,5 +1,5 @@
-from node import Node
-from transition import Transition
+from objects.node import Node
+from objects.transition import Transition
 
 class Model():
     START_STATE_TEXT = "START"

@@ -119,87 +119,86 @@ Knowledgement of UPPAAL model diagram is required.
 1. Suppose there is a XML file given like this
 
    ```
-  <?xml version="1.0" encoding="utf-8"?>
-  <!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
-  <nta>
-    <declaration>// Place global declarations here.</declaration>
-    <template>
-      <name x="5" y="5">Template</name>
-      <declaration>// Place local declarations here.</declaration>
-      <location id="id0" x="-348" y="-76" color="#00ff00">
-        <name x="-358" y="-110">Start</name>
-      </location>
-      <location id="id1" x="-17" y="-161">
-        <name x="-27" y="-195">Explore</name>
-      </location>
-      <location id="id2" x="-17" y="0">
-        <name x="-27" y="-34">Clean</name>
-      </location>
-      <location id="id3" x="144" y="-76">
-        <name x="134" y="-110">Dock</name>
-      </location>
-      <location id="id4" x="-170" y="-76">
-        <name x="-180" y="-110">Ready</name>
-      </location>
-      <location id="id5" x="263" y="-76" color="#ff0000">
-        <name x="253" y="-110">End</name>
-      </location>
-      <location id="id6" x="-263" y="-76">
-        <name x="-273" y="-110">idle</name>
-      </location>
-      <init ref="id0"/>
-      <transition>
-        <source ref="id3"/>
-        <target ref="id6"/>
-        <nail x="144" y="68"/>
-        <nail x="-263" y="68"/>
-      </transition>
-      <transition>
-        <source ref="id6"/>
-        <target ref="id4"/>
-      </transition>
-      <transition>
-        <source ref="id0"/>
-        <target ref="id6"/>
-      </transition>
-      <transition>
-        <source ref="id4"/>
-        <target ref="id2"/>
-      </transition>
-      <transition>
-        <source ref="id4"/>
-        <target ref="id1"/>
-      </transition>
-      <transition>
-        <source ref="id3"/>
-        <target ref="id5"/>
-      </transition>
-      <transition>
-        <source ref="id2"/>
-        <target ref="id3"/>
-      </transition>
-      <transition>
-        <source ref="id1"/>
-        <target ref="id2"/>
-      </transition>
-      <transition>
-        <source ref="id1"/>
-        <target ref="id3"/>
-      </transition>
-    </template>
-    <system>// Place template instantiations here.
-  Process = Template();
-  // List one or more processes to be composed into a system.
-  system Process;
-      </system>
-    <queries>
-      <query>
-        <formula></formula>
-        <comment></comment>
-      </query>
-    </queries>
-  </nta>
-
+    <?xml version="1.0" encoding="utf-8"?>
+    <!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+    <nta>
+      <declaration>// Place global declarations here.</declaration>
+      <template>
+        <name x="5" y="5">Template</name>
+        <declaration>// Place local declarations here.</declaration>
+        <location id="id0" x="-348" y="-76" color="#00ff00">
+          <name x="-358" y="-110">Start</name>
+        </location>
+        <location id="id1" x="-17" y="-161">
+          <name x="-27" y="-195">Explore</name>
+        </location>
+        <location id="id2" x="-17" y="0">
+          <name x="-27" y="-34">Clean</name>
+        </location>
+        <location id="id3" x="144" y="-76">
+          <name x="134" y="-110">Dock</name>
+        </location>
+        <location id="id4" x="-170" y="-76">
+          <name x="-180" y="-110">Ready</name>
+        </location>
+        <location id="id5" x="263" y="-76" color="#ff0000">
+          <name x="253" y="-110">End</name>
+        </location>
+        <location id="id6" x="-263" y="-76">
+          <name x="-273" y="-110">idle</name>
+        </location>
+        <init ref="id0"/>
+        <transition>
+          <source ref="id3"/>
+          <target ref="id6"/>
+          <nail x="144" y="68"/>
+          <nail x="-263" y="68"/>
+        </transition>
+        <transition>
+          <source ref="id6"/>
+          <target ref="id4"/>
+        </transition>
+        <transition>
+          <source ref="id0"/>
+          <target ref="id6"/>
+        </transition>
+        <transition>
+          <source ref="id4"/>
+          <target ref="id2"/>
+        </transition>
+        <transition>
+          <source ref="id4"/>
+          <target ref="id1"/>
+        </transition>
+        <transition>
+          <source ref="id3"/>
+          <target ref="id5"/>
+        </transition>
+        <transition>
+          <source ref="id2"/>
+          <target ref="id3"/>
+        </transition>
+        <transition>
+          <source ref="id1"/>
+          <target ref="id2"/>
+        </transition>
+        <transition>
+          <source ref="id1"/>
+          <target ref="id3"/>
+        </transition>
+      </template>
+      <system>// Place template instantiations here.
+    Process = Template();
+    // List one or more processes to be composed into a system.
+    system Process;
+        </system>
+      <queries>
+        <query>
+          <formula></formula>
+          <comment></comment>
+        </query>
+      </queries>
+    </nta>
    ```
 
 2. After running XML_parser, this will parse crutial data to graph objects. Below image is output lines as a result of conversion

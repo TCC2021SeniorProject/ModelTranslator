@@ -1,5 +1,6 @@
 from objects.node import Node
 from objects.transition import Transition
+from objects.variable import Variable
 
 class Model():
     START_STATE_TEXT = "START"
@@ -13,15 +14,58 @@ class Model():
         self.valid_graph = False  #unverified graph is set to false
         self.nodes = []
         self.transitions = []     #Unordered transition
+        self.variables = []       #conditional variables
 
     def set_valid_graph(self):
         self.valid_graph = True
+
+    def is_valid_graph(self):
+        return self.valid_graph
 
     def set_start_state(self, node):
         self.start_state = node
     
     def set_end_state(self, node):
         self.end_state = node
+
+    #for non-predetermined variables(assignment/sync function)
+    def update_variable(self, name, value):
+        #No existing element
+        index = self.get_variable_index(name)
+        if (index == False):
+            self.set_variable(name, value)
+        else:
+            new_variable = Variable()
+            new_variable.set_variable_name(name)
+            new_variable.set_variable_value(value)
+            self.variables[index] = new_variable
+
+    def set_variable(self, variable : Variable):
+        self.variables.append(variable)
+
+    def set_variable(self, name, value):
+        new_variable = Variable()
+        new_variable.set_variable_name(name)
+        new_variable.set_variable_value(value)
+        self.variables.append(new_variable)
+
+    def get_variable(self, name):
+        if (len(self.variables) == 0):
+            return False
+        else:
+            for variable in self.variables:
+                if (variable.get_variable_name() == name):
+                    return variable
+            return False
+
+    def get_variable_index(self, name):
+        if (len(self.variables) == 0):
+            return False
+        else:
+            for index, variable in enumerate(self.variables):
+                if (variable.get_variable_name() == name):
+                    return index
+            return False
 
     def get_start(self):
         return self.start_state
@@ -38,7 +82,7 @@ class Model():
     def get_nodes(self):
         return self.nodes
 
-    def set_transitions(self, transitions):
+    def set_transitions(self, transitions : Transition):
         self.transitions = transitions
 
     def get_node_by_id(self, id):

@@ -1,7 +1,6 @@
 from objects.transition import Transition
 
 class Node():
-
     '''
         id is a unique number that can't be duplicated.
         name is a duplicable text field.

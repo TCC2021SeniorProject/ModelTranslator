@@ -140,6 +140,21 @@ class ParseXML():
             variable.set_variable_value(variable_value)
             self.model.set_variable(variable)
 
+    def perform_comparision(self, notation_index, variable : Variable, given_value):
+        #variable must exist in the model
+        variable_value = variable.get_variable_value()
+
+        if notation_index == 0: # <
+            return variable_value < given_value
+        elif notation_index == 1: # >
+            return variable_value > given_value
+        elif notation_index == 2: # ==
+            return variable_value == given_value
+        elif notation_index <= 3: # <=
+            return variable_value < given_value
+        elif notation_index >= 4: # >=
+            return variable_value < given_value
+
     # left fixed to variable name (must be a predefined variable name)
     # middle fixed to notation
     # right fixed to number/data
@@ -149,6 +164,7 @@ class ParseXML():
         notation = {'<' : 0,
                     '>' : 1,
                     '=' : 2,
+                    '==' : 2,
                     '<=' : 3,
                     '>=' : 4}
 
@@ -170,8 +186,8 @@ class ParseXML():
 
         #compare value based on the notation
         if notation.has_key(given_notation):
-            print()
-            #perform comparison return Ture/False
+            #perform comparison and return Ture/False
+            self.perform_comparision(notation[given_notation], variable, given_value)
 
     def set_transition(self, line, model : Model):
         #Initial declaration

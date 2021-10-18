@@ -216,9 +216,11 @@ class ParseXML():
                 #Variable synchroniztion
                 elif sub_tag.attrib.get('kind') == "synchronisation":
                     synchronisation = sub_tag.text
+                    #Need to be implemented
                 #Changing value of existing variable
                 elif sub_tag.attrib.get('kind')  == "assignment":
                     assignment = sub_tag.text
+                    #Need to be implemented
         temp_transition.set_from(source)
         temp_transition.set_to(target)
         temp_transition.set_name(select)

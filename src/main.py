@@ -1,8 +1,12 @@
 import parser.XML_parser as Paser
-
+import objects.model as Model
 
 def main():
-    Paser.generate_model("./data/testCase3.xml")
+    model : Model
+    #Parse XML to graph
+    model = Paser.generate_model("./data/testCase2.xml")
+    #Injection? or Run?
+    
 
 
 if __name__ == '__main__':

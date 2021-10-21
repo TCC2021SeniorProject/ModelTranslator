@@ -8,8 +8,8 @@ class Model():
 
     #defines required variables with no initial value
     def __init__(self):
-        self.start_state = None   #starts the process
-        self.end_state = None     #ends the process
+        self.start_state : Node   #starts the process
+        self.end_state : Node     #ends the process
 
         self.valid_graph = False  #unverified graph is set to false
         self.nodes = []
@@ -51,18 +51,23 @@ class Model():
 
     def get_variable(self, name):
         if (len(self.variables) == 0):
-            return False
+            return None
         else:
             for variable in self.variables:
+                variable : Variable
                 if (variable.get_variable_name() == name):
                     return variable
-            return False
+            return None
+
+    def get_variables(self):
+        return self.variables
 
     def get_variable_index(self, name):
         if (len(self.variables) == 0):
             return False
         else:
             for index, variable in enumerate(self.variables):
+                variable : Variable
                 if (variable.get_variable_name() == name):
                     return index
             return False
@@ -133,3 +138,8 @@ class Model():
             return False
         else:
             return True
+
+    def reset_visit(self):
+        for node in self.nodes:
+            node : Node
+            node.set_unvisited()

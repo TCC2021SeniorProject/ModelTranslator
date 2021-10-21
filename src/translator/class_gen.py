@@ -1,10 +1,10 @@
-class Py_class_gen:
-    def make_import_script(self):
-        str = ""
+from translator.function_gen import FunctionScriptGen
 
-    def make_default_class_script(self):
-        str = ""
-        str += "class testClass:\n"
-        str += "\t def __init__(self):\n"
-        str += "\t\t print('this is a test')\n"
-        return str
+# This class is called once for an entire model.
+class ClassScriptGen:
+    def __init__(self):
+        self.class_script = ""
+
+    def make_class_script(self, class_name):
+        self.class_script += "class " + class_name + ":\n"
+        return self.class_script

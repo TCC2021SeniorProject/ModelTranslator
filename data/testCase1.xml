@@ -9,7 +9,7 @@
 			<name x="-95" y="-110">Start</name>
 		</location>
 		<location id="id1" x="153" y="-76">
-			<name x="143" y="-110">Do</name>
+			<name x="143" y="-110">Do()</name>
 		</location>
 		<location id="id2" x="374" y="-76">
 			<name x="364" y="-110">End</name>
@@ -18,10 +18,12 @@
 		<transition>
 			<source ref="id1"/>
 			<target ref="id2"/>
+			<label kind="select" x="246" y="-110">Next</label>
 		</transition>
 		<transition>
 			<source ref="id0"/>
 			<target ref="id1"/>
+			<label kind="select" x="17" y="-110">Next</label>
 		</transition>
 	</template>
 	<system>// Place template instantiations here.

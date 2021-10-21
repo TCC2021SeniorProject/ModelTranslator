@@ -135,6 +135,7 @@ class ParseXML():
                 else:
                     print("Wrong type declaration format")
                     raise Exception()
+            print("Making variables")
             variable.set_variable_type(variable_type)
             variable.set_variable_name(variable_name)
             variable.set_variable_value(variable_value)
@@ -254,6 +255,7 @@ def non_conditional_traverse(node : Node, model : Model):
 def check_graph_validity(model : Model):
     print("Check graph validation")
     non_conditional_traverse(model.get_start(), model)
+    model.reset_visit() #Reset visitation
     if (model.is_valid_graph()):
         print("\tGraph validity pass")
         return True
@@ -290,4 +292,7 @@ def generate_model(file_name):
     parser_class.convert_to_object()
     model = parser_class.get_model()
     valid_model = check_model(model)
-    return valid_model
+    if valid_model:
+        return model
+    else:
+        return None

@@ -21,4 +21,11 @@ class Variable:
         return self.name
 
     def get_variable_value(self):
+        if self.value == None:
+            if self.get_variable_type == 'str':
+                self.value = ""
+            elif self.get_variable_type == 'float':
+                self.value = 0.0
+            elif self.get_variable_type == 'int':
+                self.value = 0
         return self.value

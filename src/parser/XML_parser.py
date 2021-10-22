@@ -1,3 +1,5 @@
+import re
+
 import xml.etree.ElementTree as ET
 from objects.node import Node
 from objects.transition import Transition
@@ -25,7 +27,11 @@ class ParseXML():
 
     keyword = {'int' : 0,
                 'bool' : 1,
-                'double' : 2}
+                'boolean' : 1,
+                'float' : 2,
+                'double' : 2,
+                'string' : 3,
+                'str' : 3}
 
     def get_model(self):
         return self.model
@@ -70,15 +76,16 @@ class ParseXML():
 
     """
     Accepted types in UPPAAL are:
-        Boolean
-        integer
-        double
-        clocks
-        scalar
-        arrays
-        structures
+        Boolean    - o
+        integer    - o
+        double     - o
+        clocks     - x
+        scalar     - x
+        arrays     - x
+        structures - x
     """
     def supported_var_type(self, var_type):
+        var_type = var_type.lower()
         if var_type in self.keyword:
             if self.keyword[var_type] == 0:
                 return 0
@@ -86,49 +93,58 @@ class ParseXML():
                 return False
             elif self.keyword[var_type] == 2:
                 return 0.0
+            elif self.keyword[var_type] == 3:
+                return ""
         else:
             return None
 
-    def set_variable(self, keyword, name, value):
-        variable = Variable()
-        variable.set_variable_type(keyword)
-        variable.set_variable_name(name)
-        variable.set_variable_value(value)
-        return variable
-
     def variable_declaration(self, declaration_str : str):
         #Check multiple lines
-        lines = declaration_str.split("\n")
+        lines = re.split("\n|;", declaration_str)
         #trim extra spaces of the line
         for index, line in enumerate(lines):
             lines[index] = line.strip()
-
         #Need refactor
         for line in lines:
             line = line.strip()
-            #disregard comment lines
-            if (line[0:2] == "//"):
+            #disregard comment lines and empty element
+            if line[0:2] == "//":
                 continue
-            attributes = line.split(",")
+            elif line == "":
+                continue
+            attributes = re.split(",", line)
+            var_type = ""
             for attribute in attributes:
-                var_type = ""
                 var_name = ""
                 var_value = ""
-                words = attribute.split()
-                for i in range(len(words)):
-                    if var_value:
-                        var_type = words[i]
-                        var_value = self.supported_var_type(var_type)
-                    else:
-                        var_name = words[1]
-                        if len(words) > 3:
-                            var_value = words[3]
-                print(var_type)
-                print(var_name)
-                print(var_value)
-                #variable = self.set_variable(var_type, var_name, var_value)
-                #self.model.set_variable(variable)
-        
+                attribute = attribute.strip()
+                words = []
+                if "=" in attribute: #Value assignment exists
+                    words = attribute.split("=")
+                    #right hand is the value
+                    var_value = words[len(words) - 1]
+                    var_value = var_value.strip()
+                    words = words[:-1]
+                    attribute = ' '.join(str(e).strip() for e in words)
+                    words = attribute.split(" ")
+                else:
+                    words = attribute.split(" ")
+                print(words)
+
+                #There will be only cases like
+                #type name
+                #name
+                if len(words) == 1:
+                    var_name = words[0].strip()
+                    var_obj = Variable(var_type, var_name, var_value)
+                    self.model.set_variable(var_obj)
+                elif len(words) == 2:
+                    var_type = words[0]
+                    var_name = words[1].strip()
+                    var_obj = Variable(var_type, var_name, var_value)
+                    self.model.set_variable(var_obj)
+                else:
+                    print("Something wrong")
 
     def set_transition(self, line, model : Model):
         #Initial declaration

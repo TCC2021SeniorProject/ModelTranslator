@@ -45,12 +45,6 @@ class Model():
     def set_variable(self, variable : Variable):
         self.variables.append(variable)
 
-    def set_variable(self, name, value):
-        new_variable = Variable()
-        new_variable.set_variable_name(name)
-        new_variable.set_variable_value(value)
-        self.variables.append(new_variable)
-
     def get_variable(self, name):
         if (len(self.variables) == 0):
             return None

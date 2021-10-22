@@ -3,14 +3,12 @@
 <nta>
 	<declaration>// Global declarations. 
 int status1, charge1 = 0;
-int status2, charge2 = 0;
+int status2, str charge2 = 'd';
 int status3, charge3 = 0;
 </declaration>
 	<template>
 		<name x="8" y="8">Roomba_Test</name>
-		<parameter>int &amp;mode
-		           int &amp;battery
-		</parameter>
+		<parameter>int &amp;mode 		           int &amp;battery 		</parameter>
 		<declaration>// Place local declarations here.
 </declaration>
 		<location id="id0" x="-160" y="-448">

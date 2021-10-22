@@ -2,6 +2,12 @@ class TestClass:
 
 	def __init__(self, ):
 		print('Running constructor')
+		self.status1 = 0
+		self.charge1 = 0
+		self.status2 = 0
+		self.charge2 = 'd'
+		self.status3 = 0
+		self.charge3 = 0
 
 	async def End(self):
 		exit()

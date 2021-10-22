@@ -11,7 +11,7 @@ class FunctionScriptGen:
         for variable in variable_list:
             variable : Variable
             line = "self." + variable.get_variable_name()
-            line += "=" + variable.get_variable_value()
+            line += " = " + str(variable.get_variable_value())
             script += "\t\t" + line + "\n"
         return script
 

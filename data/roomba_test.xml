@@ -2,7 +2,10 @@
 <!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
 <nta>
 	<declaration>// Global declarations. 
-int status1, charge1 = 0;</declaration>
+int status1, charge1 = 0;
+int status2, charge2 = 0;
+int status3, charge3 = 0;
+</declaration>
 	<template>
 		<name x="8" y="8">Roomba_Test</name>
 		<parameter>int &amp;mode

@@ -24,19 +24,50 @@ class Transition():
     def set_name(self, name : str):
         self.name = name
 
+
+    def reform_conditional_state(self, guard):
+        operator = {
+            ">" : 0,
+            "<" : 0,
+            "==" : 0,
+            "=" : 0,
+            ">=" : 0,
+            "<=" : 0,
+        }
+        #Left of the operator is variables
+        temp_words = guard.split(" ")
+        for index, word in enumerate(temp_words):
+            if word in operator:
+                temp_words[index - 1] = "self." + temp_words[index - 1]
+            else:
+                continue
+
+        #Reassemble conditional line
+        new_line = ""
+        for word in temp_words:
+            new_line += word + " "
+        return new_line
+
     #Change conditional operators to python-like operators
-    def parse_gaurd(self, guard : str):
+    def parse_gaurd_operator(self, guard : str):
         guard = guard.replace("||", "or")
         guard = guard.replace("&&", "and")
         return guard
 
+    def parse_assign_operator(self, assign: str):
+        assign = assign.replace(":=", "=")
+        assign = assign.replace("<=", "=")
+        return assign
+
     def set_guard(self, guard : str):
-        self.guard = self.parse_gaurd(guard)
+        guard = self.parse_gaurd_operator(guard)
+        self.guard = self.reform_conditional_state(guard)
 
     def set_sync(self, sync : str):
         self.sync = sync
 
     def set_assign(self, assign : str):
+        assign = self.parse_assign_operator(assign)
         self.assign = assign
 
     def get_name(self):
@@ -70,14 +101,22 @@ class Transition():
     """
     def make_tranision_to_script(self):
         script = ""
-        #Check conditional(Guard) first
+        #Check update(Assign)
+        line = ""
+        if len(self.assign) > 1:
+            line = "\t\tself." + self.assign + "\n" 
+
+        #Check conditional(Guard)
         target_node = self.get_to_node()
-        if len(self.guard) > 0:
+        if len(self.guard) > 1:
             script += "\t\tif " + self.guard +":\n"
-            script += "\t\t\tawait " + target_node.get_name() + "()\n"
+            if (len(line) > 1):
+                script += "\t" + line
+            script += "\t\t\tawait self." + target_node.get_name() + "()\n"
         else:
-            script += "\t\tawait " + target_node.get_name() + "()"
-        print("Transition script:" + script)
+            if (len(line) > 1):
+                script += line
+            script += "\t\tawait self." + target_node.get_name() + "()"
         return script
 
     def get_script(self):

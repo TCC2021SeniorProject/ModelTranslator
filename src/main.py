@@ -11,7 +11,7 @@ def export_to_python_script(model):
     #Export to python file
     model_translator.export_to_file()
     #Read data file
-    print(model_translator.read_file())
+    #print(model_translator.read_file())
 
 #Refactor this to take xml_file as argumnent/or prompting input
 def main():

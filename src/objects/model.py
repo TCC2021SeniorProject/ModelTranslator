@@ -1,3 +1,5 @@
+import re
+
 from objects.node import Node
 from objects.transition import Transition
 from objects.variable import Variable

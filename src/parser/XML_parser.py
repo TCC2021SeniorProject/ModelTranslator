@@ -23,6 +23,10 @@ class ParseXML():
     data_injected = False #injected into model object
     model = Model()
 
+    keyword = {'int' : 0,
+                'bool' : 1,
+                'double' : 2}
+
     def get_model(self):
         return self.model
 
@@ -34,7 +38,7 @@ class ParseXML():
     #checks global declaration / local declaration
     def identify_declaration_tag(self, line):
         return {
-            'declararion' : True
+            'declaration' : True
         }.get(line.tag, False)
 
     def identify_template_tag(self, line):
@@ -60,7 +64,7 @@ class ParseXML():
                 text = sub_tag.text
                 node = Node(id, text)
             elif sub_tag.tag == 'committed':
-                #Update required
+                #Not implemented yet
                 node.set_commit("??")
         return node
 
@@ -74,72 +78,57 @@ class ParseXML():
         arrays
         structures
     """
-    def supported_var_type(var_type):
-        notation = {'int' : 0,
-                    'bool' : 1,
-                    'double' : 2}
-
-        if notation.has_key(var_type):
-            if notation[var_type] == 0:
+    def supported_var_type(self, var_type):
+        if var_type in self.keyword:
+            if self.keyword[var_type] == 0:
                 return 0
-            elif notation[var_type] == 1:
+            elif self.keyword[var_type] == 1:
                 return False
-            elif notation[var_type] == 2:
+            elif self.keyword[var_type] == 2:
                 return 0.0
         else:
             return None
 
-    """
-    #Cases in variable declaration
-    # 0. initially start with the assumption
-        : int a = 0
-        : int b = 10
-        : int c
-    # 1. variables with assigned initial value
-        : int a = 1;
-    # 2. variables with no value
-    #   : bool a;
-    # 3. multiple variables declared separated by ','
-        : int a, b, c, d;
-        : int a = 1, b = 2, char c = 3;
-        : int a=1, b, c, d = 1
-    # 4. Will not handle multiple ';' in one line
-    # 5. We can throw exception to not to accept unformatted declaration
-    """
-    def variable_declaration(self, line):
-        #trim spaces of the line
-        line = line.trim()
-        if (line[len(line) - 1] == ';'):
-            #Remove ';'
-            line = line[0:len(line) - 1]
-        #parse - parse by ',' first
-        list_of_variables = line.strip(',')
+    def set_variable(self, keyword, name, value):
+        variable = Variable()
+        variable.set_variable_type(keyword)
+        variable.set_variable_name(name)
+        variable.set_variable_value(value)
+        return variable
 
-        #parse declaration
-        for variable_line in list_of_variables:
-            #split line
-            elements = variable_line.split(' ')
-            #identify supported variable type
-            type_definition = self.supported_var_type(elements[0])
-            if type_definition == None:
-                raise Exception()
+    def variable_declaration(self, declaration_str : str):
+        #Check multiple lines
+        lines = declaration_str.split("\n")
+        #trim extra spaces of the line
+        for index, line in enumerate(lines):
+            lines[index] = line.strip()
 
-            variable = Variable()
-            variable_type = elements[0]
-            variable_name = elements[1]
-            variable_value = type_definition
-            elements = variable.strip(' ')
-            if (len(elements) > 2):
-                if elements[2] == '=':
-                    variable_value = elements[3]
-                else:
-                    print("Wrong type declaration format")
-                    raise Exception()
-            print("Making variables")
-            variable.set_variable_type(variable_type)
-            variable.set_variable_name(variable_name)
-            variable.set_variable_value(variable_value)
-            self.model.set_variable(variable)
+        #Need refactor
+        for line in lines:
+            line = line.strip()
+            #disregard comment lines
+            if (line[0:2] == "//"):
+                continue
+            attributes = line.split(",")
+            for attribute in attributes:
+                var_type = ""
+                var_name = ""
+                var_value = ""
+                words = attribute.split()
+                for i in range(len(words)):
+                    if var_value:
+                        var_type = words[i]
+                        var_value = self.supported_var_type(var_type)
+                    else:
+                        var_name = words[1]
+                        if len(words) > 3:
+                            var_value = words[3]
+                print(var_type)
+                print(var_name)
+                print(var_value)
+                #variable = self.set_variable(var_type, var_name, var_value)
+                #self.model.set_variable(variable)
+        
 
     def set_transition(self, line, model : Model):
         #Initial declaration
@@ -193,8 +182,7 @@ class ParseXML():
     def convert_to_object(self):
         for elem in self.root.iter():
             if self.identify_declaration_tag(elem):
-                for child in elem.iter():
-                    self.variable_declaration(child)
+                self.variable_declaration(elem.text)
             elif self.identify_template_tag(elem):   
                 for child in elem.findall(".//*"):
                     for lines in child.iter():

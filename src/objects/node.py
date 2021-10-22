@@ -21,7 +21,7 @@ class Node():
         self.visited = False
         self.parameter_list = []
         self.transition_list = []
-        self.script = "\tasync def " + name + "():\n"
+        self.script = "\tasync def " + name + "(self):\n"
         print("Node added")
 
     def set_scipt(self, content):

@@ -8,13 +8,16 @@ from objects.transition import Transition
 
 class TranslateModel:
     def __init__(self, model : Model):
+        self.class_name = "TestClass"
         self.model = model
         py_class_gen = ClassScriptGen()
-        self.class_script = py_class_gen.make_class_script("TestClass")
+        self.class_script = py_class_gen.make_class_script(self.class_name)
         variables = model.get_variables()
         self.init_script = FunctionScriptGen.make_constructor([], variables)
         self.def_script = ""
         self.entire_script = ""
+        #Refactor this to identify start by automation
+        self.base_script = self.class_name + ".Start()"
         self.stack = []
     
     #BFS search - store a node to the stack of each visit
@@ -48,6 +51,8 @@ class TranslateModel:
             #These scripts are constructed at the parsing stages
             node.form_script()
             script = node.get_script()
+            if (node == self.model.get_end()):
+                script += "\t\texit()"
             self.append_def_script(script)
 
     #Append multiple sets of def scripts
@@ -59,6 +64,7 @@ class TranslateModel:
         self.entire_script += self.class_script + "\n"
         self.entire_script += self.init_script + "\n"
         self.entire_script += self.def_script + "\n"
+        self.entire_script += self.base_script + "\n"
 
     #This should be called only once
     def get_entire_scripts(self):

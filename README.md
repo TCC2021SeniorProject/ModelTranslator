@@ -2,7 +2,7 @@
 <!-- PROJECT LOGO -->
 <br /></br>
 <div align="center">
-  <img src="img/title.png">  
+  <img src="img/icon/text_logo.png">  
 </div>
 <div align="center">  
   <!-- PROJECT SHIELDS -->
@@ -16,7 +16,7 @@
   <h3 align="center">MODEL TRANSLATOR</h3>
   <div align="center">
      <a href="">
-      <img src="img/icon/translatorColorIcon.png" alt="Logo" width="80" height="80">
+      <img src="img/icon/basic_logo.png" alt="Logo" width="80" height="80">
     </a>
   </div>
   </br>
@@ -75,6 +75,8 @@ Here's why you should use this:
 
 * [UPPAAL](https://uppaal.org/)
 * [Python](https://www.python.org/)
+  * [xml.etree.ElementTree](https://docs.python.org/3/library/xml.etree.elementtree.html)
+  * [re](https://docs.python.org/3/library/re.html)
 * [VS CODE](https://code.visualstudio.com/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -88,11 +90,9 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-Knowledgement of UPPAAL model diagram is required.
-* npm
-  ```sh
+Download UPPAAL to make your own cases
+* [DOWNLOAD UPPAAL](https://uppaal.org/)
   
-  ```
 
 ### Demo Installation
 
@@ -106,7 +106,8 @@ Knowledgement of UPPAAL model diagram is required.
    ```
 3. Run Main.py program
    ```sh
-   
+    cd ./MdoelTranslator/src
+
    ```
 
 ### Result of running XML_parser.py
@@ -118,7 +119,7 @@ Knowledgement of UPPAAL model diagram is required.
 
 1. Suppose there is a XML file given like this
 
-```
+```xml
   <?xml version="1.0" encoding="utf-8"?>
   <!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
   <nta>
@@ -192,9 +193,9 @@ Knowledgement of UPPAAL model diagram is required.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-4. Finally, our program generates a python file looking like below:
+4. Finally, our program generates a python script file looking like below:
 
-```
+```python
 class TestClass:
 
 	def __init__(self, ):
@@ -268,18 +269,18 @@ _For more plans, please see the [plan documentation](https://drive.google.com/fi
 - [x] Program is able to traverse all the nodes through tranistion objects.
 - [x] Program is able to identify the validity of the model.
 - [x] Program is able to validate the node function (e.g. starting node, termination node, logic node, process node, etc)
-- [ ] Make Python code generator/converter.
-- [ ] Test simple diagram.
+- [x] Make Python code generator/converter.
+- [x] Test simple diagram.
 
 
 ### Task 2 check list - Due October 23.
-- [ ] Make complex diagram 1
+- [x] Make complex diagram 1
 - [ ] Update(enhance) UPPAAL parser
 - [ ] Update(enhance) Python code generator/converter
 - [ ] Test complex diagram 1
 
 ### Task 3 check list - Due October 23.
-- [ ] Make complex diagram 2
+- [x] Make complex diagram 2
 - [ ] Update(enhance) UPPAAL parser
 - [ ] Update(enhance) Python code generator/converter
 - [ ] Test complex diagram 2
@@ -300,9 +301,9 @@ To view the specific testing details, **[click here](https://docs.google.com/doc
 
 *MCCD* refers to Main Control Center Device.
 
-- [ ] Test case 1 (Due Oct  9): Produce code from a simple model
-- [ ] Test case 2 (Due Oct 17): Model comparatively massive size diagram
-- [ ] Test case 3 (Due Oct 23): Build infinite loops / Redundant transitions.
+- [x] Test case 1 (Due Oct  9): Produce code from a simple model
+- [x] Test case 2 (Due Oct 17): Model comparatively massive size diagram
+- [x] Test case 3 (Due Oct 23): Build infinite loops / Redundant transitions.
 - [ ] Test case 4 (Due Nov 21): Change models to python codes that MCCD accepts.
 - [ ] Test case 5 (Due Oct 10): Simple signalling to the device
 - [ ] Test case 6 (Due Oct 24): Complex signalling to the device

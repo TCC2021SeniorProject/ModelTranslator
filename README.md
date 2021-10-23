@@ -10,7 +10,9 @@
     </br>
     <img alt="Carthage compatible" src="https://img.shields.io/badge/Status-Under_development-blue" />
     <img alt="Carthage compatible" src="https://img.shields.io/badge/Stability-Unstable-red" />
-    <img alt="Carthage compatible" src="https://img.shields.io/badge/Documentation-not ready-red" />
+    <img alt="Carthage compatible" src="https://img.shields.io/badge/Version-not published-red" />
+    <img alt="Carthage compatible" src="https://img.shields.io/badge/Full documentation-not ready-red" />
+    <img alt="Carthage compatible" src="https://img.shields.io/badge/Update Date-10/23/2021-Green" />
   </p>
   
   <h3 align="center">MODEL TRANSLATOR</h3>

@@ -5,7 +5,7 @@ class TestClass:
 		self.status1 = 0
 		self.charge1 = 0
 		self.status2 = 0
-		self.charge2 = 'd'
+		self.charge2 = 0
 		self.status3 = 0
 		self.charge3 = 0
 
@@ -13,7 +13,7 @@ class TestClass:
 		exit()
 
 	async def Dock(self):
-		self.mode = 0
+		await self.Ready()		self.mode = 0
 		await self.End()
 
 	async def Explore(self):

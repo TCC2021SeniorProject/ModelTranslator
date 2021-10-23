@@ -3,7 +3,7 @@
 <nta>
 	<declaration>// Global declarations. 
 int status1, charge1 = 0;
-int status2, str charge2 = 'd';
+int status2, charge2 = 0;
 int status3, charge3 = 0;
 </declaration>
 	<template>
@@ -11,72 +11,72 @@ int status3, charge3 = 0;
 		<parameter>int &amp;mode 		           int &amp;battery 		</parameter>
 		<declaration>// Place local declarations here.
 </declaration>
-		<location id="id0" x="-160" y="-448">
-			<name x="-144" y="-464">End</name>
+		<location id="id0" x="-144" y="-510">
+			<name x="-128" y="-526">End</name>
 		</location>
-		<location id="id1" x="-904" y="-456">
-			<name x="-936" y="-488">Start</name>
-		</location>
-		<location id="id2" x="-160" y="-368">
+		<location id="id1" x="-160" y="-368">
 			<name x="-144" y="-376">Dock</name>
 		</location>
-		<location id="id3" x="-392" y="-440">
+		<location id="id2" x="-392" y="-440">
 			<name x="-416" y="-472">Explore</name>
 		</location>
-		<location id="id4" x="-392" y="-288">
+		<location id="id3" x="-392" y="-288">
 			<name x="-416" y="-280">Clean</name>
 		</location>
-		<location id="id5" x="-664" y="-368">
+		<location id="id4" x="-664" y="-368">
 			<name x="-696" y="-400">Ready</name>
 		</location>
-		<location id="id6" x="-904" y="-368">
+		<location id="id5" x="-904" y="-368">
 			<name x="-928" y="-360">Idle</name>
 		</location>
-		<init ref="id1"/>
+		<location id="id6" x="-926" y="-484">
+			<name x="-936" y="-518">Start</name>
+		</location>
+		<init ref="id6"/>
 		<transition>
-			<source ref="id2"/>
+			<source ref="id6"/>
+			<target ref="id5"/>
+			<label kind="assignment" x="-909" y="-433">mode = 1</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
 			<target ref="id0"/>
 			<label kind="assignment" x="-152" y="-416">mode := 0</label>
 		</transition>
 		<transition>
-			<source ref="id1"/>
-			<target ref="id6"/>
-			<label kind="assignment" x="-896" y="-416">mode := 1</label>
-		</transition>
-		<transition>
-			<source ref="id4"/>
-			<target ref="id2"/>
+			<source ref="id3"/>
+			<target ref="id1"/>
 			<label kind="guard" x="-376" y="-312">mode == 4 || battery &lt; 10</label>
 			<label kind="assignment" x="-312" y="-288">mode := 4</label>
 			<nail x="-200" y="-288"/>
 		</transition>
 		<transition>
-			<source ref="id3"/>
-			<target ref="id2"/>
+			<source ref="id2"/>
+			<target ref="id1"/>
 			<label kind="guard" x="-376" y="-440">mode == 4 || battery &lt; 10</label>
-			<label kind="assignment" x="-312" y="-464">mode := 4</label>
+			<label kind="assignment" x="-312" y="-464">mode &lt;= 4</label>
 			<nail x="-208" y="-440"/>
 		</transition>
 		<transition>
-			<source ref="id3"/>
-			<target ref="id4"/>
+			<source ref="id2"/>
+			<target ref="id3"/>
 			<label kind="guard" x="-464" y="-384">mode == 3</label>
 		</transition>
 		<transition>
-			<source ref="id5"/>
-			<target ref="id4"/>
+			<source ref="id4"/>
+			<target ref="id3"/>
 			<label kind="guard" x="-544" y="-312">mode == 3</label>
 			<nail x="-600" y="-288"/>
 		</transition>
 		<transition>
-			<source ref="id5"/>
-			<target ref="id3"/>
+			<source ref="id4"/>
+			<target ref="id2"/>
 			<label kind="guard" x="-552" y="-440">mode == 2</label>
 			<nail x="-608" y="-440"/>
 		</transition>
 		<transition>
-			<source ref="id6"/>
-			<target ref="id5"/>
+			<source ref="id5"/>
+			<target ref="id4"/>
 			<label kind="guard" x="-872" y="-368">battery &gt; 10 &amp;&amp; mode == 1</label>
 		</transition>
 	</template>

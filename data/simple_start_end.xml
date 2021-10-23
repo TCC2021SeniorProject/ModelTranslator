@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Global declarations. 
+int status1, charge1;</declaration>
+	<template>
+		<name x="9" y="9">Simple</name>
+		<parameter>int &amp;mode,  int &amp;battery</parameter>
+		<declaration>// Place local declarations here.
+</declaration>
+		<location id="id0" x="-391" y="-323">
+			<name x="-408" y="-357">End</name>
+		</location>
+		<location id="id1" x="-603" y="-323">
+			<name x="-629" y="-357">Clean</name>
+		</location>
+		<location id="id2" x="-731" y="-323">
+			<name x="-756" y="-357">Ready</name>
+		</location>
+		<location id="id3" x="-952" y="-323">
+			<name x="-960" y="-357">Start</name>
+		</location>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<label kind="guard" x="-578" y="-340">mode == 4 || battery &lt; 10</label>
+			<label kind="assignment" x="-535" y="-323">mode := 4</label>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-705" y="-340">mode == 3</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-926" y="-340">mode == 1 &amp;&amp; battery &gt; 10</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+r1 = Simple(status1, charge1);
+
+// List one or more processes to be composed into a system.
+system r1;</system>
+	<queries>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>

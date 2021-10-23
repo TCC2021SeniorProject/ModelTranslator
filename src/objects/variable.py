@@ -1,5 +1,4 @@
 class Variable:
-
     var_type_dic = {'int' : 0,
                 'bool' : 1,
                 'boolean' : 1,

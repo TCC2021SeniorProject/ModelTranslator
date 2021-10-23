@@ -113,93 +113,64 @@ Knowledgement of UPPAAL model diagram is required.
 
 0. When producing a model such like this in UPPAAL
   <div align="center">
-    <img width="500" src="img/UPPAAL_simple_model.png">  
+    <img width="500" src="img/UPPAAL_model_1.png">  
   </div>
 
 1. Suppose there is a XML file given like this
 
-   ```
-    <?xml version="1.0" encoding="utf-8"?>
-    <!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
-    <nta>
-      <declaration>// Place global declarations here.</declaration>
-      <template>
-        <name x="5" y="5">Template</name>
-        <declaration>// Place local declarations here.</declaration>
-        <location id="id0" x="-348" y="-76" color="#00ff00">
-          <name x="-358" y="-110">Start</name>
-        </location>
-        <location id="id1" x="-17" y="-161">
-          <name x="-27" y="-195">Explore</name>
-        </location>
-        <location id="id2" x="-17" y="0">
-          <name x="-27" y="-34">Clean</name>
-        </location>
-        <location id="id3" x="144" y="-76">
-          <name x="134" y="-110">Dock</name>
-        </location>
-        <location id="id4" x="-170" y="-76">
-          <name x="-180" y="-110">Ready</name>
-        </location>
-        <location id="id5" x="263" y="-76" color="#ff0000">
-          <name x="253" y="-110">End</name>
-        </location>
-        <location id="id6" x="-263" y="-76">
-          <name x="-273" y="-110">idle</name>
-        </location>
-        <init ref="id0"/>
-        <transition>
-          <source ref="id3"/>
-          <target ref="id6"/>
-          <nail x="144" y="68"/>
-          <nail x="-263" y="68"/>
-        </transition>
-        <transition>
-          <source ref="id6"/>
-          <target ref="id4"/>
-        </transition>
-        <transition>
-          <source ref="id0"/>
-          <target ref="id6"/>
-        </transition>
-        <transition>
-          <source ref="id4"/>
-          <target ref="id2"/>
-        </transition>
-        <transition>
-          <source ref="id4"/>
-          <target ref="id1"/>
-        </transition>
-        <transition>
-          <source ref="id3"/>
-          <target ref="id5"/>
-        </transition>
-        <transition>
-          <source ref="id2"/>
-          <target ref="id3"/>
-        </transition>
-        <transition>
-          <source ref="id1"/>
-          <target ref="id2"/>
-        </transition>
-        <transition>
-          <source ref="id1"/>
-          <target ref="id3"/>
-        </transition>
-      </template>
-      <system>// Place template instantiations here.
-    Process = Template();
-    // List one or more processes to be composed into a system.
-    system Process;
-        </system>
-      <queries>
-        <query>
-          <formula></formula>
-          <comment></comment>
-        </query>
-      </queries>
-    </nta>
-   ```
+```
+  <?xml version="1.0" encoding="utf-8"?>
+  <!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+  <nta>
+    <declaration>// Global declarations. 
+  int status1, charge1;</declaration>
+    <template>
+      <name x="9" y="9">Simple</name>
+      <parameter>int &amp;mode,  int &amp;battery</parameter>
+      <declaration>// Place local declarations here.
+  </declaration>
+      <location id="id0" x="-391" y="-323">
+        <name x="-408" y="-357">End</name>
+      </location>
+      <location id="id1" x="-603" y="-323">
+        <name x="-629" y="-357">Clean</name>
+      </location>
+      <location id="id2" x="-731" y="-323">
+        <name x="-756" y="-357">Ready</name>
+      </location>
+      <location id="id3" x="-952" y="-323">
+        <name x="-960" y="-357">Start</name>
+      </location>
+      <transition>
+        <source ref="id1"/>
+        <target ref="id0"/>
+        <label kind="guard" x="-578" y="-340">mode == 4 || battery &lt; 10</label>
+        <label kind="assignment" x="-535" y="-323">mode := 4</label>
+      </transition>
+      <transition>
+        <source ref="id2"/>
+        <target ref="id1"/>
+        <label kind="guard" x="-705" y="-340">mode == 3</label>
+      </transition>
+      <transition>
+        <source ref="id3"/>
+        <target ref="id2"/>
+        <label kind="guard" x="-926" y="-340">mode == 1 &amp;&amp; battery &gt; 10</label>
+      </transition>
+    </template>
+    <system>// Place template instantiations here.
+  r1 = Simple(status1, charge1);
+
+  // List one or more processes to be composed into a system.
+  system r1;</system>
+    <queries>
+      <query>
+        <formula></formula>
+        <comment></comment>
+      </query>
+    </queries>
+  </nta>
+```
 
 2. After running XML_parser, this will parse crutial data to graph objects. Below image is output lines as a result of conversion
 
@@ -221,7 +192,60 @@ Knowledgement of UPPAAL model diagram is required.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+4. Finally, our program generates a python file looking like below:
 
+```
+class TestClass:
+
+	def __init__(self, ):
+		print('Running constructor')
+		self.status1 = 0
+		self.charge1 = 0
+		self.status2 = 0
+		self.charge2 = 0
+		self.status3 = 0
+		self.charge3 = 0
+
+	async def End(self):
+		exit()
+
+	async def Dock(self):
+		await self.Ready()
+		await self.End()
+
+	async def Explore(self):
+		if self.mode == 4 or self.battery < 10 :
+			self.mode = 4
+			await self.Dock()
+		if self.mode == 3 :
+			await self.Clean()
+
+
+	async def Clean(self):
+		if self.mode == 4 or self.battery < 10 :
+			self.mode = 4
+			await self.Dock()
+
+
+	async def Ready(self):
+		if self.mode == 3 :
+			await self.Clean()
+		if self.mode == 2 :
+			await self.Explore()
+
+
+	async def Idle(self):
+		if self.battery > 10 and self.mode == 1 :
+			await self.Ready()
+
+
+	async def Start(self):
+		self.mode = 1
+		await self.Idle()
+
+
+TestClass.Start()
+```
 
 <!-- USAGE EXAMPLES -->
 ## Usage

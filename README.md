@@ -52,6 +52,7 @@
     </ul>
   </li>
   <li><a href="#usage">Usage</a></li>
+  <li><a href="#Result of running XML_parser.py">Current features</a></li>
   <li><a href="#roadmap">Roadmap</a></li>
   <li><a href="#testing-schedules">Testing Schedules</a></li>
   <li><a href="#license">License</a></li>

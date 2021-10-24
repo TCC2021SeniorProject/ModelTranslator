@@ -116,8 +116,9 @@ Download UPPAAL to make your own cases
 
 0. When producing a model such like this in UPPAAL
   <div align="center">
-    <img width="800" src="img/UPPAAL_model_1.jpg">  
+    <img width="700" src="img/UPPAAL_model_1.jpg">  
   </div>
+
 
 
 1. Suppose there is a XML file given like this

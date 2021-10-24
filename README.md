@@ -356,14 +356,16 @@ Email: [sbhattacharyya@fit.edu](sbhattacharyya@fit.edu)
 
 #### Developers
 > Sung-Jun Baek </br>
-Email: [roni2006@hanmail.net](roni2006@hanmail.net) </br>
-GitHub Link: [https://github.com/MarcoBackman](https://github.com/MarcoBackman)
+> Email: [roni2006@hanmail.net](roni2006@hanmail.net) </br>
+> GitHub: [MarcoBackman](https://github.com/MarcoBackman)
 
 > Caelan Shoop </br>
-Email: [cshoop2018@my.fit.edu](cshoop2018@my.fit.edu)
+> Email: [cshoop2018@my.fit.edu](cshoop2018@my.fit.edu)
+> GitHub: [CCShoop](https://github.com/CCShoop) 
 
 > Cameron Wright </br>
-Email: [cameron2018@my.fit.edu](cameron2018@my.fit.edu)
+> Email: [cameron2018@my.fit.edu](cameron2018@my.fit.edu)
+> GitHub: [CameronWr](https://github.com/CameronWr)
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>

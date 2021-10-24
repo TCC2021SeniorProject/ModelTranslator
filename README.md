@@ -113,7 +113,7 @@ Download UPPAAL to make your own cases
    
    ```
 
-### Current Features
+## Current Features
 
 0. When producing a model such like this in UPPAAL
   <div align="center">

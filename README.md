@@ -360,11 +360,11 @@ Email: [sbhattacharyya@fit.edu](sbhattacharyya@fit.edu)
 > GitHub: [MarcoBackman](https://github.com/MarcoBackman)
 
 > Caelan Shoop </br>
-> Email: [cshoop2018@my.fit.edu](cshoop2018@my.fit.edu)
+> Email: [cshoop2018@my.fit.edu](cshoop2018@my.fit.edu) </br>
 > GitHub: [CCShoop](https://github.com/CCShoop) 
 
 > Cameron Wright </br>
-> Email: [cameron2018@my.fit.edu](cameron2018@my.fit.edu)
+> Email: [cameron2018@my.fit.edu](cameron2018@my.fit.edu) </br>
 > GitHub: [CameronWr](https://github.com/CameronWr)
 
 

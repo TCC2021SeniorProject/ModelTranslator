@@ -297,18 +297,16 @@ See the [open issues](https://github.com/TCC2021SeniorProject/ModelTranslator/is
 
 </br>
 
-```
-| Case      | Testing Responder | Due Date
-| ----------- | ----------- | ----------- |
-| Test case 1 | Tony, Cameron, Cael  | Oct 9       |
-| Test case 2 | Tony, Cameron        | Oct 17      |
-| Test case 3 | Tony, Cameron        | Oct 23       |
-| Test case 4 | Tony, Cameron, Cael  | Nov 21       |
-| Test case 5 | Cael        		| Oct 10       |
-| Test case 6 | Cael        		| Oct 24       |
-| Test case 7 | Tony, Cael        	 | Dec 12       |
-| Test case 8 | Tony, Cameron, Cael  | Dec 12       |
-```
+| Case        | Testing Responder   | Due Date |
+| ----------- | ------------------- | -------- |
+| Test case 1 | Tony, Cameron, Cael | Oct 9    |
+| Test case 2 | Tony, Cameron       | Oct 17   |
+| Test case 3 | Tony, Cameron       | Oct 23   |
+| Test case 4 | Tony, Cameron, Cael | Nov 21   |
+| Test case 5 | Cael                | Oct 10   |
+| Test case 6 | Cael                | Oct 24   |
+| Test case 7 | Tony, Cael          | Dec 12   |
+| Test case 8 | Tony, Cameron, Cael | Dec 12   |
 
 </br>
 

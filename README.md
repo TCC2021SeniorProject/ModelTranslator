@@ -116,7 +116,7 @@ Download UPPAAL to make your own cases
 
 0. When producing a model such like this in UPPAAL
   <div align="center">
-    <img width="500" src="img/UPPAAL_model_1.jpg">  
+    <img width="1000" src="img/UPPAAL_model_1.jpg">  
   </div>
 
 

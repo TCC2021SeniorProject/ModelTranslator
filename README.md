@@ -352,7 +352,7 @@ This will not be permanent until the completion of the project.
 
 #### Director
 >  Dr. Siddhartha Bhattacharyya </br>
-Email: [sbhattacharyya@fit.edu](sbhattacharyya@fit.edu)
+Email: [sbhattacharyya@fit.edu](mailto:sbhattacharyya@fit.edu)
 
 #### Developers
 > Sung-Jun Baek </br>

@@ -52,7 +52,7 @@
     </ul>
   </li>
   <li><a href="#usage">Usage</a></li>
-  <li><a href="#Result of running XML_parser.py">Current features</a></li>
+  <li><a href="#Current Features">Current features</a></li>
   <li><a href="#roadmap">Roadmap</a></li>
   <li><a href="#testing-schedules">Testing Schedules</a></li>
   <li><a href="#license">License</a></li>
@@ -113,7 +113,7 @@ Download UPPAAL to make your own cases
    
    ```
 
-### Result of running XML_parser.py
+### Current Features
 
 0. When producing a model such like this in UPPAAL
   <div align="center">

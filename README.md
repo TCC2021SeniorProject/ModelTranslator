@@ -277,9 +277,9 @@ _For more plans, please see the [plan documentation](https://drive.google.com/fi
 
 ### Task 2 check list - Due October 23.
 - [x] Make complex diagram 1
-- [ ] Update(enhance) UPPAAL parser
-- [ ] Update(enhance) Python code generator/converter
-- [ ] Test complex diagram 1
+- [x] Update(enhance) UPPAAL parser
+- [x] Update(enhance) Python code generator/converter
+- [x] Test complex diagram 1
 
 ### Task 3 check list - Due October 23.
 - [x] Make complex diagram 2

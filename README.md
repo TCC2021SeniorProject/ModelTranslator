@@ -354,18 +354,12 @@ _For more plans, please see the [plan documentation](https://drive.google.com/fi
 
 ### Task 2 check list - Due October 23.
 - [x] Make complex diagram 1
-<<<<<<< HEAD
-<<<<<<< HEAD
 - [x] Update(enhance) UPPAAL parser
 - [x] Update(enhance) Python code generator/converter
 - [x] Test complex diagram 1
-=======
-=======
->>>>>>> f25137d53bb849046e7431053541a5738e33c3b9
 - [ ] Update (enhance) UPPAAL parser
 - [ ] Update (enhance) Python code generator/converter
 - [ ] Test complex diagram 1
->>>>>>> f25137d53bb849046e7431053541a5738e33c3b9
 
 ### Task 3 check list - Due October 23.
 - [x] Make complex diagram 2
@@ -387,11 +381,6 @@ See the [open issues](https://github.com/TCC2021SeniorProject/ModelTranslator/is
 | Test case 2 | Tony, Cameron       | Oct 17   |
 | Test case 3 | Tony, Cameron       | Oct 23   |
 | Test case 4 | Tony, Cameron, Cael | Nov 21   |
-<<<<<<< HEAD
-=======
-| Test case 5 | Cael                | Oct 10   |
-| Test case 6 | Cael                | Oct 24   |
->>>>>>> f25137d53bb849046e7431053541a5738e33c3b9
 | Test case 7 | Tony, Cael          | Dec 12   |
 | Test case 8 | Tony, Cameron, Cael | Dec 12   |
 

@@ -125,7 +125,7 @@ Download UPPAAL to make your own cases
 </br>
 
 ```diff
-+                     Rules for a valid execution
++Rules for a valid execution
 ```
 > 1. A model must be a valid model. The validity of the model can be checked in UPPAAL software. Any invalid UPPAAL model will cause a program crash.
 > 2. Any unidentified variables may cause error either on the progress in the injection to the device or in the use of this software.

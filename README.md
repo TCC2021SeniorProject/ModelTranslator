@@ -121,6 +121,7 @@ Download UPPAAL to make your own cases
    
    ```
 
+<<<<<<< HEAD
 ### Model Validity
 </br>
 
@@ -189,6 +190,9 @@ Download UPPAAL to make your own cases
 
 ### Example of how software works
 </br>
+=======
+## Current Features
+>>>>>>> f25137d53bb849046e7431053541a5738e33c3b9
 
 0. When producing a model such like this in UPPAAL
   <div align="center">
@@ -357,10 +361,13 @@ _For more plans, please see the [plan documentation](https://drive.google.com/fi
 ### Task 2 check list - Due October 23.
 - [x] Make complex diagram 1
 <<<<<<< HEAD
+<<<<<<< HEAD
 - [x] Update(enhance) UPPAAL parser
 - [x] Update(enhance) Python code generator/converter
 - [x] Test complex diagram 1
 =======
+=======
+>>>>>>> f25137d53bb849046e7431053541a5738e33c3b9
 - [ ] Update (enhance) UPPAAL parser
 - [ ] Update (enhance) Python code generator/converter
 - [ ] Test complex diagram 1
@@ -386,6 +393,11 @@ See the [open issues](https://github.com/TCC2021SeniorProject/ModelTranslator/is
 | Test case 2 | Tony, Cameron       | Oct 17   |
 | Test case 3 | Tony, Cameron       | Oct 23   |
 | Test case 4 | Tony, Cameron, Cael | Nov 21   |
+<<<<<<< HEAD
+=======
+| Test case 5 | Cael                | Oct 10   |
+| Test case 6 | Cael                | Oct 24   |
+>>>>>>> f25137d53bb849046e7431053541a5738e33c3b9
 | Test case 7 | Tony, Cael          | Dec 12   |
 | Test case 8 | Tony, Cameron, Cael | Dec 12   |
 
@@ -399,6 +411,11 @@ To view the specific testing details, **[click here](https://docs.google.com/doc
 - [x] Test case 2 (Due Oct 17): Model comparatively massive size diagram
 - [x] Test case 3 (Due Oct 23): Build infinite loops / Redundant transitions.
 - [ ] Test case 4 (Due Nov 21): Change models to python codes that MCCD accepts.
+<<<<<<< HEAD
+=======
+- [ ] Test case 5 (Due Oct 10): Simple signalling to the device
+- [ ] Test case 6 (Due Oct 24): Complex signalling to the device
+>>>>>>> f25137d53bb849046e7431053541a5738e33c3b9
 - [ ] Test case 7 (Due Dec 12): Handling devices via web application on MCCD
 - [ ] Test case 8 (Due Dec 12): MCCD can be postponed until the device finishes its current job
 

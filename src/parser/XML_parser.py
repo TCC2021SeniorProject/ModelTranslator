@@ -75,7 +75,7 @@ class ParseXML():
         return node
 
     """
-    Accepted types in UPPAAL are:
+    Implemented types:
         Boolean    - o
         integer    - o
         double     - o
@@ -129,7 +129,6 @@ class ParseXML():
                     words = attribute.split(" ")
                 else:
                     words = attribute.split(" ")
-                print(words)
 
                 #There will be only cases like
                 #type name

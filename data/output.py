@@ -13,7 +13,7 @@ class TestClass:
 		exit()
 
 	async def Dock(self):
-		await self.Ready()
+		self.mode = 0
 		await self.End()
 
 	async def Explore(self):

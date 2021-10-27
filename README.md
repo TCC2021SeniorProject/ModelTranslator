@@ -14,7 +14,7 @@
     <img alt="Carthage compatible" src="https://img.shields.io/badge/Full documentation-not ready-red" />
     <img alt="Carthage compatible" src="https://img.shields.io/badge/Update Date-10/23/2021-Green" />
   </p>
-  
+
   <h3 align="center">MODEL TRANSLATOR</h3>
   <div align="center">
      <a href="">
@@ -37,6 +37,7 @@
 </div>
 </br>
 </br>
+</br>
 
 
 ## TABLE OF CONTENTS
@@ -49,14 +50,24 @@
     <ul>
       <li><a href="#prerequisites">Prerequisites</a>
       </li>
+      <li><a href="#model-validity">Model Validity</a>
+      </li>
+      <li><a href="#file-structure">File Structure</a>
+      </li>
+      <li><a href="#process-logic-flow">Process logic flow</a>
+      </li>
     </ul>
   </li>
   <li><a href="#usage">Usage</a></li>
+  <li><a href="#current-features">Current features</a></li>
   <li><a href="#roadmap">Roadmap</a></li>
   <li><a href="#testing-schedules">Testing Schedules</a></li>
   <li><a href="#license">License</a></li>
   <li><a href="#contact">Contact</a></li>
 </ol>
+
+</br>
+</br>
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
@@ -66,23 +77,21 @@ This project will assist developers on establishing IoT system.
 Here's why you should use this:
 * Users who wants to design automata with UPPAAL but has no idea what to do with the generated XML file.
 * Users who wants their modeled diagrams runs on RaspPi device.
-* Users who wants to test out IoT environment with the modeling tool(UPPAAL).
+* Users who wants to test out IoT environment with the modeling tool (UPPAAL).
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-
-### Tools Used With
+### Tools Used With (Translator)
 
 
 * [UPPAAL](https://uppaal.org/)
-* [Python](https://www.python.org/)
+* [Python(3.6.9)](https://www.python.org/)
   * [xml.etree.ElementTree](https://docs.python.org/3/library/xml.etree.elementtree.html)
   * [re](https://docs.python.org/3/library/re.html)
 * [VS CODE](https://code.visualstudio.com/)
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
+</br>
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -109,15 +118,84 @@ Download UPPAAL to make your own cases
 3. Run Main.py program
    ```sh
     cd ./MdoelTranslator/src
-
+   
    ```
 
-### Result of running XML_parser.py
+### Model Validity
+</br>
+
+<p style="color:#EF786F;font-size:15px;">&ensp;&ensp;&ensp;<b>Rules for a valid execution</b></p>
+
+</br>
+
+1. A model must be a valid model. The validity of the model can be checked in UPPAAL software. Any invalid UPPAAL model will cause a program crash.
+
+2. Any unidentified variables may cause error either on the progress in the injection to the device or in the use of this software.
+
+3. The declarations must be placed(defined) at the right place, occordingly to its template.
+
+</br>
+
+### File structure
+
+```
+├── data
+│   ├── xml_input_file.xml
+│   ├── output_file.py
+├── img
+├── README.md
+└── src
+    ├── __init__.py
+    ├── main.py
+    ├── objects
+    │   ├── model.py
+    │   ├── node.py
+    │   ├── transition.py
+    │   └── variable.py
+    ├── parser
+    │   └── XML_parser.py
+    └── translator
+        ├── class_gen.py
+        ├── function_gen.py
+        ├── model.py
+        └── py_export.py
+```
+</br>
+
+### Process logic flow
+
+</br>
+</br>
+</br>
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+## Current Features
+
+* Translator can handle below featues from UPPAAL.
+  * Identifies Start and End node by name (This feature will be changed to tag identification).
+  * Change UPPAAL xml into abstract graph structure.
+  * Parse given global declaration from UPPAAL to variables.
+  * Transition object can handle:
+    * select (name).
+    * guard (conditionals).
+    * assignment (variable update in local).
+    * locate linked node sources.
+  * Each UPPAAL node name is converted to the function declaration in python.
+  * Each transition point is converted to function call in python.
+
+</br>
+</br>
+
+### Example of how software works
+</br>
 
 0. When producing a model such like this in UPPAAL
   <div align="center">
-    <img width="500" src="img/UPPAAL_model_1.png">  
+    <img width="700" src="img/UPPAAL_model_1.jpg">  
   </div>
+
+
 
 1. Suppose there is a XML file given like this
 
@@ -251,7 +329,7 @@ TestClass.Start()
 ```
 
 <!-- USAGE EXAMPLES -->
-## Usage
+## Usage/Application
 
 
 _For more examples, please refer to the [Design Documentation](https://docs.google.com/document/d/e/2PACX-1vQ0GhSxaPt2g3zVoJ4P_tEIz-wvtw0bt5sdaG9b234H0Y10dJu01ctV5YPrfZKCXZp57UvUPH7nJ3qQ/pub)_
@@ -267,6 +345,7 @@ _For more plans, please see the [plan documentation](https://drive.google.com/fi
 
 ### Task 1 check list - Due October 16.
 - [x] Update mark down documentation.
+- [x] Create mock Python code output.
 - [x] Make UPPAAL parser.
 - [x] Program is able to traverse all the nodes through tranistion objects.
 - [x] Program is able to identify the validity of the model.
@@ -277,14 +356,20 @@ _For more plans, please see the [plan documentation](https://drive.google.com/fi
 
 ### Task 2 check list - Due October 23.
 - [x] Make complex diagram 1
+<<<<<<< HEAD
 - [x] Update(enhance) UPPAAL parser
 - [x] Update(enhance) Python code generator/converter
 - [x] Test complex diagram 1
+=======
+- [ ] Update (enhance) UPPAAL parser
+- [ ] Update (enhance) Python code generator/converter
+- [ ] Test complex diagram 1
+>>>>>>> f25137d53bb849046e7431053541a5738e33c3b9
 
 ### Task 3 check list - Due October 23.
 - [x] Make complex diagram 2
-- [ ] Update(enhance) UPPAAL parser
-- [ ] Update(enhance) Python code generator/converter
+- [ ] Update (enhance) UPPAAL parser
+- [ ] Update (enhance) Python code generator/converter
 - [ ] Test complex diagram 2
 
 See the [open issues](https://github.com/TCC2021SeniorProject/ModelTranslator/issues) for a full list of proposed features (and known issues).
@@ -294,9 +379,16 @@ See the [open issues](https://github.com/TCC2021SeniorProject/ModelTranslator/is
 ## Testing Schedules
 
 </br>
-<div align="elft">
-  <img width="500px" src="img/testSchedule.png">  
-</div>
+
+| Case        | Testing Responder   | Due Date |
+| ----------- | ------------------- | -------- |
+| Test case 1 | Tony, Cameron, Cael | Oct 9    |
+| Test case 2 | Tony, Cameron       | Oct 17   |
+| Test case 3 | Tony, Cameron       | Oct 23   |
+| Test case 4 | Tony, Cameron, Cael | Nov 21   |
+| Test case 7 | Tony, Cael          | Dec 12   |
+| Test case 8 | Tony, Cameron, Cael | Dec 12   |
+
 </br>
 
 To view the specific testing details, **[click here](https://docs.google.com/document/d/e/2PACX-1vQC5scu0DfEu0nLqPVWZzML1m6oMh8Q2Oo86GEyt_GFx_NB7BA3BZWF44hMv6tEFyhgTrATsf8TUQL3/pub)**
@@ -307,9 +399,7 @@ To view the specific testing details, **[click here](https://docs.google.com/doc
 - [x] Test case 2 (Due Oct 17): Model comparatively massive size diagram
 - [x] Test case 3 (Due Oct 23): Build infinite loops / Redundant transitions.
 - [ ] Test case 4 (Due Nov 21): Change models to python codes that MCCD accepts.
-- [ ] Test case 5 (Due Oct 10): Simple signalling to the device
-- [ ] Test case 6 (Due Oct 24): Complex signalling to the device
-- [ ] Test case 7 (Due Dec 12):	Handling devices via web application on MCCD
+- [ ] Test case 7 (Due Dec 12): Handling devices via web application on MCCD
 - [ ] Test case 8 (Due Dec 12): MCCD can be postponed until the device finishes its current job
 
 
@@ -334,24 +424,25 @@ This will not be permanent until the completion of the project.
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
-
 <!-- CONTACT -->
 ## Contact
 
 #### Director
 >  Dr. Siddhartha Bhattacharyya </br>
-email:[sbhattacharyya@fit.edu](sbhattacharyya@fit.edu)
+Email: [sbhattacharyya@fit.edu](mailto:sbhattacharyya@fit.edu)
 
 #### Developers
 > Sung-Jun Baek </br>
-email:[roni2006@hanmail.net](roni2006@hanmail.net) </br>
-GitHub Link: [https://github.com/MarcoBackman](https://github.com/MarcoBackman)
+> Email: [roni2006@hanmail.net](mailto:roni2006@hanmail.net) </br>
+> GitHub: [MarcoBackman](https://github.com/MarcoBackman)
 
 > Caelan Shoop </br>
-email:[cshoop2018@my.fit.edu](cshoop2018@my.fit.edu)
+> Email: [cshoop2018@my.fit.edu](mailto:cshoop2018@my.fit.edu) </br>
+> GitHub: [CCShoop](https://github.com/CCShoop) 
 
 > Cameron Wright </br>
-email:[cameron2018@my.fit.edu](cameron2018@my.fit.edu)
+> Email: [cameron2018@my.fit.edu](mailto:cameron2018@my.fit.edu) </br>
+> GitHub: [CameronWr](https://github.com/CameronWr)
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>

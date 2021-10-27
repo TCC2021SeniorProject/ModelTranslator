@@ -124,7 +124,7 @@ Download UPPAAL to make your own cases
 ### Model Validity
 </br>
 
-<p style="color:#EF786F;font-size:15px;">&ensp;&ensp;&ensp;<b>Rules for a valid execution</b></p>
+<p style="color:#EF786F; font-size:15px;">&ensp;&ensp;&ensp;<b>Rules for a valid execution</b></p>
 
 </br>
 

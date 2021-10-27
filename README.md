@@ -394,11 +394,6 @@ To view the specific testing details, **[click here](https://docs.google.com/doc
 - [x] Test case 2 (Due Oct 17): Model comparatively massive size diagram
 - [x] Test case 3 (Due Oct 23): Build infinite loops / Redundant transitions.
 - [ ] Test case 4 (Due Nov 21): Change models to python codes that MCCD accepts.
-<<<<<<< HEAD
-=======
-- [ ] Test case 5 (Due Oct 10): Simple signalling to the device
-- [ ] Test case 6 (Due Oct 24): Complex signalling to the device
->>>>>>> f25137d53bb849046e7431053541a5738e33c3b9
 - [ ] Test case 7 (Due Dec 12): Handling devices via web application on MCCD
 - [ ] Test case 8 (Due Dec 12): MCCD can be postponed until the device finishes its current job
 

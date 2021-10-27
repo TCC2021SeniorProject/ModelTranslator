@@ -121,7 +121,6 @@ Download UPPAAL to make your own cases
    
    ```
 
-<<<<<<< HEAD
 ### Model Validity
 </br>
 
@@ -190,9 +189,6 @@ Download UPPAAL to make your own cases
 
 ### Example of how software works
 </br>
-=======
-## Current Features
->>>>>>> f25137d53bb849046e7431053541a5738e33c3b9
 
 0. When producing a model such like this in UPPAAL
   <div align="center">

@@ -125,7 +125,7 @@ Download UPPAAL to make your own cases
 </br>
 
 ```diff
-+                     Rules for a valid execution
++Rules for a valid execution
 ```
 
 </br>

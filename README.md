@@ -12,7 +12,7 @@
     <img alt="Carthage compatible" src="https://img.shields.io/badge/Stability-Unstable-red" />
     <img alt="Carthage compatible" src="https://img.shields.io/badge/Version-not published-red" />
     <img alt="Carthage compatible" src="https://img.shields.io/badge/Full documentation-not ready-red" />
-    <img alt="Carthage compatible" src="https://img.shields.io/badge/Update Date-10/23/2021-Green" />
+    <img alt="Carthage compatible" src="https://img.shields.io/badge/Update Date-10/27/2021-Green" />
   </p>
 
   <h3 align="center">MODEL TRANSLATOR</h3>
@@ -121,15 +121,22 @@ Download UPPAAL to make your own cases
    
    ```
 
-### Model Validity
+### Valid model for tranlator
 </br>
 
 ```diff
 +Rules for a valid execution
 ```
+
 > 1. A model must be a valid model. The validity of the model can be checked in UPPAAL software. Any invalid UPPAAL model will cause a program crash.
+>
 > 2. Any unidentified variables may cause error either on the progress in the injection to the device or in the use of this software.
+>
 > 3. The declarations must be placed(defined) at the right place, occordingly to its template.
+>
+> 4. Each node is considered as function definition - No dublicated function.
+>
+> 5. Each transition is considered as function call.
 
 </br>
 </br>
@@ -357,15 +364,10 @@ _For more plans, please see the [plan documentation](https://drive.google.com/fi
 - [x] Update(enhance) UPPAAL parser
 - [x] Update(enhance) Python code generator/converter
 - [x] Test complex diagram 1
-- [ ] Update (enhance) UPPAAL parser
-- [ ] Update (enhance) Python code generator/converter
-- [ ] Test complex diagram 1
+- [x] Update (enhance) UPPAAL parser
+- [x] Update (enhance) Python code generator/converter
+- [x] Test complex diagram 1
 
-### Task 3 check list - Due October 23.
-- [x] Make complex diagram 2
-- [ ] Update (enhance) UPPAAL parser
-- [ ] Update (enhance) Python code generator/converter
-- [ ] Test complex diagram 2
 
 See the [open issues](https://github.com/TCC2021SeniorProject/ModelTranslator/issues) for a full list of proposed features (and known issues).
 
@@ -407,6 +409,8 @@ To view the specific testing details, **[click here](https://docs.google.com/doc
 
 **Follow rules for better readability: [Clean Code by Robert C. Martin](https://gist.github.com/wojteklu/73c6914cc446146b8b533c0988cf8d29)**
 </br>
+
+**Getter first, setter later for function definitions.**
 
 
 <!-- LICENSE -->

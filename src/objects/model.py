@@ -1,5 +1,3 @@
-import re
-
 from objects.node import Node
 from objects.transition import Transition
 from objects.variable import Variable
@@ -10,27 +8,73 @@ class Model():
 
     #defines required variables with no initial value
     def __init__(self):
-        self.start_state : Node   #starts the process
-        self.end_state : Node     #ends the process
-
-        self.valid_graph = False  #unverified graph is set to false
+        self.name = ""
+        self.start_state : Node = None
+        self.end_state = []
         self.nodes = []
-        self.transitions = []     #Unordered transition
-        self.variables = []       #conditional variables
+        self.transitions = []
+        self.variables = []
+        self.valid_graph = False
 
-    def set_valid_graph(self):
-        self.valid_graph = True
+    def get_model_name(self):
+        return self.name
+
+    def get_nodes(self):
+        return self.nodes
+
+    def get_node_by_id(self, id):
+        if (len(self.nodes) == 0):
+            raise Exception("No node matching to the given id")
+        node : Node
+        for node in self.nodes:
+            if (node.get_id() == id):
+                return node
+        raise Exception("No node matching to the given id")
+
+    def add_node(self, node):
+        self.nodes.append(node)
+
+    def get_transition_num(self):
+        return len(self.transitions)
+
+    def set_transitions(self, transitions : Transition):
+        self.transitions = transitions
 
     def is_valid_graph(self):
         return self.valid_graph
 
-    def set_start_state(self, node):
+    def set_valid_graph(self):
+        self.valid_graph = True
+
+    def get_start(self):
+        return self.start_state
+
+    def set_start(self, node):
         self.start_state = node
     
-    def set_end_state(self, node):
-        self.end_state = node
+    def is_end(self, target_node : Node):
+        for node in self.end_state:
+            node : Node
+            if node.get_id == target_node.get_id:
+                return True
+        return False
 
-    #for non-predetermined variables(assignment/sync function)
+    def get_end_list(self):
+        if len(self.end_state) == 0:
+            return None
+        return self.end_state
+
+    def add_end(self, node):
+        #Check for duplication
+        if self.is_end(node):
+            return
+        else:
+            self.end_state.append(node)
+
+    def set_model_name(self, name):
+        self.name = name
+
+    #Used for assign command from UPPAAL
     def update_variable(self, name, value):
         #No existing element
         index = self.get_variable_index(name)
@@ -42,8 +86,8 @@ class Model():
             new_variable.set_variable_value(value)
             self.variables[index] = new_variable
 
-    def set_variable(self, variable : Variable):
-        self.variables.append(variable)
+    def get_variables(self):
+        return self.variables
 
     def get_variable(self, name):
         if (len(self.variables) == 0):
@@ -55,9 +99,6 @@ class Model():
                     return variable
             return None
 
-    def get_variables(self):
-        return self.variables
-
     def get_variable_index(self, name):
         if (len(self.variables) == 0):
             return False
@@ -68,72 +109,14 @@ class Model():
                     return index
             return False
 
-    def get_start(self):
-        return self.start_state
+    def set_variable(self, variable : Variable):
+        self.variables.append(variable)
 
-    def get_end(self):
-        return self.end_state
-
-    def add_node(self, node):
-        self.nodes.append(node)
-
-    def set_nodes(self, nodes):
-        self.nodes = nodes
-
-    def get_nodes(self):
-        return self.nodes
-
-    def set_transitions(self, transitions : Transition):
-        self.transitions = transitions
-
-    def get_node_by_id(self, id):
-        if (len(self.nodes) == 0):
-            print("Getting node by index failed, empty list")
-            return
-        node : Node
-        for node in self.nodes:
-            if (node.get_id() == id):
-                return node
-        print("No node matching to the given id")
-        return None
-
-    def get_node_by_index(self, index):
-        if (len(self.nodes) == 0):
-            print("Getting node by index failed, empty list")
-            return
-        elif (len(self.nodes) < index):
-            print("Getting node by index failed, index out of bounds")
-            return
-        return self.nodes[index]
-
-    def get_transition_by_index(self, index):
-        if (len(self.transitions) == 0):
-            print("Getting transition by index failed, empty list")
-            return
-        elif (len(self.transitions) < index):
-            print("Getting transition by index failed, index out of bounds")
-            return
-        return self.transitions[index]
-
-    def get_number_of_nodes(self):
+    def get_node_size(self):
         return len(self.nodes)
 
-    def get_number_of_transition(self):
+    def get_transition_size(self):
         return len(self.transitions)
-
-    #will return True if start state exists
-    def find_start(self):
-        if self.start_state == None:
-            return False
-        else:
-            return True
-
-    #will return True if end state exists
-    def find_end(self):
-        if self.end_state == None:
-            return False
-        else:
-            return True
 
     def reset_visit(self):
         for node in self.nodes:

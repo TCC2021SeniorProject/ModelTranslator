@@ -13,8 +13,10 @@ class TestClass:
 		exit()
 
 	async def Dock(self):
+		await self.Ready()
 		self.mode = 0
 		await self.End()
+
 
 	async def Explore(self):
 		if self.mode == 4 or self.battery < 10 :
@@ -45,6 +47,7 @@ class TestClass:
 	async def Start(self):
 		self.mode = 1
 		await self.Idle()
+
 
 
 TestClass.Start()

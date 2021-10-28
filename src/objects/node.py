@@ -1,51 +1,48 @@
 from objects.transition import Transition
 
+"""
+    Node consists of following elements
+
+    name          : String value used as function name
+    id            : Unique identification name.
+    commit        : Linkage pointer to other template(class) 
+    transition(s) : One direction node pointer linkage.
+    script        : Script strings where used at the export stage.
+"""
 class Node():
-    '''
-        id:
-         - A unique number that can't be duplicated.
-        
-        name:
-         - A duplicable text field.
-         - Name has to be function like
-            ex1) check_status()
-            ex2) get_signal(device_id)
-         - It may accpet non-function name, 
-            then it must be a built-in function in the translator
-    '''
+
     def __init__(self, id, name):
         self.id = id
         self.name = name
+        #Not implemented yet
         self.commit : str
-        self.is_function = False
+        self.is_commit = False
         self.visited = False
-        self.parameter_list = []
+        self.parameter_list = [] #Not implemented yet.
         self.transition_list = []
         self.script = "\tasync def " + name + "(self):\n"
         print("Node added")
 
-    def set_scipt(self, content):
-        self.script += content
-    
     def get_script(self):
         return self.script
+
+    def set_scipt(self, content):
+        self.script += content
 
     def get_id(self):
         return self.id
 
+    def set_id(self, id):
+        self.id = id
+
     def get_name(self):
         return self.name
 
-    def isFunction(self):
-        return self.is_function
+    def set_name(self, name):
+        self.name = name
 
-    def add_transition(self, from_id, to_id, name):
-        transition = Transition()
-        transition.set_from(from_id)
-        transition.set_to(to_id)
-        transition.set_name(name)
-        self.transition_list.append(transition)
-        print("Transition added")
+    def get_transitions(self):
+        return self.transition_list
 
     def add_transition(self, transition):
         self.transition_list.append(transition)
@@ -54,11 +51,8 @@ class Node():
     def transition_count(self):
         return len(self.transition_list)
 
-    def isEmpty(self):
-        return (len(self.transition_list) == 0)
-
-    def get_transitions(self):
-        return self.transition_list
+    def is_visited(self):
+        return self.visited
 
     def set_visited(self):
         self.visited = True
@@ -66,14 +60,12 @@ class Node():
     def set_unvisited(self):
         self.visited = False
     
-    def isVisited(self):
-        return self.visited
-
-    def set_commit(self, commit):
-        self.commit = commit
-
     def get_commit(self):
         return self.commit
+
+    def set_commit(self, commit):
+        self.is_commit = True
+        self.commit = commit
 
     def form_script(self):
         for transition in self.transition_list:

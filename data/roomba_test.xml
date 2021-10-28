@@ -34,6 +34,10 @@ int status3, charge3 = 0;
 		</location>
 		<init ref="id6"/>
 		<transition>
+			<source ref="id1"/>
+			<target ref="id4"/>
+		</transition>
+		<transition>
 			<source ref="id6"/>
 			<target ref="id5"/>
 			<label kind="assignment" x="-909" y="-433">mode = 1</label>

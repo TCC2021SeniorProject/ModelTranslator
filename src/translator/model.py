@@ -8,26 +8,29 @@ from objects.transition import Transition
 
 class TranslateModel:
     def __init__(self, model : Model):
-        self.class_name = "TestClass"
+        #Refactor to accept multiple models
         self.model = model
-        py_class_gen = ClassScriptGen()
-        self.class_script = py_class_gen.make_class_script(self.class_name)
+        #Refactor to set model variables to local
         variables = model.get_variables()
+        #Refactor to accept class name as template name text
+        self.class_name = "TestClass"
+
+        self.class_script = ClassScriptGen.make_class_script(self.class_name)
         self.init_script = FunctionScriptGen.make_constructor([], variables)
         self.def_script = ""
         self.entire_script = ""
+        
         #Refactor this to identify start by automation
-        self.base_script = self.class_name + ".Start()"
+        self.base_script = self.class_name + "." + model.get_start().get_name() + "()"
         self.stack = []
     
     #BFS search - store a node to the stack of each visit
     def traverse_model(self):
-        node : Node
         queue = []
         queue.append(self.model.get_start())
         while (len(queue) > 0):
             #Remove first and stack up the element
-            node = queue[0]
+            node : Node = queue[0]
             queue.pop(0)
             self.stack.append(node)
             #Stack up next nodes by exisiting transitions
@@ -35,12 +38,13 @@ class TranslateModel:
             for transition in transitions:
                 transition : Transition
                 to_node = transition.get_to_node()
-                if not (to_node.isVisited()):
+                if not (to_node.is_visited()):
                     queue.append(to_node)
                     to_node.set_visited()
 
-
-
+    """
+        This is used for better readability of the generated code
+    """
     def append_node_transition_scripts(self):
         #Traverse and stack up the nodes.
         self.traverse_model()
@@ -51,22 +55,19 @@ class TranslateModel:
             #These scripts are constructed at the parsing stages
             node.form_script()
             script = node.get_script()
-            if (node == self.model.get_end()):
+            if self.model.is_end(node):
                 script += "\t\texit()"
             self.append_def_script(script)
 
-    #Append multiple sets of def scripts
     def append_def_script(self, script : str):
         self.def_script += script + "\n\n"
-    
-    #Has to be called internally
+
     def assemble_scripts(self):
         self.entire_script += self.class_script + "\n"
         self.entire_script += self.init_script + "\n"
         self.entire_script += self.def_script + "\n"
         self.entire_script += self.base_script + "\n"
-
-    #This should be called only once
+    
     def get_entire_scripts(self):
         self.assemble_scripts()
         return self.entire_script

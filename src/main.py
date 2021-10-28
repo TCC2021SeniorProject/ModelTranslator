@@ -23,7 +23,7 @@ def parse_model(xml_file):
         print("Invalid model given, terminating")
         return -1
     else:
-        return Paser.generate_model(xml_file)
+        return validation
 
 def export_to_python_script(model):
     #Tranlate into python script - single template

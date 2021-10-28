@@ -15,7 +15,8 @@ class TranslateModel:
         #Refactor to accept class name as template name text
         self.class_name = "TestClass"
 
-        self.class_script = ClassScriptGen.make_class_script(self.class_name)
+        #Refactor this
+        self.class_script = "class " + "TestClass" + ":\n"
         self.init_script = FunctionScriptGen.make_constructor([], variables)
         self.def_script = ""
         self.entire_script = ""

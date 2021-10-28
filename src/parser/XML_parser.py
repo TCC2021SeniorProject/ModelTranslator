@@ -76,8 +76,7 @@ class ParseXML():
 
     #Make xml line into node
     def set_node(self, line):
-        node = None
-        node : Node
+        node : Node = None
         id = line.attrib.get("id")
         for sub_tag in line:
             if sub_tag.tag == 'name':

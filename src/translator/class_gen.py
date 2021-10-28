@@ -1,6 +1,6 @@
 from translator.function_gen import FunctionScriptGen
 
-# This class is called once for an entire model.
+#Not implemented yet
 class ClassScriptGen:
     def __init__(self):
         self.class_script = ""

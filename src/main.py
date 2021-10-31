@@ -4,7 +4,7 @@ import parser.XML_parser as Paser
 from translator.model import TranslateModel
 
 #Argument should be: 1. execution file 2. input file
-default_input_directory = "./data/roomba_test.xml"
+default_input_directory = "./data/test.xml"
 
 def identify_system_argument():
     arg_list = sys.argv
@@ -15,7 +15,7 @@ def identify_system_argument():
         raise Exception('Invalid number of arguments are given')
     else:
         print("Using default input file directory: " + default_input_directory)
-        return "./data/roomba_test.xml"
+        return default_input_directory
 
 def parse_model(xml_file):
     validation = Paser.generate_model(xml_file)

@@ -1,4 +1,3 @@
-from translator.function_gen import FunctionScriptGen
 
 #Not implemented yet
 class ClassScriptGen:

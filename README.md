@@ -168,7 +168,9 @@ Download UPPAAL to make your own cases
 </br>
 
 ### Process logic flow
-
+  <div align="center">
+    <img width="800" src="img/execution_process_flow.png">  
+  </div>
 </br>
 </br>
 </br>

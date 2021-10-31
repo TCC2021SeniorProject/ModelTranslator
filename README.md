@@ -72,12 +72,13 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This project will assist developers on establishing IoT system.
+This project will assist developers in implementing custom IoT systems.
 
 Here's why you should use this:
-* Users who wants to design automata with UPPAAL but has no idea what to do with the generated XML file.
-* Users who wants their modeled diagrams runs on RaspPi device.
-* Users who wants to test out IoT environment with the modeling tool (UPPAAL).
+
+* Users who want to design automata with UPPAAL but have no idea what to do with the generated XML file.
+* Users who want their modeled diagrams to run on a Rasberry Pi device.
+* Users who want to test out IoT environment with the modeling tool (UPPAAL).
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -101,9 +102,8 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-Download UPPAAL to make your own cases
+Download UPPAAL to create your model
 * [DOWNLOAD UPPAAL](https://uppaal.org/)
-  
 
 ### Demo Installation
 
@@ -129,14 +129,9 @@ Download UPPAAL to make your own cases
 ```
 
 > 1. A model must be a valid model. The validity of the model can be checked in UPPAAL software. Any invalid UPPAAL model will cause a program crash.
->
-> 2. Any unidentified variables may cause error either on the progress in the injection to the device or in the use of this software.
->
-> 3. The declarations must be placed(defined) at the right place, occordingly to its template.
->
-> 4. Each node is considered as function definition - No dublicated function.
->
-> 5. Each transition is considered as function call.
+> 2. All variables must be defined. Any unidentified variables may cause errors either while using the software (translation) or executing output (Python code).
+> 3. All variable declarations must be valid, according to its template.
+> 4. Every node must have a unique identifier. Duplicate identifiers will result in overwriting of functions.
 
 </br>
 </br>
@@ -177,17 +172,23 @@ Download UPPAAL to make your own cases
 
 ## Current Features
 
-* Translator can handle below featues from UPPAAL.
-  * Identifies Start and End node by name (This feature will be changed to tag identification).
-  * Change UPPAAL xml into abstract graph structure.
-  * Parse given global declaration from UPPAAL to variables.
-  * Transition object can handle:
-    * select (name).
-    * guard (conditionals).
-    * assignment (variable update in local).
-    * locate linked node sources.
-  * Each UPPAAL node name is converted to the function declaration in python.
-  * Each transition point is converted to function call in python.
+- The translator can handle the below features from UPPAAL
+
+- - Identifies Start and End node by name (This feature will be changed to tag identification)
+  - Change UPPAAL XML into abstract graph structure
+  - Parse given global declaration from UPPAAL to variables
+
+- Transition object can handle:
+
+- - - Select (name)
+    - Guard (conditionals)
+    - Assignment (variable update in local)
+
+  - Locate linked node sources
+
+  - Each UPPAAL node name is converted to the function declaration in python.
+
+  - Each transition point is converted to a function call in python
 
 </br>
 </br>
@@ -258,9 +259,10 @@ Download UPPAAL to make your own cases
   </nta>
 ```
 
-2. After running XML_parser, this will parse crutial data to graph objects. Below image is output lines as a result of conversion
+2. After running XML_parser, this will parse crucial data into graph objects. Below the image is output lines as a result of this conversion
 
 </br>
+
 <div align="left">
   <img src="img/XML_to_graph.png">  
 </div>
@@ -337,16 +339,17 @@ TestClass.Start()
 ## Usage/Application
 
 
-_For more examples, please refer to the [Design Documentation](https://docs.google.com/document/d/e/2PACX-1vQ0GhSxaPt2g3zVoJ4P_tEIz-wvtw0bt5sdaG9b234H0Y10dJu01ctV5YPrfZKCXZp57UvUPH7nJ3qQ/pub)_
+_For more examples, please refer to the [Design Documentation](https://docs.google.com/document/d/e/2PACX-1vQ0GhSxaPt2g3zVoJ4P_tEIz-wvtw0bt5sdaG9b234H0Y10dJu01ctV5YPrfZKCXZp57UvUPH7nJ3qQ/pub)_.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 
 <!-- ROADMAP -->
+
 ## Roadmap
 
-_For more plans, please see the [plan documentation](https://drive.google.com/file/d/1UHxCx8l3Wgu_6PQxfjx6K0d7gkP5ybov/view)_
+_For more plans, please see the [plan documentation](https://drive.google.com/file/d/1UHxCx8l3Wgu_6PQxfjx6K0d7gkP5ybov/view)_.
 
 ### Task 1 check list - Due October 16.
 - [x] Update mark down documentation.
@@ -416,7 +419,7 @@ To view the specific testing details, **[click here](https://docs.google.com/doc
 <!-- LICENSE -->
 ## License
 
-Currently there is no license for this repo meaning our team retain all rights to the source code and no one may reproduce, distribute, or create derivative works from our work.
+Currently, there is no license for this repo, meaning our team retains all rights to the source code and no one may reproduce, distribute, or create derivative works from our work.
 
 This will not be permanent until the completion of the project.
 

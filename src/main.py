@@ -4,7 +4,10 @@ import parser.XML_parser as Paser
 from translator.model import TranslateModel
 
 #Argument should be: 1. execution file 2. input file
-default_input_directory = "./data/test.xml"
+#simple_start_end
+#test
+#original_bad
+default_input_directory = "./data/original_bad.xml"
 
 def identify_system_argument():
     arg_list = sys.argv
@@ -19,11 +22,7 @@ def identify_system_argument():
 
 def parse_model(xml_file):
     validation = Paser.generate_model(xml_file)
-    if validation == None:
-        print("Invalid model given, terminating")
-        return -1
-    else:
-        return validation
+    return validation
 
 def export_to_python_script(model):
     #Tranlate into python script - single template
@@ -41,10 +40,9 @@ def main():
         error_type, error_instance, traceback = sys.exc_info()
         error_instance.args = (error_instance.args[0],)
         raise(error_instance)
-    model = parse_model(file_name)
 
-    if model != -1:
-        export_to_python_script(model)
+    model = parse_model(file_name)
+    export_to_python_script(model)
 
 #Beginning of the program
 if __name__ == '__main__':

@@ -201,9 +201,15 @@ class ParseXML():
         return source, temp_transition
 
     def set_start(self, node : Node):
+        id = str(node.get_id())
+        name = str(node.get_name())
+        print("Setting start at :" + id + ", " + name)
         self.model.set_start(node)
 
     def set_end(self, node : Node):
+        id = str(node.get_id())
+        name = str(node.get_name())
+        print("Setting end at :" + id + ", " + name)
         self.model.add_end(node)
 
     def find_end(self, model : Model):
@@ -212,16 +218,21 @@ class ParseXML():
         for node in nodes:
             node : Node
             if node.transition_count() == 0:
+                print("End node found: ")
                 end_nodes.append(node)
         return end_nodes
 
     #Identifying start and end by name
     def identify_start_end_node(self, node : Node):
         if node.get_name().upper() == self.model.START_STATE_TEXT:
-            print(node.get_id() + ": setting start node")
+            id = str(node.get_id())
+            name = str(node.get_name())
+            print("Setting start at :" + id + ", " + name)
             self.set_start(node)
         elif node.get_name().upper() == self.model.END_STATE_TEXT:
-            print(node.get_id() + ": Setting end node")
+            id = str(node.get_id())
+            name = str(node.get_name())
+            print("Setting end at :" + id + ", " + name)
             self.set_end(node)
 
     #Crucial function of Parser class(Always start from here)
@@ -339,8 +350,6 @@ def generate_model(file_name):
     parser_class = ParseXML(file_name)
     parser_class.convert_to_object()
     model = parser_class.get_model()
-    valid_model = check_model(model)
-    if valid_model:
-        return model
-    else:
-        return None
+    #Validation check is not used
+    #valid_model = check_model(model)
+    return model

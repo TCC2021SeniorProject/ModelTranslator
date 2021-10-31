@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Global declarations. 
+int status1, charge1;</declaration>
+	<template>
+		<name x="9" y="9">Roomba_Test</name>
+		<parameter>int &amp;mode,  int &amp;battery</parameter>
+		<declaration>// Place local declarations here.
+</declaration>
+		<location id="id0" x="-136" y="-357">
+			<name x="-127" y="-348">Dock</name>
+		</location>
+		<location id="id1" x="-391" y="-442">
+			<name x="-416" y="-476">Explore</name>
+		</location>
+		<location id="id2" x="-391" y="-289">
+			<name x="-416" y="-280">Clean</name>
+		</location>
+		<location id="id3" x="-663" y="-365">
+			<name x="-688" y="-357">Ready</name>
+		</location>
+		<location id="id4" x="-892" y="-365">
+			<name x="-909" y="-399">Idle</name>
+		</location>
+		<location id="id5" x="-136" y="-442">
+			<name x="-127" y="-467">Dead</name>
+		</location>
+		<location id="id6" x="-850" y="-297">
+			<name x="-858" y="-331">Mistake</name>
+		</location>
+		<init ref="id4"/>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id6"/>
+			<label kind="guard" x="-824" y="-314">battery &lt;= 1</label>
+			<label kind="assignment" x="-824" y="-297">mode := -1</label>
+			<nail x="-714" y="-297"/>
+			<nail x="-714" y="-272"/>
+			<nail x="-850" y="-272"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id5"/>
+			<label kind="guard" x="-136" y="-416">battery == 0</label>
+			<label kind="assignment" x="-136" y="-399">mode := -1</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-365" y="-357">mode == 3</label>
+			<nail x="-204" y="-340"/>
+			<nail x="-374" y="-340"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-374" y="-408">mode == 2</label>
+			<nail x="-221" y="-391"/>
+			<nail x="-382" y="-391"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id4"/>
+			<label kind="guard" x="-875" y="-425">mode == 0 || battery &lt;= 10</label>
+			<label kind="assignment" x="-875" y="-408">mode := 0</label>
+			<nail x="-705" y="-408"/>
+			<nail x="-875" y="-408"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-569" y="-357">mode == 1</label>
+			<nail x="-493" y="-340"/>
+			<nail x="-569" y="-340"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-569" y="-416">mode == 1</label>
+			<nail x="-501" y="-399"/>
+			<nail x="-569" y="-399"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id4"/>
+			<label kind="assignment" x="-688" y="-263">mode := 0</label>
+			<nail x="-136" y="-246"/>
+			<nail x="-892" y="-246"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-697" y="-467">mode == 1</label>
+			<nail x="-620" y="-450"/>
+			<nail x="-705" y="-450"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id0"/>
+			<label kind="guard" x="-374" y="-314">mode == 4 || battery &lt; 10</label>
+			<label kind="assignment" x="-314" y="-289">mode := 4</label>
+			<nail x="-204" y="-289"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<label kind="guard" x="-374" y="-442">mode == 4 || battery &lt; 10</label>
+			<label kind="assignment" x="-314" y="-467">mode := 4</label>
+			<nail x="-204" y="-442"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-467" y="-374">mode == 3</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-510" y="-289">mode == 3</label>
+			<nail x="-561" y="-289"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-518" y="-459">mode == 2</label>
+			<nail x="-569" y="-442"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-867" y="-365">battery &gt; 10 &amp;&amp; mode == 1</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+r1 = Roomba_Test(status1, charge1);
+
+// List one or more processes to be composed into a system.
+system r1;</system>
+	<queries>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>

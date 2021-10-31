@@ -33,6 +33,7 @@ class TranslateModel:
             #Remove first and stack up the element
             node : Node = queue[0]
             queue.pop(0)
+            node.set_visited()
             self.stack.append(node)
             #Stack up next nodes by exisiting transitions
             transitions = node.get_transitions()

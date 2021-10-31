@@ -1,7 +1,70 @@
-<?xml version="1.0" encoding="utf-8"?><!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_1.dtd'><nta><declaration>// Global declarations. 
-int status1, charge1;</declaration><template><name x="8" y="8">Roomba_Test</name><parameter>int &amp;mode,  int &amp;battery</parameter><declaration>// Place local declarations here.
-</declaration><location id="id0" x="-136" y="-360"><name x="-144" y="-392">Dock</name></location><location id="id1" x="-392" y="-440"><name x="-416" y="-472">Explore</name></location><location id="id2" x="-392" y="-288"><name x="-416" y="-280">Clean</name></location><location id="id3" x="-664" y="-368"><name x="-688" y="-400">Ready</name></location><location id="id4" x="-896" y="-368"><name x="-912" y="-400">Idle</name></location><init ref="id4"/><transition><source ref="id2"/><target ref="id0"/><label kind="guard" x="-376" y="-312">mode == 4 || battery &lt; 10</label><label kind="assignment" x="-312" y="-288">mode := 4</label><nail x="-200" y="-288"/></transition><transition><source ref="id1"/><target ref="id0"/><label kind="guard" x="-376" y="-440">mode == 4 || battery &lt; 10</label><label kind="assignment" x="-312" y="-464">mode := 4</label><nail x="-208" y="-440"/></transition><transition><source ref="id1"/><target ref="id2"/><label kind="guard" x="-464" y="-376">mode == 3</label></transition><transition><source ref="id3"/><target ref="id2"/><label kind="guard" x="-512" y="-312">mode == 3</label><nail x="-560" y="-288"/></transition><transition><source ref="id3"/><target ref="id1"/><label kind="guard" x="-520" y="-440">mode == 2</label><nail x="-568" y="-440"/></transition><transition><source ref="id4"/><target ref="id3"/><label kind="guard" x="-864" y="-368">battery &gt; 10 &amp;&amp; mode == 1</label></transition></template><system>// Place template instantiations here.
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Global declarations. 
+int status1, charge1;</declaration>
+	<template>
+		<name x="8" y="8">Roomba_Test</name>
+		<parameter>int &amp;mode,  int &amp;battery</parameter>
+		<declaration>// Place local declarations here.
+</declaration>
+		<location id="id0" x="-170" y="-365">
+			<name x="-178" y="-397">Dock</name>
+		</location>
+		<location id="id1" x="-392" y="-440">
+			<name x="-416" y="-472">Explore</name>
+		</location>
+		<location id="id2" x="-392" y="-288">
+			<name x="-416" y="-280">Clean</name>
+		</location>
+		<location id="id3" x="-664" y="-368">
+			<name x="-688" y="-400">Ready</name>
+		</location>
+		<location id="id4" x="-896" y="-368">
+			<name x="-912" y="-400">Idle</name>
+		</location>
+		<init ref="id4"/>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id0"/>
+			<label kind="guard" x="-376" y="-312">mode == 4 || battery &lt; 10</label>
+			<label kind="assignment" x="-312" y="-288">mode := 4</label>
+			<nail x="-200" y="-288"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<label kind="guard" x="-376" y="-440">mode == 4 || battery &lt; 10</label>
+			<label kind="assignment" x="-312" y="-464">mode := 4</label>
+			<nail x="-208" y="-440"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-464" y="-376">mode == 3</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-512" y="-312">mode == 3</label>
+			<nail x="-560" y="-288"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-520" y="-440">mode == 2</label>
+			<nail x="-568" y="-440"/>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
 r1 = Roomba_Test(status1, charge1);
 
 // List one or more processes to be composed into a system.
-system r1;</system></nta>
+system r1;</system>
+	<queries>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>

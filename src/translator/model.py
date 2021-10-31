@@ -8,22 +8,20 @@ from objects.transition import Transition
 
 class TranslateModel:
     def __init__(self, model : Model):
+        self.stack = []
         #Refactor to accept multiple models
         self.model = model
         #Refactor to set model variables to local
         variables = model.get_variables()
         #Refactor to accept class name as template name text
-        self.class_name = "TestClass"
-
-        #Refactor this
-        self.class_script = "class " + "TestClass" + ":\n"
-        self.init_script = FunctionScriptGen.make_constructor([], variables)
+        class_gen = ClassScriptGen(model)
+        self.class_script = class_gen.get_class_script()
         self.def_script = ""
         self.entire_script = ""
-        
-        #Refactor this to identify start by automation
-        self.base_script = self.class_name + "." + model.get_start().get_name() + "()"
-        self.stack = []
+
+        start_node = model.get_start()
+        class_name = model.get_model_name()
+        self.base_script = class_name + "." + start_node.get_name() + "()"
     
     #BFS search - store a node to the stack of each visit
     def traverse_model(self):
@@ -66,7 +64,6 @@ class TranslateModel:
 
     def assemble_scripts(self):
         self.entire_script += self.class_script + "\n"
-        self.entire_script += self.init_script + "\n"
         self.entire_script += self.def_script + "\n"
         self.entire_script += self.base_script + "\n"
     

@@ -1,9 +1,4 @@
-class TestClass:
-
-	def __init__(self, ):
-		print('Running constructor')
-		self.status1 = 0
-		self.charge1 = 0
+class Roomba_Test:
 
 	async def Dead(self):
 		exit()
@@ -56,4 +51,4 @@ class TestClass:
 
 
 
-TestClass.Idle()
+Roomba_Test.Idle()

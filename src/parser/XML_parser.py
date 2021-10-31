@@ -243,12 +243,15 @@ class ParseXML():
                 self.variable_declaration(elem.text)
             #Construct template to classes
             elif self.identify_template_tag(elem):
+                #Gets a direct child of the template
+                for class_name in elem.findall('.name[1]'):
+                #Name the template - only get a direct children of template tag
+                    if self.identify_name_tag(class_name):
+                        print("Class name: " + class_name.text)
+                        self.model.set_model_name(class_name.text)
                 for lines in elem.findall(".//*"):
                     for line in lines.iter():
-                        #Name the template
-                        if self.identify_name_tag(line):
-                            self.model.set_model_name(line.text)
-                        elif self.identify_location_tag(line):
+                        if self.identify_location_tag(line):
                             node = self.set_node(line)
                             if node == None:
                                 continue

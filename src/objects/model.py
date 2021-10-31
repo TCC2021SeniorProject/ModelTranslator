@@ -72,7 +72,10 @@ class Model():
             self.end_state.append(node)
 
     def set_model_name(self, name):
-        self.name = name
+        if name == None:
+            self.name = ""
+        else:
+            self.name = name
 
     #Used for assign command from UPPAAL
     def update_variable(self, name, value):

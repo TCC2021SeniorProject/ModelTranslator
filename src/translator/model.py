@@ -1,80 +1,43 @@
-from translator.class_gen import ClassScriptGen
-from translator.function_gen import FunctionScriptGen
-from translator.py_export import Export
 
 from objects.model import Model
-from objects.node import Node
-from objects.transition import Transition
+from objects.variable import Variable
+
+from translator.class_gen import ClassScriptGen
 
 class TranslateModel:
-    def __init__(self, model : Model):
+    def __init__(self, models, global_variables):
         self.stack = []
-        #Refactor to accept multiple models
-        self.model = model
-        #Refactor to set model variables to local
-        variables = model.get_variables()
-        #Refactor to accept class name as template name text
-        class_gen = ClassScriptGen(model)
-        self.class_script = class_gen.get_class_script()
-        self.def_script = ""
+        self.models = models              #list of Model()
+        self.variables = global_variables #list of Variable()
+
+        self.start_node = None
+
+        self.global_var_script = ""
         self.entire_script = ""
-
-        start_node = model.get_start()
-        class_name = model.get_model_name()
-        self.base_script = class_name + "." + start_node.get_name() + "()"
     
-    #BFS search - store a node to the stack of each visit
-    def traverse_model(self):
-        queue = []
-        queue.append(self.model.get_start())
-        while (len(queue) > 0):
-            #Remove first and stack up the element
-            node : Node = queue[0]
-            queue.pop(0)
-            node.set_visited()
-            self.stack.append(node)
-            #Stack up next nodes by exisiting transitions
-            transitions = node.get_transitions()
-            for transition in transitions:
-                transition : Transition
-                to_node = transition.get_to_node()
-                if not (to_node.is_visited()):
-                    queue.append(to_node)
-                    to_node.set_visited()
+    #Holds entire single class scripts - class, init(), def(). 
+    def make_class_script(self, model : Model):
+        class_gen = ClassScriptGen(model)
+        class_gen.make_class_scripts()
+        class_scripts = class_gen.get_class_script()
+        return class_scripts
 
-    """
-        This is used for better readability of the generated code
-    """
-    def append_node_transition_scripts(self):
-        #Traverse and stack up the nodes.
-        self.traverse_model()
-        #Definitions must be in order.
-        while (len(self.stack) != 0):
-            node = self.stack.pop()
-            node : Node
-            #These scripts are constructed at the parsing stages
-            node.form_script()
-            script = node.get_script()
-            if self.model.is_end(node):
-                script += "\t\texit()"
-            self.append_def_script(script)
+    def make_full_scripts(self):
+        global_var_script = ""
+        class_name = ""
+        start_node = ""
+        #Append global variables scripts
+        for global_var in self.variables:
+            global_var: Variable
+            global_var_script += global_var.get_gobal_var_script() + "\n"
+        self.entire_script += global_var_script
+        
+        #Append each of class scripts
+        for model in self.models:
+            self.entire_script += self.make_class_script(model) + "\n"
 
-    def append_def_script(self, script : str):
-        self.def_script += script + "\n\n"
+        #Needs refactor - starting class and node needs to be identified
+        #self.entire_script += class_name + "." + start_node.get_name() + "()"
 
-    def assemble_scripts(self):
-        self.entire_script += self.class_script + "\n"
-        self.entire_script += self.def_script + "\n"
-        self.entire_script += self.base_script + "\n"
-    
-    def get_entire_scripts(self):
-        self.assemble_scripts()
+    def get_full_scripts(self):
         return self.entire_script
-
-    def export_to_file(self):
-        self.export = Export()
-        self.export.make_file("")
-        self.export.append_to_file(self.get_entire_scripts())
-
-    def read_file(self):
-        return self.export.read_file("./data/output.py")

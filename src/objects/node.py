@@ -7,27 +7,18 @@ from objects.transition import Transition
     id            : Unique identification name.
     commit        : Linkage pointer to other template(class) 
     transition(s) : One direction node pointer linkage.
-    script        : Script strings where used at the export stage.
 """
 class Node():
 
     def __init__(self, id, name):
         self.id = id
         self.name = name
-        #Not implemented yet
-        self.commit : str
+        self.commit : str        #Not implemented yet
         self.is_commit = False
         self.visited = False
         self.parameter_list = [] #Not implemented yet.
         self.transition_list = []
-        self.script = "\tasync def " + name + "(self):\n"
-        print("Node added")
-
-    def get_script(self):
-        return self.script
-
-    def set_scipt(self, content):
-        self.script += content
+        print(name + "Node created")
 
     def get_id(self):
         return self.id
@@ -66,8 +57,3 @@ class Node():
     def set_commit(self, commit):
         self.is_commit = True
         self.commit = commit
-
-    def form_script(self):
-        for transition in self.transition_list:
-            transition : Transition
-            self.set_scipt(transition.get_script())

@@ -32,6 +32,7 @@ class Model():
         raise Exception("No node matching to the given id")
 
     def add_node(self, node):
+        print("Node added")
         self.nodes.append(node)
 
     def get_transition_num(self):
@@ -114,6 +115,9 @@ class Model():
 
     def set_variable(self, variable : Variable):
         self.variables.append(variable)
+
+    def set_variables(self, variables):
+        self.variables = variables
 
     def get_node_size(self):
         return len(self.nodes)

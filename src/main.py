@@ -2,12 +2,10 @@ import sys
 import parser.XML_parser as Paser
 
 from translator.model import TranslateModel
+from translator.py_export import Export
 
 #Argument should be: 1. execution file 2. input file
-#simple_start_end
-#test
-#original_bad
-default_input_directory = "./data/original_bad.xml"
+default_input_directory = "./data/all_tran_example.xml"
 
 def identify_system_argument():
     arg_list = sys.argv
@@ -20,19 +18,16 @@ def identify_system_argument():
         print("Using default input file directory: " + default_input_directory)
         return default_input_directory
 
-def parse_model(xml_file):
-    validation = Paser.generate_model(xml_file)
-    return validation
-
-def export_to_python_script(model):
+def generate_scripts(models, global_variables):
     #Tranlate into python script - single template
-    model_translator = TranslateModel(model)
-    model_translator.append_node_transition_scripts()
-    #Export to python file
-    model_translator.export_to_file()
+    model_translator = TranslateModel(models, global_variables)
+    model_translator.make_full_scripts()
+    scripts = model_translator.get_full_scripts()
+    return scripts
 
 #Refactor this to take xml_file as argumnent/or prompting input
 def main():
+    #Read XML files
     file_name = ""
     try:
         file_name = identify_system_argument()
@@ -40,9 +35,14 @@ def main():
         error_type, error_instance, traceback = sys.exc_info()
         error_instance.args = (error_instance.args[0],)
         raise(error_instance)
+    #Parse and form into model
+    models, global_variables = Paser.generate_model(file_name)
 
-    model = parse_model(file_name)
-    export_to_python_script(model)
+    #Generate scripts based on the model
+    scripts = generate_scripts(models, global_variables)
+
+    #Export scripts to file
+    Export.make_file(scripts)
 
 #Beginning of the program
 if __name__ == '__main__':

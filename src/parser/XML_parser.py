@@ -3,8 +3,9 @@ import re
 import xml.etree.ElementTree as ET
 from objects.node import Node
 from objects.transition import Transition
-from objects.model import Model
+from objects.template import Model
 from objects.variable import Variable
+from parser.tag_set import TagSet
 
 """
    Parse XML elements into objects for model class
@@ -26,46 +27,15 @@ class ParseXML():
         self.root = self.tree.getroot()
         self.models = []
         self.global_variables = []
+        self.system_script = []
 
     def get_models(self):
         return self.models
 
-    def get_global_variables(self):
-        return self.global_variables
+    def get_global_entities(self):
+        return self.global_variables, self.system_script
 
-    #checks global declaration / local declaration
-    def identify_declaration_tag(self, line):
-        return {
-            'declaration' : True
-        }.get(line.tag, False)
-
-    def identify_template_tag(self, line):
-        return {
-            'template' : True
-        }.get(line.tag, False)
-
-    def identify_location_tag(self, line):
-        return {
-            'location' : True
-        }.get(line.tag, False)
-
-    def identify_transition_tag(self, line):
-        return {
-            'transition' : True
-        }.get(line.tag, False)
-
-    def identify_init_tag(self, line):
-        return {
-            'init' : True
-        }.get(line.tag, False)
-
-    def identify_name_tag(self, line):
-        return {
-            'name' : True
-        }.get(line.tag, False)
-
-    #Make xml line into node
-    def set_node(self, line):
+    def parse_node(self, line):
         node : Node = None
         id = line.attrib.get("id")
         for sub_tag in line:
@@ -86,11 +56,9 @@ class ParseXML():
         variables = []
         #Check multiple lines
         lines = re.split("\n|;", declaration_str)
-        #trim extra spaces of the line
         for index, line in enumerate(lines):
             lines[index] = line.strip()
-        #Need refactor
-        for line in lines:
+        for line in lines:               #Need refactor
             line = line.strip()
             #disregard comment lines and empty element
             if line[0:2] == "//":
@@ -115,9 +83,6 @@ class ParseXML():
                 else:
                     words = attribute.split(" ")
 
-                #There will be only cases like
-                #type name
-                #name
                 if len(words) == 1:
                     var_name = words[0].strip()
                     var_obj = Variable(var_type, var_name, var_value)
@@ -128,13 +93,12 @@ class ParseXML():
                     var_obj = Variable(var_type, var_name, var_value)
                     variables.append(var_obj)
                 else:
-                    print("Something wrong")
+                    raise Exception("Something wrong")
         return variables
 
-    def set_transition(self, line, model : Model):
-        #Initial declaration
-        source : Node
-        target : Node
+    def parse_transition(self, line, model : Model):
+        source : Node = None
+        target : Node = None
         select = ""
         guard = ""
         synchronisation = ""
@@ -171,6 +135,23 @@ class ParseXML():
         temp_transition.set_assign(assignment)
         return source, temp_transition
 
+    def parse_system(self, line):
+        content = line.text
+        lines = re.split("\n", content)
+        new_lines = []
+        for line in lines:
+            line = line.strip()
+            if line[0:2] == "//":         #Skip comment line
+                continue
+            elif len(line) < 2:
+                continue                  #Skip empty line
+            line = line.replace("system", "")
+            line = line.replace(";", "")
+            line = line.strip()
+            new_lines.append(line)
+
+        return new_lines
+
     def set_start(self, node : Node, model : Model):
         id = str(node.get_id())
         name = str(node.get_name())
@@ -193,53 +174,78 @@ class ParseXML():
                 end_nodes.append(node)
         return end_nodes
 
-    #Crucial function of Parser class(Always start from here)
+    """
+        Crucial function of Parser class
+    """
     def convert_to_object(self):
         #Global declaration
         for elem in self.root.findall("declaration"):
             self.global_variables = self.parse_declaration(elem.text)
+
         for template in self.root.findall("template"):
             model = Model()
             temp_name_set = False
             for line in template.iter():
-                if self.identify_template_tag(line):
+                if TagSet.identify_template_tag(line):
                     continue
                 #This assumes every first name tag indicates a class name
-                elif self.identify_name_tag(line) and not temp_name_set:
+                elif TagSet.identify_name_tag(line) and not temp_name_set:
                     print("Class name: " + line.text)
                     model.set_model_name(line.text)
                     temp_name_set = True
-                elif self.identify_location_tag(line):
-                    node = self.set_node(line)
+                elif TagSet.identify_location_tag(line):
+                    node = self.parse_node(line)
                     if node == None:
                         raise Exception("Node is null")
                     model.add_node(node)
-                elif self.identify_transition_tag(line):
-                    node, transition = self.set_transition(line, model)
+                elif TagSet.identify_transition_tag(line):
+                    node, transition = self.parse_transition(line, model)
                     if not (node == None):
                         node.add_transition(transition)
-                elif self.identify_init_tag(line):
+                elif TagSet.identify_init_tag(line):
                     print("Init tag found")
                     #Init may have no name
                     id = line.attrib.get('ref')
                     node = model.get_node_by_id(id)
                     self.set_start(node, model)
                 #Local declaration
-                elif self.identify_declaration_tag(line):
+                elif TagSet.identify_declaration_tag(line):
                     model.set_variables = self.parse_declaration(elem.text)
             #Find end node - no transition going out
             end_nodes = self.find_end(model)
+            
+            #Finalize single template
             for node in end_nodes:
                 self.set_end(node, model)
             self.models.append(model)
 
+        for system in self.root.findall("system"):
+            for line in system.iter():
+                if TagSet.identify_system_tag(line):
+                    self.system_script = self.parse_system(line)
+
+        for queries in self.root.findall("queries"):
+            for line in queries.iter():
+                #Not implemented
+                if TagSet.identify_queries_tag:
+                    pass
+                #Not implemented
+                elif TagSet.identify_query_tag:
+                    pass
+                #Not implemented
+                elif TagSet.identify_formula_tag:
+                    pass
+                #Not implemented
+                elif TagSet.identify_comment_tag:
+                    pass
 """
-Starting function
-    Returns True/False of the model validity
+Root function of this class
+    - This will be called first
+    - Returns True/False of the model validity
 """
 def generate_model(file_name):
     parser_class = ParseXML(file_name)
     parser_class.convert_to_object()
     models = parser_class.get_models()
-    global_variables = parser_class.get_global_variables()
-    return models, global_variables
+    global_variables, system_script = parser_class.get_global_entities()
+    return models, global_variables, system_script

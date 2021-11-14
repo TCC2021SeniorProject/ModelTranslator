@@ -1,11 +1,11 @@
 import sys
 import parser.XML_parser as Paser
 
-from translator.model import TranslateModel
+from translator.script_gen import TranslateModel
 from translator.py_export import Export
 
 #Argument should be: 1. execution file 2. input file
-default_input_directory = "./data/all_tran_example.xml"
+default_input_directory = "./data/original_bad.xml"
 
 def identify_system_argument():
     arg_list = sys.argv
@@ -18,9 +18,9 @@ def identify_system_argument():
         print("Using default input file directory: " + default_input_directory)
         return default_input_directory
 
-def generate_scripts(models, global_variables):
+def generate_scripts(models, global_variables, global_system):
     #Tranlate into python script - single template
-    model_translator = TranslateModel(models, global_variables)
+    model_translator = TranslateModel(models, global_variables, global_system)
     model_translator.make_full_scripts()
     scripts = model_translator.get_full_scripts()
     return scripts
@@ -36,10 +36,10 @@ def main():
         error_instance.args = (error_instance.args[0],)
         raise(error_instance)
     #Parse and form into model
-    models, global_variables = Paser.generate_model(file_name)
+    models, global_variables, global_system = Paser.generate_model(file_name)
 
     #Generate scripts based on the model
-    scripts = generate_scripts(models, global_variables)
+    scripts = generate_scripts(models, global_variables, global_system)
 
     #Export scripts to file
     Export.make_file(scripts)

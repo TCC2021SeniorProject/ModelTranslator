@@ -7,7 +7,7 @@ int status1, charge1;</declaration>
 		<name x="9" y="9">Roomba_Test</name>
 		<parameter>int &amp;mode,  int &amp;battery</parameter>
 		<declaration>// Place local declarations here.
-</declaration>
+		</declaration>
 		<location id="id0" x="-136" y="-357">
 			<name x="-127" y="-348">Dock</name>
 		</location>

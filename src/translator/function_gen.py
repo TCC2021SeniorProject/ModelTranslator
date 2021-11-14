@@ -11,13 +11,16 @@ class FunctionScriptGen:
         for param in param_list:
             script += param + ", "
         script += "):\n"
-        script += "\t\tprint('Running constructor')\n"
+        #Noting to initialize
+        if len(variable_list) == 0:
+            script += "\t\tpass\n"
+            return  script + "\n"
         for variable in variable_list:
             variable : Variable
             line = "self." + variable.get_variable_name()
             line += " = " + str(variable.get_variable_value())
             script += "\t\t" + line + "\n"
-        return script
+        return script + "\n"
 
     """
     Additional script setting
@@ -54,6 +57,6 @@ class FunctionScriptGen:
             transition : Transition
             function_scripts += self.make_tranision_to_script(transition)
         if self.model.is_end(node):
-            function_scripts += "\t\texit()"
+            function_scripts += "\t\texit()\n"
         
         return function_scripts

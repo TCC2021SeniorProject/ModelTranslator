@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Global declaration(s)
+int status;
+int battery;
+
+</declaration>
+	<template>
+		<name x="0" y="0">all_tran_example</name>
+		<parameter>int &amp;mode, int &amp;charge</parameter>
+		<declaration>// Place local declarations here.</declaration>
+		<location id="id0" x="-1411" y="-425">
+			<name x="-1428" y="-459">Idle</name>
+		</location>
+		<location id="id1" x="-1173" y="-425">
+			<name x="-1190" y="-459">Run</name>
+		</location>
+		<location id="id2" x="-935" y="-425">
+			<name x="-952" y="-459">Dock</name>
+		</location>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id0"/>
+			<label kind="assignment" x="-1207" y="-340">mode = 0</label>
+			<nail x="-1020" y="-340"/>
+			<nail x="-1360" y="-340"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-1139" y="-425">mode == 4 || charge &lt; 10</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-1377" y="-425">mode == 1 &amp;&amp; charge &gt; 10</label>
+		</transition>
+	</template>
+	<template>
+		<name>clean</name>
+		<parameter>int &amp;mode</parameter>
+		<location id="id3" x="-629" y="-272">
+			<name x="-646" y="-306">Clean</name>
+		</location>
+		<location id="id4" x="-773" y="-272">
+			<name x="-841" y="-306">ShouldClean</name>
+		</location>
+		<init ref="id4"/>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-748" y="-272">mode == 3</label>
+		</transition>
+	</template>
+	<template>
+		<name>explore</name>
+		<parameter>int &amp;mode</parameter>
+		<location id="id5" x="-850" y="-493">
+			<name x="-867" y="-527">Explore</name>
+		</location>
+		<location id="id6" x="-1020" y="-493">
+			<name x="-1088" y="-527">ShouldExplore</name>
+		</location>
+		<init ref="id6"/>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id5"/>
+			<label kind="guard" x="-986" y="-493">mode == 2</label>
+		</transition>
+	</template>
+	<system>// Template instantiation(s)
+Roomba = all_tran_example(status, battery);
+// Processe(s) to be composed into a system(s)
+system Roomba;
+    </system>
+	<queries>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>

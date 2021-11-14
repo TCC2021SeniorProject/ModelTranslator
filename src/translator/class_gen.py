@@ -1,5 +1,4 @@
-from objects.model import Model
-from objects.model import Variable
+from objects.template import Model
 from objects.node import Node
 from objects.transition import Transition
 

@@ -1,11 +1,12 @@
 import re
-
 import xml.etree.ElementTree as ET
-from objects.node import Node
-from objects.transition import Transition
-from objects.template import Model
-from objects.variable import Variable
 from parser.tag_set import TagSet
+
+from objects.node import Node
+from objects.template import Model
+from objects.transition import Transition
+from objects.variable import Variable
+from translator.global_set import GlobalSet
 
 """
    Parse XML elements into objects for model class
@@ -19,23 +20,15 @@ class ParseXML():
                     'boolean' : 1,
                     'float' : 2,
                     'double' : 2,
-                    'string' : 3,
-                    'str' : 3}
+                    'string' : 3,   #Not accepted in UPPAAL - Refactor
+                    'str' : 3}      #Not accepted in UPPAAL - Refactor
 
-    def __init__ (self, fileName):
+    def __init__ (self, fileName : str):
         self.tree = ET.parse(fileName)
         self.root = self.tree.getroot()
-        self.models = []
-        self.global_variables = []
-        self.system_script = []
+        self.global_sets : GlobalSet = GlobalSet()
 
-    def get_models(self):
-        return self.models
-
-    def get_global_entities(self):
-        return self.global_variables, self.system_script
-
-    def parse_node(self, line):
+    def parse_node(self, line : ET):
         node : Node = None
         id = line.attrib.get("id")
         for sub_tag in line:
@@ -94,9 +87,9 @@ class ParseXML():
                     variables.append(var_obj)
                 else:
                     raise Exception("Something wrong")
-        return variables
+        self.global_sets.set_global_variables(variables)
 
-    def parse_transition(self, line, model : Model):
+    def parse_transition(self, line : ET, model : Model):
         source : Node = None
         target : Node = None
         select = ""
@@ -135,8 +128,33 @@ class ParseXML():
         temp_transition.set_assign(assignment)
         return source, temp_transition
 
-    def parse_system(self, line):
-        content = line.text
+    #Refactor required
+    def parse_system_instance(self, line : str):
+        elements = line.split("=")
+        print(elements)
+        instance = elements[0].strip()         #r1
+        model_str = elements[1].strip()        #Roomba_Test(parm1, parm2 ...);
+        model_str = model_str.replace(")", "") #Roomba_Test(parm1, parm2 ...
+        elements = model_str.split("(")
+        model_name = elements[0]               #Roomba_Test
+        param_line = elements[1]               #parm1, parm2 ...
+        params = param_line.split(",")
+
+        model = self.global_sets.get_model_by_name(model_name)
+        if (model == None): #Error model/init() not found
+            print("No model defined")
+            return
+
+        sys_obj = self.global_sets.system_object
+        sys_obj.add_instance_info(line, instance, model)
+
+    #Refactor required
+    """
+    r1 = Roomba_Test(param1, param2, ...);
+    system r1
+    """
+    def parse_system(self, et : ET):
+        content = et.text
         lines = re.split("\n", content)
         new_lines = []
         for line in lines:
@@ -145,10 +163,20 @@ class ParseXML():
                 continue
             elif len(line) < 2:
                 continue                  #Skip empty line
-            line = line.replace("system", "")
-            line = line.replace(";", "")
-            line = line.strip()
-            new_lines.append(line)
+
+            #system keyword -> Run defined instance
+            if "system" in line: # system r1 -> r1.init(params)
+                line = line.replace("system", "")
+                line = line.replace(";", "")
+                line = line.strip()
+                sys_obj = self.global_sets.system_object
+                sys_obj.add_call(line) #append - r1
+
+            else: # r1 = Roomba_Test(param1, param2, ...);
+                line = line.replace(";", "")
+                line = line.strip()
+                self.parse_system_instance(line)
+                new_lines.append(line)
 
         return new_lines
 
@@ -180,7 +208,7 @@ class ParseXML():
     def convert_to_object(self):
         #Global declaration
         for elem in self.root.findall("declaration"):
-            self.global_variables = self.parse_declaration(elem.text)
+            self.parse_declaration(elem.text)
 
         for template in self.root.findall("template"):
             model = Model()
@@ -217,11 +245,12 @@ class ParseXML():
             #Finalize single template
             for node in end_nodes:
                 self.set_end(node, model)
-            self.models.append(model)
+            self.global_sets.add_model(model)
 
         for system in self.root.findall("system"):
             for line in system.iter():
                 if TagSet.identify_system_tag(line):
+                    #Refactor this to store into object rather than in text
                     self.system_script = self.parse_system(line)
 
         for queries in self.root.findall("queries"):
@@ -243,9 +272,7 @@ Root function of this class
     - This will be called first
     - Returns True/False of the model validity
 """
-def generate_model(file_name):
+def generate_model(file_name : str) -> GlobalSet:
     parser_class = ParseXML(file_name)
     parser_class.convert_to_object()
-    models = parser_class.get_models()
-    global_variables, system_script = parser_class.get_global_entities()
-    return models, global_variables, system_script
+    return parser_class.global_sets

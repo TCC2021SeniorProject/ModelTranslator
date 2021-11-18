@@ -133,7 +133,7 @@ int status1, charge1;</declaration>
 		</transition>
 	</template>
 	<system>// Place template instantiations here.
-r1 = Roomba_Test(status1, charge1);
+r1 = Roomba_Test();
 
 // List one or more processes to be composed into a system.
 system r1;</system>

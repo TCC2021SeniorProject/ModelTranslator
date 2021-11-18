@@ -1,15 +1,18 @@
 
+from objects.system import System
 from objects.template import Model
 from objects.variable import Variable
 
 from translator.class_gen import ClassScriptGen
+from translator.global_set import GlobalSet
+
 
 class TranslateModel:
-    def __init__(self, models, global_variables, global_system):
+    def __init__(self, objects : GlobalSet):
         self.stack = []
-        self.models = models              #list of Model()
-        self.variables = global_variables #list of Variable()
-        self.systems = global_system      #list of string commands
+        self.objects = objects
+        self.models = objects.models              #list of Model objects
+        self.variables = objects.global_variables #list of Variable objects
 
         self.start_node = None
 
@@ -18,6 +21,7 @@ class TranslateModel:
     
     #Holds entire single class scripts - class, init(), def(). 
     def make_class_script(self, model : Model):
+
         class_gen = ClassScriptGen(model)
         class_gen.make_class_scripts()
         class_scripts = class_gen.get_class_script()
@@ -25,8 +29,6 @@ class TranslateModel:
 
     def make_full_scripts(self):
         global_var_script = ""
-        class_name = ""
-        start_node = ""
         #Append global variables scripts
         for global_var in self.variables:
             global_var: Variable
@@ -37,9 +39,8 @@ class TranslateModel:
         for model in self.models:
             self.entire_script += self.make_class_script(model)
 
-        #Needs refactor - starting class and node needs to be identified
-        for command in self.systems:
-            self.entire_script += command + "\n"
+        self.entire_script += self.objects.get_dec_scripts() + "\n"
+        self.entire_script += self.objects.get_instance_calls() + "\n"
 
     def get_full_scripts(self):
         return self.entire_script

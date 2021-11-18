@@ -4,6 +4,7 @@ charge1 = 0
 class Roomba_Test:
 	def __init__(self, ):
 		pass
+
 	async def Dead(self):
 		exit()
 
@@ -49,5 +50,7 @@ class Roomba_Test:
 		if self.battery > 10 and self.mode == 1:
 			await self.Ready()
 
-r1 = Roomba_Test(status1, charge1)
-r1
+r1 = Roomba_Test()
+
+r1.Idle()
+

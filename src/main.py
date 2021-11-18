@@ -1,6 +1,7 @@
 import sys
 import parser.XML_parser as Paser
 
+from translator.global_set import GlobalSet
 from translator.script_gen import TranslateModel
 from translator.py_export import Export
 
@@ -18,9 +19,9 @@ def identify_system_argument():
         print("Using default input file directory: " + default_input_directory)
         return default_input_directory
 
-def generate_scripts(models, global_variables, global_system):
+def generate_scripts(objects : GlobalSet):
     #Tranlate into python script - single template
-    model_translator = TranslateModel(models, global_variables, global_system)
+    model_translator = TranslateModel(objects)
     model_translator.make_full_scripts()
     scripts = model_translator.get_full_scripts()
     return scripts
@@ -36,10 +37,10 @@ def main():
         error_instance.args = (error_instance.args[0],)
         raise(error_instance)
     #Parse and form into model
-    models, global_variables, global_system = Paser.generate_model(file_name)
+    objects : GlobalSet = Paser.generate_model(file_name)
 
     #Generate scripts based on the model
-    scripts = generate_scripts(models, global_variables, global_system)
+    scripts = generate_scripts(objects)
 
     #Export scripts to file
     Export.make_file(scripts)

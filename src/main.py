@@ -1,9 +1,9 @@
-import sys
 import parser.XML_parser as Paser
+import sys
 
-from translator.global_set import GlobalSet
-from translator.script_gen import TranslateModel
+from objects.global_set import GlobalSet
 from translator.py_export import Export
+from translator.script_gen import TranslateModel
 
 #Argument should be: 1. execution file 2. input file
 default_input_directory = "./data/original_bad.xml"

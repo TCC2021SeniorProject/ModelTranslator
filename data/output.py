@@ -1,5 +1,3 @@
-status1 = 0
-charge1 = 0
 
 class Roomba_Test:
 	def __init__(self, ):

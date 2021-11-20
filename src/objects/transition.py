@@ -1,22 +1,22 @@
 """
     Transition's node links cannot be void
     Transition has one to one pointing behavior.
+
+    @TODO: make async, guard, assign, sync objects
+
+    @AUTHOR: Marco-Backman
 """
+
 class Transition():
-    operator = {
-            ">" : 0,
-            "<" : 0,
-            "==" : 0,
-            "=" : 0,
-            ">=" : 0,
-            "<=" : 0 }
+    operator = [">", "<", "==", "=", ">=", "<="]
 
     def __init__(self):
-        #Avoid cross importation
+        #XXX Import at this line to avoid cross importation
         from objects.node import Node
         self.name : str = None
         self.guard : str  = None    
         self.sync : str = None
+        self.sync_call = False #True: !, False: ?
         self.assign : str = None
         self.transition_from : Node = None
         self.transition_to : Node = None
@@ -47,7 +47,6 @@ class Transition():
         self.name = name
 
     def reform_conditional_state(self, guard):
-        #Left of the operator is variables
         temp_words = guard.split(" ")
         for index, word in enumerate(temp_words):
             if word in self.operator:
@@ -76,6 +75,10 @@ class Transition():
         return self.sync
 
     def set_sync(self, sync : str):
+        if (sync[-1:] == '!'):   # sync: '!'(call)
+            self.sync_call = True
+        elif (sync[-1:] == '?'): # sync: '?'(find)
+            self.sync_call = False
         self.sync = sync
 
     def get_assign(self):

@@ -1,24 +1,31 @@
-from objects.template import Model
+from objects.template import Template
 from objects.node import Node
 from objects.transition import Transition
 
 from translator.function_gen import FunctionScriptGen
 
-class ClassScriptGen:
+"""
 
-    def __init__(self, model : Model):
-        self.model = model
+
+    @TODO:
+
+    @AUTHOR: Marco-Backman
+"""
+
+class ClassScriptGen:
+    def __init__(self, template : Template):
+        self.template = template
         self.class_script = ""
 
     def append_class_def_script(self):
-        class_name = self.model.get_model_name()
+        class_name = self.template.get_template_name()
         self.class_script += "class " + class_name + ":\n"
 
     #BFS search - store a node to the stack of each visit
-    def traverse_model(self):
+    def traverse_template(self):
         queue = []
         stack = []
-        queue.append(self.model.get_start())
+        queue.append(self.template.get_start())
         while (len(queue) > 0):
             #Remove first and stack up the element
             node : Node = queue[0]
@@ -37,13 +44,13 @@ class ClassScriptGen:
 
     def append_function_script(self):
         #Make constructor
-        variables = self.model.get_variables()
-        func_script_gen = FunctionScriptGen(self.model)
+        variables = self.template.get_variables()
+        func_script_gen = FunctionScriptGen(self.template)
         script = func_script_gen.make_constructor([], variables)
         self.class_script += script
 
         #Traverse and stack up the nodes.
-        stack = self.traverse_model()
+        stack = self.traverse_template()
         function_scripts = ""
         while (len(stack) != 0):
             node : Node = stack.pop()

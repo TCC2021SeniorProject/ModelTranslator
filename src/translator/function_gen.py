@@ -1,10 +1,23 @@
 from objects.variable import Variable
+from objects.template import Template
 from objects.node import Node
 from objects.transition import Transition
 
+"""
+
+    Script setting info
+        Guard  - Conditionals
+        Assign - Add variables
+        Sync   - Check existing variables
+
+    @TODO: Implement sync script generation
+
+    @AUTHOR: Marco-Backman
+"""
+
 class FunctionScriptGen:
-    def __init__(self, model):
-        self.model = model
+    def __init__(self, template : Template):
+        self.template : Template = template
 
     def make_constructor(self, param_list, variable_list):
         script = "\tdef __init__(self, "
@@ -22,12 +35,6 @@ class FunctionScriptGen:
             script += "\t\t" + line + "\n"
         return script + "\n"
 
-    """
-    Additional script setting
-        Guard  - Conditionals
-        Assign - Add variables
-        Sync   - Check existing variables
-    """
     def make_tranision_to_script(self, transition : Transition):
         script = ""
         #Update(Assign), set variable
@@ -43,6 +50,10 @@ class FunctionScriptGen:
                 script += "\t" + line
             script += "\t\t\tawait self." + target_node.get_name() + "()\n"
         
+        #Sync find - '?'
+
+        #Sync call - '!'
+
         #Normal function call
         else:
             if (len(line) > 1):
@@ -56,7 +67,7 @@ class FunctionScriptGen:
         for transition in transition_list:
             transition : Transition
             function_scripts += self.make_tranision_to_script(transition)
-        if self.model.is_end(node):
+        if self.template.is_end(node):
             function_scripts += "\t\texit()\n"
         
         return function_scripts

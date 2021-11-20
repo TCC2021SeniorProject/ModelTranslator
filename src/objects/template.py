@@ -2,7 +2,16 @@ from objects.node import Node
 from objects.transition import Transition
 from objects.variable import Variable
 
-class Model():
+"""
+    Stores each UPPAAL template into an object form.
+    This will contain every information that a single template must possess.
+
+    @TODO:
+
+    @AUTHOR: Marco-Backman
+"""
+
+class Template():
     START_STATE_TEXT = "START"
     END_STATE_TEXT = "END"
 
@@ -16,8 +25,14 @@ class Model():
         self.variables = []
         self.valid_graph = False
 
-    def get_model_name(self):
+    def get_template_name(self):
         return self.name
+
+    def set_template_name(self, name):
+        if name == None:
+            self.name = ""
+        else:
+            self.name = name
 
     def get_nodes(self):
         return self.nodes
@@ -71,12 +86,6 @@ class Model():
             return
         else:
             self.end_state.append(node)
-
-    def set_model_name(self, name):
-        if name == None:
-            self.name = ""
-        else:
-            self.name = name
 
     #Used for assign command from UPPAAL
     def update_variable(self, name, value):

@@ -1,7 +1,6 @@
 import xml.etree.ElementTree as ET
 
 class TagSet:
-    #checks global declaration / local declaration
     def identify_declaration_tag(line : ET.Element) -> bool:
         return {
             'declaration' : True

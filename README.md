@@ -140,25 +140,33 @@ Download UPPAAL to create your model
 
 ```
 ├── data
-│   ├── xml_input_file.xml
-│   ├── output_file.py
+├── docs
 ├── img
+│   └── icon
 ├── README.md
 └── src
-    ├── __init__.py
-    ├── main.py
-    ├── objects
-    │   ├── model.py
-    │   ├── node.py
-    │   ├── transition.py
-    │   └── variable.py
-    ├── parser
-    │   └── XML_parser.py
-    └── translator
-        ├── class_gen.py
-        ├── function_gen.py
-        ├── model.py
-        └── py_export.py
+    ├── main.py
+    ├── objects
+    │   ├── global_set.py
+    │   ├── node.py
+    │   ├── system.py
+    │   ├── template.py
+    │   ├── transition.py
+    │   └── variable.py
+    ├── parser
+    │   ├── components
+    │   │   ├── declaration_parser.py
+    │   │   ├── node_parser.py
+    │   │   ├── system_parser.py
+    │   │   └── transition_parser.py
+    │   ├── tag_set.py
+    │   └── XML_parser.py
+    └── translator
+        ├── class_gen.py
+        ├── function_gen.py
+        ├── py_export.py
+        └── script_gen.py
+
 ```
 </br>
 

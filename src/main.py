@@ -6,7 +6,7 @@ from translator.py_export import Export
 from translator.script_gen import TranslateModel
 
 #Argument should be: 1. execution file 2. input file
-default_input_directory = "./data/original_bad.xml"
+default_input_directory = "./data/all_tran_example.xml"
 
 def identify_system_argument():
     arg_list = sys.argv

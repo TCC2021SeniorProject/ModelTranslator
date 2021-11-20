@@ -1,3 +1,5 @@
+from typing import List, Dict
+
 from objects.global_set import GlobalSet
 from objects.system import System
 from objects.template import Template
@@ -18,11 +20,11 @@ from translator.class_gen import ClassScriptGen
 """
 
 class TranslateModel:
-    def __init__(self, objects : GlobalSet):
+    def __init__(self, global_set : GlobalSet):
         self.stack = []
-        self.objects = objects
-        self.templates = objects.templates              #list of Template objects
-        self.variables = objects.global_variables #list of Variable objects
+        self.objects = global_set
+        self.templates : List[Template] = global_set.templates
+        self.variables : List[Variable] = global_set.global_variables
 
         self.start_node = None
 

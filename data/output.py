@@ -1,54 +1,46 @@
+status = 0
+battery = 0
+check_mode = None
 
-class Roomba_Test:
+class all_tran_example:
 	def __init__(self, ):
 		pass
 
-	async def Dead(self):
-		exit()
-
 	async def Dock(self):
-		if self.battery == 0:
-			self.mode = -1
-			await self.Dead()
-		if self.mode == 3:
-			await self.Clean()
-		if self.mode == 2:
-			await self.Explore()
 		self.mode = 0
 		await self.Idle()
 
-	async def Explore(self):
-		if self.mode == 1:
-			await self.Ready()
-		if self.mode == 4 or self.battery < 10:
-			self.mode = 4
+	async def Run(self):
+		if self.mode == 4 or self.charge < 10:
 			await self.Dock()
-		if self.mode == 3:
-			await self.Clean()
+
+	async def Idle(self):
+		if self.mode == 1 and self.charge > 10:
+			await self.Run()
+
+class clean:
+	def __init__(self, ):
+		pass
 
 	async def Clean(self):
-		if self.mode == 1:
-			await self.Ready()
-		if self.mode == 4 or self.battery < 10:
-			self.mode = 4
-			await self.Dock()
+		exit()
 
-	async def Ready(self):
-		if self.mode == 0 or self.battery <= 10:
-			self.mode = 0
-			await self.Idle()
-		if self.mode == 1:
-			await self.Ready()
+	async def default_init(self):
 		if self.mode == 3:
 			await self.Clean()
+
+class explore:
+	def __init__(self, ):
+		pass
+
+	async def Explore(self):
+		exit()
+
+	async def default_init(self):
 		if self.mode == 2:
 			await self.Explore()
 
-	async def Idle(self):
-		if self.battery > 10 and self.mode == 1:
-			await self.Ready()
+Roomba = all_tran_example(status, battery)
 
-r1 = Roomba_Test()
-
-r1.Idle()
+Roomba.Idle()
 

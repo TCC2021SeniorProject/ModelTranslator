@@ -1,3 +1,4 @@
+from typing import List
 import re
 from objects.variable import Variable
 
@@ -10,8 +11,8 @@ from objects.variable import Variable
 """
 
 class DeclarationParser:
-    def parse_declaration(declaration_str : str):
-        variables = []
+    def parse_declaration(declaration_str : str) -> List[Variable]:
+        variables : List[Variable] = []
         #Check multiple lines
         lines = re.split("\n|;", declaration_str)
         for index, line in enumerate(lines):

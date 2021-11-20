@@ -56,8 +56,7 @@ class ParseXML():
     def convert_to_object(self):
         #Global declaration
         for elem in self.root.findall("declaration"):
-            DeclarationParser.parse_declaration(elem.text)
-
+            self.global_sets.set_global_variables(DeclarationParser.parse_declaration(elem.text))
         for template_xml in self.root.findall("template"):
             template = Template()
             temp_name_set = False

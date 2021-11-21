@@ -5,7 +5,34 @@ from objects.global_set import GlobalSet
 from translator.py_export import Export
 from translator.script_gen import TranslateModel
 
-#Argument should be: 1. execution file 2. input file
+"""
+    XXX Main class
+        - Takes UPPAAL model in XML file as an input file
+        - Executes parser(translator)
+        - Make output in Python scripts
+        - Export file to designated path
+
+    @TODO: Consider adding features such as:
+                - Get input directory by argument
+                - Get output directory by argument
+
+           Add exception handlers to handle any unexpected cases:
+                - XML file corruption
+                - Cases where transator does not support
+                - Invalid input file dir or output file dir
+
+           Resolve coupling problem
+                -There are multiple cross importation to be fixed.
+                    - Node - Transition, Variable
+                    - System - object. modules
+                    - GlobalSets - object. modules
+                    - Template - Variable
+
+    @AUTHOR: Marco-Backman
+    @TARGET USER: UPPAAL users and developers
+"""
+
+# @TODO Argument should be: 1. execution file 2. input file
 default_input_directory = "./data/all_tran_example.xml"
 
 def identify_system_argument():
@@ -26,7 +53,6 @@ def generate_scripts(objects : GlobalSet):
     scripts = model_translator.get_full_scripts()
     return scripts
 
-#Refactor this to take xml_file as argumnent/or prompting input
 def main():
     #Read XML files
     file_name = ""
@@ -45,6 +71,5 @@ def main():
     #Export scripts to file
     Export.make_file(scripts)
 
-#Beginning of the program
 if __name__ == '__main__':
     main()

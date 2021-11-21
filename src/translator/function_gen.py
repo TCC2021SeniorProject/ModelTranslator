@@ -1,7 +1,10 @@
+from typing import List
+
 from objects.variable import Variable
 from objects.template import Template
 from objects.node import Node
 from objects.transition import Transition
+from objects.global_set import GlobalSet
 
 """
 
@@ -16,8 +19,9 @@ from objects.transition import Transition
 """
 
 class FunctionScriptGen:
-    def __init__(self, template : Template):
+    def __init__(self, template : Template, global_set : GlobalSet):
         self.template : Template = template
+        self.global_set : GlobalSet = global_set
 
     def make_constructor(self, param_list, variable_list):
         script = "\tdef __init__(self, "
@@ -40,7 +44,7 @@ class FunctionScriptGen:
         #Update(Assign), set variable
         line = ""
         if len(transition.assign) > 1:
-            line = "\t\tself." + transition.assign + "\n" 
+            line = "\t\tself." + transition.assign + "\n"
 
         #Conditional call(Guard)
         target_node = transition.get_to_node()
@@ -49,10 +53,19 @@ class FunctionScriptGen:
             if (len(line) > 1):
                 script += "\t" + line
             script += "\t\t\tawait self." + target_node.get_name() + "()\n"
-        
-        #Sync find - '?'
 
-        #Sync call - '!'
+        #Sync find - '?'
+        if transition.is_sync_caller():
+            sync_name = transition.sync.get_name()
+            sync_transitions : List[Transition] \
+              = self.global_set.get_sync_transitions(sync_name)
+            #Find targeted node
+            if sync_transitions != None:
+                for sync_transition in sync_transitions:
+                    target_node : Node = sync_transition.get_to_node()
+                    sync = sync_transition.get_sync()
+                    class_name = sync.get_caller_location()
+                    script += "\t\t" + class_name + "()." + target_node.get_name() + "()\n"
 
         #Normal function call
         else:
@@ -69,5 +82,5 @@ class FunctionScriptGen:
             function_scripts += self.make_tranision_to_script(transition)
         if self.template.is_end(node):
             function_scripts += "\t\texit()\n"
-        
+
         return function_scripts

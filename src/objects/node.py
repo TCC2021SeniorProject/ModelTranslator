@@ -1,7 +1,6 @@
 from typing import List
 
 from objects.transition import Transition
-from objects.variable import Variable
 
 """
     Node consists of following elements
@@ -17,8 +16,9 @@ from objects.variable import Variable
     @AUTHOR: Marco-Backman
 """
 
-class Node():
+class Node:
     def __init__(self, id : str, name : str):
+        from objects.variable import Variable
         self.id : str = id
         self.name : str = name
         #Not implemented yet
@@ -60,7 +60,7 @@ class Node():
 
     def set_unvisited(self) -> bool:
         self.visited = False
-    
+
     #Not implemented yet
     def get_commit(self):
         return self.commit

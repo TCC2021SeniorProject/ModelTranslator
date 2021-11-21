@@ -1,6 +1,7 @@
 from objects.template import Template
 from objects.node import Node
 from objects.transition import Transition
+from objects.global_set import GlobalSet
 
 from translator.function_gen import FunctionScriptGen
 
@@ -13,9 +14,10 @@ from translator.function_gen import FunctionScriptGen
 """
 
 class ClassScriptGen:
-    def __init__(self, template : Template):
+    def __init__(self, template : Template, global_set : GlobalSet):
         self.template = template
         self.class_script = ""
+        self.global_set = global_set
 
     def append_class_def_script(self):
         class_name = self.template.get_template_name()
@@ -45,7 +47,7 @@ class ClassScriptGen:
     def append_function_script(self):
         #Make constructor
         variables = self.template.get_variables()
-        func_script_gen = FunctionScriptGen(self.template)
+        func_script_gen = FunctionScriptGen(self.template, self.global_set)
         script = func_script_gen.make_constructor([], variables)
         self.class_script += script
 

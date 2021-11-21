@@ -1,3 +1,5 @@
+from objects.sync import Syncronization
+
 """
     Stores various types of UPPAAL variables and values accordingly.
     Converts UPPAAL operator notations into Python operator notations.
@@ -10,11 +12,11 @@
         channel    - o
         clocks     - x
         scalar     - x
-        array      - o
+        array      - x
         structures - x
         constraints- x
 
-    @TODO: 
+    @TODO:
         1. Implement channel
         2. Implement array
         3. Implement struct
@@ -23,17 +25,17 @@
 """
 
 class Variable:
-    var_type_dic = {'int' : 0,
-                'bool' : 1,
-                'boolean' : 1,
-                'float' : 2,
-                'double' : 2,
-                'channel' : 3,
-                'chan' : 3,
-                'array' : 4,
-                'arr' : 4}
+    var_type_dic = {'int'     : 0,
+                    'bool'    : 1,
+                    'boolean' : 1,
+                    'float'   : 2,
+                    'double'  : 2,
+                    'channel' : 3,
+                    'chan'    : 3,
+                    'array'   : 4,
+                    'arr'     : 4}
 
-    def __init__(self, var_type, var_name, var_value):
+    def __init__(self, var_type : str, var_name : str, var_value : str):
         self.var_type = var_type.lower()
         self.var_name = var_name
         self.var_value = var_value
@@ -56,7 +58,7 @@ class Variable:
         elif var_type_index == 2:
             self.var_value = 0.0
         elif var_type_index == 3:
-            self.var_value = "None"
+            self.var_value = "None #Channel variable"
         elif var_type_index == 4:
             self.var_value = "[]"
         else:
@@ -90,3 +92,6 @@ class Variable:
 
     def is_channel(self):
         return True if self.var_type_dic.get(self.var_type) == 3 else False
+
+    def get_sync_instance(self):
+        return Syncronization(self.var_name)

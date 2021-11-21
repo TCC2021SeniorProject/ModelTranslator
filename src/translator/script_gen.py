@@ -30,11 +30,11 @@ class TranslateModel:
 
         self.global_var_script = ""
         self.entire_script = ""
-    
-    #Holds entire single class scripts - class, init(), def(). 
+
+    #Holds entire single class scripts - class, init(), def().
     def make_class_script(self, template : Template):
 
-        class_gen = ClassScriptGen(template)
+        class_gen = ClassScriptGen(template, self.objects)
         class_gen.make_class_scripts()
         class_scripts = class_gen.get_class_script()
         return class_scripts
@@ -46,7 +46,7 @@ class TranslateModel:
             global_var: Variable
             global_var_script += global_var.get_gobal_var_script() + "\n"
         self.entire_script += global_var_script + "\n"
-        
+
         #Append each of class scripts
         for template in self.templates:
             self.entire_script += self.make_class_script(template)

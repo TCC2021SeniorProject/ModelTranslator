@@ -1,9 +1,8 @@
-from objects.node import Node
-from objects.template import Template
+from typing import Dict, List
 
 """
     Stores UPPAAL system commands into objects
-    1. Converts instance call 
+    1. Converts instance call
     2. Converts an UPPAAL instance declaration into python script
         - Currently, System class will simply take an entire line
     3. Ignores every comment
@@ -15,10 +14,12 @@ from objects.template import Template
 
 class System:
     def __init__(self):
+        from objects.template import Template
+        from objects.node import Node
         #instance declaration in full string
-        self.instance_declare = [] #key - instance name, value - full script
-        self.instances = {}        #key - instance name, value - template
-        self.instance_call = []    #will contain the name of the instances
+        self.instance_declare : List[str] = [] #key - instance name
+        self.instances : Dict[Template] = {}   #key - instance name
+        self.instance_call : List[str] = []    #will contain the name of the instances
 
     #If system keyword is raised
     #Rename def name and varaibles - confusing
@@ -31,17 +32,21 @@ class System:
         except:
             print("Wrong instance name!")
 
-    def get_init_name(self, template : Template) -> str:
-        target_node : Node = template.start_state
+    def get_init_name(self, template) -> str:
+        target_node = template.start_state
         script : str = str(target_node.get_name()) + "()"
         return script
 
-    def add_instance_info(self, full_inst : str, instance : str, template : Template):
+    def add_instance_info(self, full_inst : str, instance : str, template):
         print("System added: " + instance + ", " + str(template.name))
         self.instance_declare.append(full_inst)
         self.instances[instance] = template
 
-    def add_call(self, instance_name):
+    def add_call(self, instance_name : str):
         self.instance_call.append(instance_name)
 
-
+    def print_info(self):
+        for inst_dec in self.instance_declare:
+            print("system declared" + inst_dec)
+        for inst_call in self.instance_call:
+            print("system declared" + inst_call)

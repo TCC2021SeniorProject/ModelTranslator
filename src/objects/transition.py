@@ -1,3 +1,5 @@
+from objects.global_set import GlobalSet
+
 """
     Transition's node links cannot be void
     Transition has one to one pointing behavior.
@@ -13,10 +15,13 @@ class Transition():
     def __init__(self):
         #XXX Import at this line to avoid cross importation
         from objects.node import Node
+        from objects.sync import Syncronization
+        from objects.template import Template
         self.name : str = None
-        self.guard : str  = None    
-        self.sync : str = None
-        self.sync_call = False #True: !, False: ?
+        self.guard : str  = None
+        self.template : Template = None
+        self.sync : Syncronization = None
+        self.sync_caller = False # True: ?, False: !
         self.assign : str = None
         self.transition_from : Node = None
         self.transition_to : Node = None
@@ -46,6 +51,12 @@ class Transition():
     def set_name(self, name : str):
         self.name = name
 
+    def set_template(self, template):
+        self.template = template
+
+    def get_template(self):
+        return self.template
+
     def reform_conditional_state(self, guard):
         temp_words = guard.split(" ")
         for index, word in enumerate(temp_words):
@@ -74,12 +85,32 @@ class Transition():
     def get_sync(self):
         return self.sync
 
-    def set_sync(self, sync : str):
-        if (sync[-1:] == '!'):   # sync: '!'(call)
-            self.sync_call = True
-        elif (sync[-1:] == '?'): # sync: '?'(find)
-            self.sync_call = False
-        self.sync = sync
+    def set_sync(self, sync_name : str, global_set : GlobalSet):
+        from objects.sync import Syncronization
+        if (sync_name[-1:] == '!'):   # sync: '!'(responder)
+            sync_name = sync_name[0:-1]
+            self.sync = Syncronization(sync_name)
+            self.sync.set_template(self.template)
+            self.sync.set_responder(self)
+            self.sync_caller = False
+            global_set.add_sync_transitions(sync_name, self)
+        elif (sync_name[-1:] == '?'): # sync: '?'(caller)
+            #This will only be used for name identification
+            sync_name = sync_name[0:-1]
+            self.sync = Syncronization(sync_name)
+            self.sync_caller = True
+        else:
+            print("Sync syntax error")
+
+    def is_sync(self) -> bool:
+        if self.sync_caller == True:
+            return True
+        return False if self.sync == None else True
+
+    def is_sync_caller(self) -> bool:
+        if self.sync_caller == True:
+            return True
+        return False
 
     def get_assign(self):
         return self.assign

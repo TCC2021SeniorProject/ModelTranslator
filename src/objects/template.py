@@ -1,6 +1,7 @@
+from typing import List
+
 from objects.node import Node
 from objects.transition import Transition
-from objects.variable import Variable
 
 """
     Stores each UPPAAL template into an object form.
@@ -11,33 +12,34 @@ from objects.variable import Variable
     @AUTHOR: Marco-Backman
 """
 
-class Template():
+class Template:
     START_STATE_TEXT = "START"
     END_STATE_TEXT = "END"
 
     #defines required variables with no initial value
     def __init__(self):
+        from objects.variable import Variable
         self.name = ""
         self.start_state : Node = None
-        self.end_state = []
-        self.nodes = []
-        self.transitions = []
-        self.variables = []
+        self.end_state : List[Node] = []
+        self.nodes : List[Node] = []
+        self.transitions : List[Transition] = []
+        self.variables : List[Variable] = []
         self.valid_graph = False
 
     def get_template_name(self):
         return self.name
 
-    def set_template_name(self, name):
+    def set_template_name(self, name) -> str:
         if name == None:
             self.name = ""
         else:
             self.name = name
 
-    def get_nodes(self):
+    def get_nodes(self) -> List[Node]:
         return self.nodes
 
-    def get_node_by_id(self, id):
+    def get_node_by_id(self, id) -> Node:
         if (len(self.nodes) == 0):
             raise Exception("No node matching to the given id")
         node : Node
@@ -50,7 +52,7 @@ class Template():
         print("Node added")
         self.nodes.append(node)
 
-    def get_transition_num(self):
+    def get_transition_num(self) -> int:
         return len(self.transitions)
 
     def set_transitions(self, transitions : Transition):
@@ -62,20 +64,20 @@ class Template():
     def set_valid_graph(self):
         self.valid_graph = True
 
-    def get_start(self):
+    def get_start(self) -> Node:
         return self.start_state
 
     def set_start(self, node):
         self.start_state = node
-    
-    def is_end(self, target_node : Node):
+
+    def is_end(self, target_node : Node) -> bool:
         for node in self.end_state:
             node : Node
             if node.get_id == target_node.get_id:
                 return True
         return False
 
-    def get_end_list(self):
+    def get_end_list(self) -> List[Node]:
         if len(self.end_state) == 0:
             return None
         return self.end_state
@@ -89,6 +91,7 @@ class Template():
 
     #Used for assign command from UPPAAL
     def update_variable(self, name, value):
+        from objects.variable import Variable
         #No existing element
         index = self.get_variable_index(name)
         if (index == False):
@@ -103,6 +106,7 @@ class Template():
         return self.variables
 
     def get_variable(self, name):
+        from objects.variable import Variable
         if (len(self.variables) == 0):
             return None
         else:
@@ -112,7 +116,8 @@ class Template():
                     return variable
             return None
 
-    def get_variable_index(self, name):
+    def get_variable_index(self, name) -> int:
+        from objects.variable import Variable
         if (len(self.variables) == 0):
             return False
         else:
@@ -122,16 +127,16 @@ class Template():
                     return index
             return False
 
-    def set_variable(self, variable : Variable):
+    def set_variable(self, variable):
         self.variables.append(variable)
 
     def set_variables(self, variables):
         self.variables = variables
 
-    def get_node_size(self):
+    def get_node_size(self) -> int:
         return len(self.nodes)
 
-    def get_transition_size(self):
+    def get_transition_size(self) -> int:
         return len(self.transitions)
 
     def reset_visit(self):

@@ -18,10 +18,9 @@ from objects.variable import Variable
     XML data coverted into node, transition objects
 
     @TODO:
-        1. Parse sync
-        2. Parse variable constraints
-        3. Parse channel and array
-        4. Parse query
+        1. Parse variable constraints
+        2. Parse array
+        3. Parse query
 
     @AUTHOR: Marco-Backman
 """

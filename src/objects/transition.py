@@ -4,13 +4,16 @@ from objects.global_set import GlobalSet
     Transition's node links cannot be void
     Transition has one to one pointing behavior.
 
-    @TODO: make async, guard, assign, sync objects
+    @TODO:
+            0. Move all parsing feature to parser.transition_parser.py
+            1. Update more assignment operators
+            2. Make async, guard, assign, sync objects
 
     @AUTHOR: Marco-Backman
 """
-
 class Transition():
-    operator = [">", "<", "==", "=", ">=", "<="]
+
+    guard_operator = [">", "<", "==", "=", ">=", "<="]
 
     def __init__(self):
         #XXX Import at this line to avoid cross importation
@@ -18,6 +21,7 @@ class Transition():
         from objects.sync import Syncronization
         from objects.template import Template
         self.name : str = None
+        #stores reformed string
         self.guard : str  = None
         self.template : Template = None
         self.sync : Syncronization = None
@@ -57,14 +61,14 @@ class Transition():
     def get_template(self):
         return self.template
 
-    def reform_conditional_state(self, guard):
+    def reform_conditional_state(self, guard : str):
         temp_words = guard.split(" ")
         for index, word in enumerate(temp_words):
-            if word in self.operator:
+            #identify variable and comparing value
+            if word in self.guard_operator:
                 temp_words[index - 1] = "self." + temp_words[index - 1]
             else:
                 continue
-        #Reassemble conditional line
         new_line = ""
         for word in temp_words:
             new_line += word + " "
@@ -114,6 +118,21 @@ class Transition():
 
     def get_assign(self):
         return self.assign
+    """
+        '-' , '!' = 'not'
+
+        'x++' , '++x' = 'x += 1'
+
+        'x--' , '--x' = 'x -= 1'
+
+        'x => y' = 'not(x) or y
+
+        '>?' =  'max()'
+
+        '<?' = 'min()'
+
+        'x:x?y' = ???
+    """
 
     def parse_assign_operator(self, assign: str):
         assign = assign.replace(":=", "=")

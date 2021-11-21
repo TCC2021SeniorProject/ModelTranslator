@@ -15,7 +15,6 @@ from typing import Dict, List
 class System:
     def __init__(self):
         from objects.template import Template
-        from objects.node import Node
         #instance declaration in full string
         self.instance_declare : List[str] = [] #key - instance name
         self.instances : Dict[Template] = {}   #key - instance name
@@ -34,7 +33,10 @@ class System:
 
     def get_init_name(self, template) -> str:
         target_node = template.start_state
-        script : str = str(target_node.get_name()) + "()"
+        script : str = str(target_node.get_name()) + "("
+        # add parameters here
+
+        script += ")"
         return script
 
     def add_instance_info(self, full_inst : str, instance : str, template):

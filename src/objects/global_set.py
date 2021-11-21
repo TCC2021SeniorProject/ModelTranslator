@@ -113,5 +113,5 @@ class GlobalSet:
         script = ""
         calls = self.system_object.instance_call
         for call in calls:
-            script += self.system_object.find_templates(call) + "\n"
+            script += str(self.system_object.find_templates(call)) + "\n"
         return script

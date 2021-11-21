@@ -33,7 +33,7 @@ from translator.script_gen import TranslateModel
 """
 
 # @TODO Argument should be: 1. execution file 2. input file
-default_input_directory = "./data/all_tran_example.xml"
+default_input_directory = "./data/multi_temp.xml"
 
 def identify_system_argument():
     arg_list = sys.argv

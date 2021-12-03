@@ -93,7 +93,6 @@ class ParseXML:
 
                 #This assumes every first name tag indicates a class name
                 elif TagSet.identify_name_tag(line) and not temp_name_set:
-                    print("Class name: " + line.text)
                     template.set_template_name(line.text)
                     temp_name_set = True
 
@@ -110,7 +109,6 @@ class ParseXML:
                         node.add_transition(transition)
 
                 elif TagSet.identify_init_tag(line):
-                    print("Init tag found")
                     #Init may have no name
                     id = line.attrib.get('ref')
                     node = template.get_node_by_id(id)
@@ -119,7 +117,7 @@ class ParseXML:
                 #Local declaration
                 elif TagSet.identify_declaration_tag(line):
                     template.set_variables \
-                      = DeclarationParser.parse_declaration(elem.text)
+                      = DeclarationParser.parse_declaration(line.text)
 
             #Find end node - no out-going transition
             end_nodes = self.find_end(template)
@@ -133,21 +131,6 @@ class ParseXML:
                     self.system_script \
                       = SystemParser.parse_system(line, self.global_set)
 
-        for queries in self.root.findall("queries"):
-            for line in queries.iter():
-                #Not implemented
-                if TagSet.identify_queries_tag:
-                    pass
-                #Not implemented
-                elif TagSet.identify_query_tag:
-                    pass
-                #Not implemented
-                elif TagSet.identify_formula_tag:
-                    pass
-                #Not implemented
-                elif TagSet.identify_comment_tag:
-                    pass
-
 """
     XXX Root function of this class
         - This will be called first
@@ -156,5 +139,6 @@ class ParseXML:
 def generate_model(file_name : str) -> GlobalSet:
     parser_class = ParseXML(file_name)
     parser_class.convert_to_object()
+
     parser_class.test_print()
     return parser_class.global_set

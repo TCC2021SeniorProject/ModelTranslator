@@ -1,7 +1,6 @@
 from typing import Dict, List
 
 from objects.system import System
-
 """
     Holds all the objects that is require for global field in UPPAAL
     XXX This is not used for local level
@@ -18,7 +17,7 @@ class GlobalSet:
         from objects.variable import Variable
         self.templates : List[Template] = []
         self.global_variables : List[Variable] = []
-        #key - channel name, value - list of Syncronization
+        #key - channel name, value - list of Transition
         self.sync_transitions : Dict[List[Transition]] = {}
         self.system_object : System = System()
 
@@ -46,10 +45,6 @@ class GlobalSet:
     def add_global_variable(self, global_variable):
         self.global_variables.append(global_variable)
 
-    def print_global_variables(self):
-        for var in self.get_global_variables():
-            print(var.get_gobal_var_script())
-
     def initialize_channel(self, sync):
         sync_name = sync.get_name()
         self.sync_transitions[sync_name] = []
@@ -74,13 +69,29 @@ class GlobalSet:
         print("Sync appending to" + str(self.sync_transitions[sync_name]))
         self.sync_transitions[sync_name].append(sync_transition)
 
+    def get_system_obj(self) -> System:
+        return self.system_object
+
+    def set_system_obj(self, system_object : System):
+        self.system_object = system_object
+
+    def print_tempate_node_transition(self):
+        print("----Template node trans info----")
+        for template in self.templates:
+            template.print_info()
+
+    def print_global_variables(self):
+        print("----Global var info----")
+        for var in self.get_global_variables():
+            print(var.print_info())
+
     def print_sync_info(self):
-        from objects.transition import Transition
         from objects.sync import Syncronization
+        from objects.transition import Transition
+        print("----Sync info----")
         if len(self.sync_transitions) == 0:
-            print("No sync declared")
+            print("No sync declared\n")
         else:
-            print("Sync info")
             for key in self.sync_transitions:
                 for transition in self.sync_transitions[key]:
                     transition : Transition
@@ -88,17 +99,13 @@ class GlobalSet:
                     print("\t sync name: " + sync.get_name())
                     print("\t\t sync location: " + sync.get_caller_location())
 
-    def get_system_obj(self) -> System:
-        return self.system_object
-
-    def set_system_obj(self, system_object : System):
-        self.system_object = system_object
-
     def print_system_info(self):
+        print("----System info----")
         if self.system_object == None:
-            print("No system declared")
+            print("No system declared\n")
         else:
             self.system_object.print_info()
+            print()
 
     #Call this before get_instance_calls()
     def get_dec_scripts(self):

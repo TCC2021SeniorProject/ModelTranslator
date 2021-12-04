@@ -34,15 +34,9 @@ class ParseXML:
         self.global_set : GlobalSet = GlobalSet()
 
     def set_start(self, node : Node, template : Template):
-        id = str(node.get_id())
-        name = str(node.get_name())
-        print("Setting start at :" + id + ", " + name)
         template.set_start(node)
 
     def set_end(self, node : Node, template : Template):
-        id = str(node.get_id())
-        name = str(node.get_name())
-        print("Setting end at :" + id + ", " + name)
         template.add_end(node)
 
     def find_end(self, template : Template) -> List[Node]:
@@ -64,11 +58,14 @@ class ParseXML:
                 self.global_set.initialize_channel(sync_inst)
 
     def test_print(self):
-        #Print global set info
-        print("Printing global info...")
+        self.global_set.print_tempate_node_transition()
+        print()
         self.global_set.print_global_variables()
-        self.global_set.print_system_info()
+        print()
         self.global_set.print_sync_info()
+        print()
+        self.global_set.print_system_info()
+        print()
 
     """
         XXX Crucial function of Parser class
@@ -76,8 +73,7 @@ class ParseXML:
     def convert_to_object(self) -> None:
         #Global declaration
         for elem in self.root.findall("declaration"):
-            glob_variable_list \
-              = DeclarationParser.parse_declaration(elem.text)
+            glob_variable_list = DeclarationParser.parse_declaration(elem.text)
             self.global_set.set_global_variables(glob_variable_list)
 
         #Find channel
@@ -90,8 +86,7 @@ class ParseXML:
                 node : Node = None
                 if TagSet.identify_template_tag(line):
                     continue
-
-                #This assumes every first name tag indicates a class name
+                #Ordering of tag identification matters
                 elif TagSet.identify_name_tag(line) and not temp_name_set:
                     template.set_template_name(line.text)
                     temp_name_set = True
@@ -102,22 +97,23 @@ class ParseXML:
                         raise Exception("Node is null")
                     template.add_node(node)
 
-                elif TagSet.identify_transition_tag(line):
-                    node, transition \
-                      = TransitionParser.parse_transition(line, template, self.global_set)
-                    if node != None:
-                        node.add_transition(transition)
-
                 elif TagSet.identify_init_tag(line):
                     #Init may have no name
                     id = line.attrib.get('ref')
                     node = template.get_node_by_id(id)
                     self.set_start(node, template)
 
+                elif TagSet.identify_transition_tag(line):
+                    node, transition \
+                      = TransitionParser.parse_transition(line, template, self.global_set)
+                    if node != None:
+                        node.add_transition(transition)
+                        template.add_transitions(transition)
+
                 #Local declaration
                 elif TagSet.identify_declaration_tag(line):
-                    template.set_variables \
-                      = DeclarationParser.parse_declaration(line.text)
+                    variables = DeclarationParser.parse_declaration(line.text)
+                    template.set_variables(variables)
 
             #Find end node - no out-going transition
             end_nodes = self.find_end(template)
@@ -130,7 +126,6 @@ class ParseXML:
                 if TagSet.identify_system_tag(line):
                     self.system_script \
                       = SystemParser.parse_system(line, self.global_set)
-
 """
     XXX Root function of this class
         - This will be called first

@@ -30,6 +30,7 @@ class System:
             return instace_name + "." + init_function
         except:
             print("Wrong instance name!")
+            return ""
 
     def get_init_name(self, template) -> str:
         target_node = template.start_state
@@ -49,6 +50,6 @@ class System:
 
     def print_info(self):
         for inst_dec in self.instance_declare:
-            print("system declared" + inst_dec)
+            print("system declared: " + inst_dec)
         for inst_call in self.instance_call:
-            print("system declared" + inst_call)
+            print("system declared: " + inst_call)

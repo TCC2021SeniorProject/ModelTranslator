@@ -1,21 +1,20 @@
 status = 0
 battery = 0
+check_mode = None #Channel variable
 
 class all_tran_example:
-	def __init__(self, status, battery):
-		self.status = status
-		self.battery = battery
+	def __init__(self, ):
+		pass
 
 	async def Dock(self):
-		self.status = 0
 		await self.Idle()
 
 	async def Run(self):
-		if self.status == 4 or self.battery < 10:
+		if self.mode == 4 or self.charge < 10:
 			await self.Dock()
 
 	async def Idle(self):
-		if self.status == 1 and self.battery > 10:
+		if self.mode == 1 and self.charge > 10:
 			await self.Run()
 
 class clean:
@@ -25,8 +24,9 @@ class clean:
 	async def Clean(self):
 		exit()
 
-	async def ShouldClean(self):
-		if self.status == 3:
+	async def default_init(self):
+		if self.mode == 3:
+			all_tran_example().Run()
 			await self.Clean()
 
 class explore:
@@ -36,8 +36,9 @@ class explore:
 	async def Explore(self):
 		exit()
 
-	async def ShouldExplore(self):
-		if self.status == 2:
+	async def default_init(self):
+		if self.mode == 2:
+			all_tran_example().Run()
 			await self.Explore()
 
 Roomba = all_tran_example(status, battery)

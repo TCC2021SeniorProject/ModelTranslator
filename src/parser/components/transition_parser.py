@@ -19,10 +19,10 @@ class TransitionParser:
                          global_set : GlobalSet):
         source : Node = None
         target : Node = None
-        select = ""
-        guard = ""
-        synchronisation = ""
-        assignment = ""
+        select : str = ""
+        guard : str = None
+        synchronisation : str = None
+        assignment : str = None
         temp_transition = Transition()
 
         for sub_tag in line:
@@ -50,7 +50,10 @@ class TransitionParser:
         temp_transition.set_to(target)
         temp_transition.set_name(select)
         temp_transition.set_template(template)
-        temp_transition.set_guard(guard)
-        temp_transition.set_assign(assignment)
-        temp_transition.set_sync(synchronisation, global_set)
+        if guard != None:
+            temp_transition.set_guard(guard)
+        if assignment != None:
+            temp_transition.set_assign(assignment)
+        if synchronisation != None:
+            temp_transition.set_sync(synchronisation, global_set)
         return source, temp_transition

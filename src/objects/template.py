@@ -1,3 +1,4 @@
+from re import template
 from typing import List
 
 from objects.node import Node
@@ -49,14 +50,16 @@ class Template:
         raise Exception("No node matching to the given id")
 
     def add_node(self, node):
-        print("Node added")
         self.nodes.append(node)
 
     def get_transition_num(self) -> int:
         return len(self.transitions)
 
-    def set_transitions(self, transitions : Transition):
+    def set_transitions(self, transitions : List[Transition]):
         self.transitions = transitions
+
+    def add_transitions(self, transition: Transition):
+        self.transitions.append(transition)
 
     def is_valid_graph(self):
         return self.valid_graph
@@ -94,12 +97,12 @@ class Template:
         from objects.variable import Variable
         #No existing element
         index = self.get_variable_index(name)
+        new_variable = Variable()
+        new_variable.set_variable_name(name)
+        new_variable.set_variable_value(value)
         if (index == False):
-            self.set_variable(name, value)
+            self.variables.append(new_variable)
         else:
-            new_variable = Variable()
-            new_variable.set_variable_name(name)
-            new_variable.set_variable_value(value)
             self.variables[index] = new_variable
 
     def get_variables(self):
@@ -127,7 +130,7 @@ class Template:
                     return index
             return False
 
-    def set_variable(self, variable):
+    def add_variable(self, variable):
         self.variables.append(variable)
 
     def set_variables(self, variables):
@@ -143,3 +146,19 @@ class Template:
         for node in self.nodes:
             node : Node
             node.set_unvisited()
+
+    def print_info(self):
+        #Template
+        print("Template name: " + self.name)
+
+        #Local var
+        for variable in self.variables:
+            variable.print_info()
+
+        #Node
+        for node in self.nodes:
+            node.print_info()
+
+        #Transitions
+        for transition in self.transitions:
+            transition.print_info()

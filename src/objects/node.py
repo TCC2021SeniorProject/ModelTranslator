@@ -28,7 +28,6 @@ class Node:
         #Not implemented yet.
         self.parameter_list : List[Variable] = []
         self.transition_list : List[Transition] = []
-        print(name + "Node created")
 
     def get_id(self) -> str:
         return self.id
@@ -47,7 +46,6 @@ class Node:
 
     def add_transition(self, transition : Transition):
         self.transition_list.append(transition)
-        print("Transition added")
 
     def transition_count(self) -> int:
         return len(self.transition_list)
@@ -69,3 +67,6 @@ class Node:
     def set_commit(self, commit : str):
         self.is_commit = True
         self.commit = commit
+
+    def print_info(self):
+        print("\t Node name: " + self.name + " id: " + self.id)

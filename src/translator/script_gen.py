@@ -22,7 +22,7 @@ from translator.class_gen import ClassScriptGen
 class TranslateModel:
     def __init__(self, global_set : GlobalSet):
         self.stack = []
-        self.objects = global_set
+        self.global_set = global_set
         self.templates : List[Template] = global_set.templates
         self.variables : List[Variable] = global_set.global_variables
 
@@ -34,13 +34,14 @@ class TranslateModel:
     #Holds entire single class scripts - class, init(), def().
     def make_class_script(self, template : Template):
 
-        class_gen = ClassScriptGen(template, self.objects)
+        class_gen = ClassScriptGen(template, self.global_set)
         class_gen.make_class_scripts()
         class_scripts = class_gen.get_class_script()
         return class_scripts
 
     def make_full_scripts(self):
         global_var_script = ""
+
         #Append global variables scripts
         for global_var in self.variables:
             global_var: Variable
@@ -51,8 +52,9 @@ class TranslateModel:
         for template in self.templates:
             self.entire_script += self.make_class_script(template)
 
-        self.entire_script += self.objects.get_dec_scripts() + "\n"
-        self.entire_script += self.objects.get_instance_calls() + "\n"
+        #Instance declaration and calls
+        self.entire_script += self.global_set.get_dec_scripts() + "\n"
+        self.entire_script += self.global_set.get_instance_calls() + "\n"
 
     def get_full_scripts(self):
         return self.entire_script

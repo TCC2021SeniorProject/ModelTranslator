@@ -1,3 +1,5 @@
+from typing import Dict
+
 from objects.sync import Syncronization
 
 """
@@ -17,9 +19,10 @@ from objects.sync import Syncronization
         constraints- x
 
     @TODO:
-        1. Implement channel
-        2. Implement array
-        3. Implement struct
+        1. Implement channelSyncronization
+            - typedef
+            - const
+        5. Ignore unsupported types
 
     @AUTHOR: Marco-Backman
 """
@@ -40,8 +43,12 @@ class Variable:
         self.var_name = var_name
         self.var_value = var_value
         var_type_index = self.var_type_dic.get(var_type)
+        #Check primitive types
         if var_value == "":
-            self.set_defualt_value(var_type, var_type_index)
+            type_found = self.set_defualt_value(var_type_index)
+            #Check typedef types
+            if type_found == -1:
+                print("Wrong type given for the variable")
         else:
             if var_type_index == 1: #UPPAAL sets boolean value to 0, 1
                 if var_value == "0" or var_value == "false":
@@ -49,20 +56,24 @@ class Variable:
                 elif var_value == "1" or var_value == "true":
                     self.var_value = "True"
 
-    def set_defualt_value(self, var_type, var_type_index):
-        var_type = var_type.lower()
+    def set_defualt_value(self, var_type_index):
         if var_type_index == 0:
             self.var_value = 0
+            return 1
         elif var_type_index == 1:
             self.var_value = False
+            return 1
         elif var_type_index == 2:
             self.var_value = 0.0
+            return 1
         elif var_type_index == 3:
             self.var_value = "None #Channel variable"
+            return 1
         elif var_type_index == 4:
             self.var_value = "[]"
+            return 1
         else:
-            print("Variable type error")
+            return -1
 
     def get_variable_type(self):
         return self.var_type
@@ -95,3 +106,8 @@ class Variable:
 
     def get_sync_instance(self):
         return Syncronization(self.var_name)
+
+    def print_info(self):
+        print("Type: " + self.var_type\
+            + " name:" + self.var_name\
+            + " value:" + str(self.var_value))

@@ -18,8 +18,8 @@ from objects.transition import Transition
 class Syncronization():
     def __init__(self, name : str):
         self.caller_location : Template = None
-        self.caller : Transition = None    #?
-        self.responder : Transition = None #!
+        self.caller : Transition = None    #!
+        self.responder : Transition = None #?
         self.name : str = name
 
     def get_caller_location(self):
@@ -27,17 +27,6 @@ class Syncronization():
 
     def set_template(self, template: Template):
         self.caller_location : Template = template
-
-    @DeprecationWarning
-    def get_caller(self):
-        if self.caller == None:
-            print("No caller")
-            return None
-        return self.caller.get_name()
-
-    @DeprecationWarning
-    def set_caller(self, caller : Transition):
-        self.caller : Transition = caller
 
     def get_responder(self):
         return self.responder

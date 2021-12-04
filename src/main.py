@@ -1,4 +1,5 @@
 import parser.XML_parser as Paser
+import pathlib
 import sys
 
 from objects.global_set import GlobalSet
@@ -33,7 +34,10 @@ from translator.script_gen import TranslateModel
 """
 
 # @TODO Argument should be: 1. execution file 2. input file
-default_input_directory = "./data/multi_temp.xml"
+
+# 1. all_tran_example.xml
+# 2. fisher.xml
+default_input_directory = "./data/all_tran_example.xml"
 
 def identify_system_argument():
     arg_list = sys.argv
@@ -45,6 +49,14 @@ def identify_system_argument():
     else:
         print("Using default input file directory: " + default_input_directory)
         return default_input_directory
+
+def locate_file(file_name : str):
+    try:
+        f = open(file_name, 'r')
+        f.close()
+    except IOError:
+        print("File not found")
+        raise
 
 def generate_scripts(objects : GlobalSet):
     #Tranlate into python script - single template
@@ -58,10 +70,12 @@ def main():
     file_name = ""
     try:
         file_name = identify_system_argument()
+        locate_file(file_name)
     except Exception:
         error_type, error_instance, traceback = sys.exc_info()
-        error_instance.args = (error_instance.args[0],)
+        error_instance.args = error_instance.args[0]
         raise(error_instance)
+
     #Parse and form into model
     objects : GlobalSet = Paser.generate_model(file_name)
 

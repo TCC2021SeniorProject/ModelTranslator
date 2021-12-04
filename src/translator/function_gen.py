@@ -13,7 +13,7 @@ from objects.global_set import GlobalSet
         Sync   - Calls sync transition from other template
                  Must be called before any await execution.
 
-    @TODO:
+    @TODO: Implement auto indentation.
 
     @AUTHOR: Marco-Backman
 """
@@ -41,7 +41,7 @@ class FunctionScriptGen:
 
     def make_sync_transtion_script(self, transition : Transition, depth : int):
         script = ""
-        #Sync find - '?'
+        #Sync find - '!'
         if transition.is_sync_caller():
             sync_name = transition.sync.get_name()
             sync_transitions : List[Transition] \
@@ -59,35 +59,34 @@ class FunctionScriptGen:
 
     def make_tranision_to_script(self, transition : Transition):
         script = ""
-        #Update(Assign), set variable
         line = ""
-        if len(transition.assign) > 1:
-            line = "\t\tself." + transition.assign + "\n"
 
-        #Conditional call(Guard)
+        # Conditional call(Guard) with sync (and/or) def call
         target_node = transition.get_to_node()
-        if len(transition.guard) > 1:
+        if transition.guard != None:
             script += "\t\tif " + transition.guard +":\n"
             script += self.make_sync_transtion_script(transition, 3)
             if (len(line) > 1):
-                script += "\t" + line
+                script += line
             script += "\t\t\tawait self." + target_node.get_name() + "()\n"
-
-        #Normal function call
-        else:
+        else: #No conditional sync (and/or) def call
+            script += self.make_sync_transtion_script(transition, 3)
             if (len(line) > 1):
                 script += line
-            script += self.make_sync_transtion_script(transition, 2)
             script += "\t\tawait self." + target_node.get_name() + "()\n"
+
+        # Update(Assign), set variable
+        if transition.assign != None:
+            for assign in transition.assign:
+                line += "\t\t\tself." + assign + "\n"
         return script
 
     def make_function_script(self, node : Node):
-        transition_list = node.get_transitions()
         function_scripts = "\tasync def " + node.get_name() + "(self):\n"
+        transition_list = node.get_transitions()
         for transition in transition_list:
             transition : Transition
             function_scripts += self.make_tranision_to_script(transition)
         if self.template.is_end(node):
             function_scripts += "\t\texit()\n"
-
         return function_scripts

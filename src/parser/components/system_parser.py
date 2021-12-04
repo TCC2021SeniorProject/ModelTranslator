@@ -17,6 +17,7 @@ from objects.global_set import GlobalSet
 
     @TODO: Refactor required - unorganized
            Parameter not handled
+           Multiple
 
     @AUTHOR: Marco-Backman
 """
@@ -24,6 +25,7 @@ from objects.global_set import GlobalSet
 class SystemParser:
     def parse_system_instance(line : str, global_sets : GlobalSet):
         elements = line.split("=")
+        print(elements)
         instance = elements[0].strip()         #r1
         template_str = elements[1].strip()        #Roomba_Test(parm1, parm2 ...);
         template_str = template_str.replace(")", "") #Roomba_Test(parm1, parm2 ...

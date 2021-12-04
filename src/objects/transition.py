@@ -1,3 +1,5 @@
+from typing import List
+
 from objects.global_set import GlobalSet
 
 """
@@ -7,6 +9,8 @@ from objects.global_set import GlobalSet
     @TODO:
             0. Move all parsing feature to parser.transition_parser.py
             1. Update more assignment operators
+                - need to handle '!' as not
+                -
             2. Make async, guard, assign, sync objects
 
     @AUTHOR: Marco-Backman
@@ -25,8 +29,8 @@ class Transition():
         self.guard : str  = None
         self.template : Template = None
         self.sync : Syncronization = None
-        self.sync_caller = False # True: ?, False: !
-        self.assign : str = None
+        self.sync_caller = False # True: !, False: ?
+        self.assign : List[str] = None
         self.transition_from : Node = None
         self.transition_to : Node = None
         self.visited = False
@@ -91,20 +95,20 @@ class Transition():
 
     def set_sync(self, sync_name : str, global_set : GlobalSet):
         from objects.sync import Syncronization
-        if (sync_name[-1:] == '!'):   # sync: '!'(responder)
+        if (sync_name[-1:] == '?'):   # sync: '!'(responder)
             sync_name = sync_name[0:-1]
             self.sync = Syncronization(sync_name)
             self.sync.set_template(self.template)
             self.sync.set_responder(self)
             self.sync_caller = False
             global_set.add_sync_transitions(sync_name, self)
-        elif (sync_name[-1:] == '?'): # sync: '?'(caller)
+        elif (sync_name[-1:] == '!'): # sync: '?'(caller)
             #This will only be used for name identification
             sync_name = sync_name[0:-1]
             self.sync = Syncronization(sync_name)
             self.sync_caller = True
         else:
-            print("Sync syntax error")
+            print("Sync syntax error at transition.py, set_sync()")
 
     def is_sync(self) -> bool:
         if self.sync_caller == True:
@@ -134,11 +138,16 @@ class Transition():
         'x:x?y' = ???
     """
 
-    def parse_assign_operator(self, assign: str):
-        assign = assign.replace(":=", "=")
-        assign = assign.replace("<=", "=")
-        return assign
+    def parse_assign_operator(self, assign_script: str) -> List[str]:
+        assign_list = []
+        assign_script = assign_script.replace(":=", "=")
+        assign_script = assign_script.replace("<=", "=")
+        assign_list = [assign.strip() for assign in assign_script.split(",")]
+        return assign_list
 
-    def set_assign(self, assign : str):
-        assign = self.parse_assign_operator(assign)
-        self.assign = assign
+    def set_assign(self, assign_script : str):
+        self.assign = self.parse_assign_operator(assign_script)
+
+    def print_info(self):
+        print("\t Transition from: " + self.transition_from.id\
+             + " to: " + self.transition_to.id)

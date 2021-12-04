@@ -9,7 +9,8 @@ int battery;
 	<template>
 		<name x="0" y="0">all_tran_example</name>
 		<parameter>int &amp;mode, int &amp;charge</parameter>
-		<declaration>// Place local declarations here.</declaration>
+		<declaration>// Place local declarations here.
+		int local_var</declaration>
 		<location id="id0" x="-1411" y="-425">
 			<name x="-1428" y="-459">Idle</name>
 		</location>

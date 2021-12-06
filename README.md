@@ -85,7 +85,6 @@ Here's why you should use this:
 
 ### Tools Used With (Translator)
 
-
 * [UPPAAL](https://uppaal.org/)
 * [Python(3.6.9)](https://www.python.org/)
   * [xml.etree.ElementTree](https://docs.python.org/3/library/xml.etree.elementtree.html)
@@ -111,26 +110,19 @@ Download UPPAAL to create your model
    ```sh
    git clone https://github.com/TCC2021SeniorProject/ModelTranslator.git
    ```
-2. Download XML examples
-   ```sh
-   
-   ```
-3. Run Main.py program
+
+2. Run Main.py program
    ```sh
     cd ./MdoelTranslator/src
-   
+    python3 Main.py  
    ```
 
 ### Valid model for tranlator
 </br>
 
-```diff
-+Rules for a valid execution
-```
-
-> 1. A model must be a valid model. The validity of the model can be checked in UPPAAL software. Any invalid UPPAAL model will cause a program crash.
-> 2. All variables must be defined. Any unidentified variables may cause errors either while using the software (translation) or executing output (Python code).
-> 3. All variable declarations must be valid, according to its template.
+> 1. A model must be a valid model. The validity of the model can be checked in UPPAAL software. Any invalid UPPAAL model will not be accepted.
+> 2. All variables must be defined. Any unidentified variables will not be executable on Python.
+> 3. All variable declarations must be valid, according to its template. Variable validation will be also checked on UPPAAL
 > 4. Every node must have a unique identifier. Duplicate identifiers will result in overwriting of functions.
 
 </br>

@@ -12,7 +12,7 @@
     <img alt="Carthage compatible" src="https://img.shields.io/badge/Stability-Unstable-red" />
     <img alt="Carthage compatible" src="https://img.shields.io/badge/Version-not published-red" />
     <img alt="Carthage compatible" src="https://img.shields.io/badge/Full documentation-not ready-red" />
-    <img alt="Carthage compatible" src="https://img.shields.io/badge/Update Date-11/7/2021-Green" />
+    <img alt="Carthage compatible" src="https://img.shields.io/badge/Update Date-12/7/2021-Green" />
   </p>
 
   <h3 align="center">MODEL TRANSLATOR</h3>
@@ -70,7 +70,6 @@ Here's why you should use this:
 
 ### Tools Used With (Translator)
 
-
 * [UPPAAL](https://uppaal.org/)
 * [Python(3.6.9)](https://www.python.org/)
   * [xml.etree.ElementTree](https://docs.python.org/3/library/xml.etree.elementtree.html)
@@ -94,6 +93,7 @@ Download UPPAAL to create your model
    ```sh
    git clone https://github.com/TCC2021SeniorProject/ModelTranslator.git
    ```
+
 2. Download XML examples
    ```sh
 

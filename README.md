@@ -2,9 +2,9 @@
 <!-- PROJECT LOGO -->
 <br /></br>
 <div align="center">
-  <img src="img/icon/text_logo.png">  
+  <img src="img/icon/text_logo.png">
 </div>
-<div align="center">  
+<div align="center">
   <!-- PROJECT SHIELDS -->
   <p align="center">
     </br>
@@ -12,7 +12,7 @@
     <img alt="Carthage compatible" src="https://img.shields.io/badge/Stability-Unstable-red" />
     <img alt="Carthage compatible" src="https://img.shields.io/badge/Version-not published-red" />
     <img alt="Carthage compatible" src="https://img.shields.io/badge/Full documentation-not ready-red" />
-    <img alt="Carthage compatible" src="https://img.shields.io/badge/Update Date-10/27/2021-Green" />
+    <img alt="Carthage compatible" src="https://img.shields.io/badge/Update Date-11/7/2021-Green" />
   </p>
 
   <h3 align="center">MODEL TRANSLATOR</h3>
@@ -37,31 +37,16 @@
 </div>
 </br>
 </br>
-</br>
 
 
 ## TABLE OF CONTENTS
 <ol>
-  <li>
-    <a href="#about-the-project">About The Project</a>
-  </li>
-  <li>
-    <a href="#getting-started">Getting Started</a>
-    <ul>
-      <li><a href="#prerequisites">Prerequisites</a>
-      </li>
-      <li><a href="#model-validity">Model Validity</a>
-      </li>
-      <li><a href="#file-structure">File Structure</a>
-      </li>
-      <li><a href="#process-logic-flow">Process logic flow</a>
-      </li>
-    </ul>
-  </li>
-  <li><a href="#usage">Usage</a></li>
-  <li><a href="#current-features">Current features</a></li>
+  <li><a href="#about-the-project">About the Project</a></li>
+  <li><a href="#getting-started">Getting Started</a></li>
+  <li><a href="#current-features">Current Features</a></li>
+  <li><a href="#usage">Usage/Application</a></li>
   <li><a href="#roadmap">Roadmap</a></li>
-  <li><a href="#testing-schedules">Testing Schedules</a></li>
+  <li><a href="#coding-style-convention">Coding Style Convention</a></li>
   <li><a href="#license">License</a></li>
   <li><a href="#contact">Contact</a></li>
 </ol>
@@ -76,9 +61,9 @@ This project will assist developers in implementing custom IoT systems.
 
 Here's why you should use this:
 
-* Users who want to design automata with UPPAAL but have no idea what to do with the generated XML file.
-* Users who want their modeled diagrams to run on a Rasberry Pi device.
-* Users who want to test out IoT environment with the modeling tool (UPPAAL).
+* Users who want to design automata system with UPPAAL
+* Users who want their modeled diagrams to run on a Rasberry Pi device
+* Users who want to test out IoT environment with the modeling tool (UPPAAL)
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -97,8 +82,6 @@ Here's why you should use this:
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
@@ -113,72 +96,14 @@ Download UPPAAL to create your model
    ```
 2. Download XML examples
    ```sh
-   
+
    ```
 3. Run Main.py program
    ```sh
     cd ./MdoelTranslator/src
-   
    ```
 
-### Valid model for tranlator
 </br>
-
-```diff
-+Rules for a valid execution
-```
-
-> 1. A model must be a valid model. The validity of the model can be checked in UPPAAL software. Any invalid UPPAAL model will cause a program crash.
-> 2. All variables must be defined. Any unidentified variables may cause errors either while using the software (translation) or executing output (Python code).
-> 3. All variable declarations must be valid, according to its template.
-> 4. Every node must have a unique identifier. Duplicate identifiers will result in overwriting of functions.
-
-</br>
-</br>
-
-### File structure
-
-```
-├── data
-├── docs
-├── img
-│   └── icon
-├── README.md
-└── src
-    ├── main.py
-    ├── objects
-    │   ├── global_set.py
-    │   ├── node.py
-    │   ├── system.py
-    │   ├── template.py
-    │   ├── transition.py
-    │   └── variable.py
-    ├── parser
-    │   ├── components
-    │   │   ├── declaration_parser.py
-    │   │   ├── node_parser.py
-    │   │   ├── system_parser.py
-    │   │   └── transition_parser.py
-    │   ├── tag_set.py
-    │   └── XML_parser.py
-    └── translator
-        ├── class_gen.py
-        ├── function_gen.py
-        ├── py_export.py
-        └── script_gen.py
-
-```
-</br>
-
-### Process logic flow
-  <div align="center">
-    <img width="800" src="img/execution_process_flow.png">  
-  </div>
-</br>
-</br>
-</br>
-
-<p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Current Features
 
@@ -206,20 +131,28 @@ Download UPPAAL to create your model
 ### Example of how software works
 </br>
 
-0. When producing a model such like this in UPPAAL
+> ##### 1. Build your own model in UPPAAL
+
+ <details><summary>Expand to see the model images</summary><p>
+
   <div align="center">
-    <img width="700" src="img/UPPAAL_model_1.jpg">  
+    <img width="700" src="img/UPPAAL_model_1.jpg">
   </div>
 
+</p></details></ul>
 
+</br>
+</br>
 
-1. Suppose there is a XML file given like this
+> ##### 2. XML input of UPPAAL model
+
+<details><summary>Expand to see the code</summary><p>
 
 ```xml
   <?xml version="1.0" encoding="utf-8"?>
   <!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
   <nta>
-    <declaration>// Global declarations. 
+    <declaration>// Global declarations.
   int status1, charge1;</declaration>
     <template>
       <name x="9" y="9">Simple</name>
@@ -269,28 +202,13 @@ Download UPPAAL to create your model
   </nta>
 ```
 
-2. After running XML_parser, this will parse crucial data into graph objects. Below the image is output lines as a result of this conversion
-
-</br>
-
-<div align="left">
-  <img src="img/XML_to_graph.png">  
-</div>
-</br>
-</br>
-
-3. Then the parser automatically checks all the required data such as a starting state, an end state, infinity, and connectionless transitions.
-
-</br>
-<div align="left">
-  <img src="img/verify.png">  
-</div>
-</br>
-</br>
+</p></details></ul>
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-4. Finally, our program generates a python script file looking like below:
+> ##### 3. Final output in python:
+
+ <details><summary>Expand to see the code</summary><p>
 
 ```python
 class TestClass:
@@ -345,23 +263,110 @@ class TestClass:
 TestClass.Start()
 ```
 
+</p></details></ul>
+</br>
+</br>
+
+
+### Process logic flow
+  <div align="center">
+    <img width="800" src="img/execution_process_flow.png">
+  </div>
+</br>
+</br>
+</br>
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+
+### File structure
+
+```
+├── data
+├── docs
+├── img
+│   └── icon
+├── README.md
+└── src
+    ├── main.py
+    ├── objects
+    │   ├── global_set.py
+    │   ├── node.py
+    │   ├── sync.py
+    │   ├── system.py
+    │   ├── template.py
+    │   ├── transition.py
+    │   └── variable.py
+    ├── parser
+    │   ├── components
+    │   │   ├── declaration_parser.py
+    │   │   ├── node_parser.py
+    │   │   ├── system_parser.py
+    │   │   └── transition_parser.py
+    │   ├── syntax
+    │   │   └── cpyparser.py
+    │   ├── tag_set.py
+    │   └── XML_parser.py
+    └── translator
+        ├── class_gen.py
+        ├── function_gen.py
+        ├── py_export.py
+        └── script_gen.py
+```
+</br>
+
+
+### Valid model rule
+</br>
+
+```diff
++Rules before giving an input
+```
+
+> 1. A model must be a valid model. The validity of the model can be checked in UPPAAL software. Any invalid UPPAAL model will cause a program crash.
+> 2. All variables must be defined. Any unidentified variables may cause errors either while using the software (translation) or executing output (Python code).
+> 3. All variable declarations must be valid, according to its template.
+> 4. Every node must have a unique identifier. Duplicate identifiers will result in overwriting of functions.
+
+
 <!-- USAGE EXAMPLES -->
 ## Usage/Application
-
 
 _For more examples, please refer to the [Design Documentation](https://docs.google.com/document/d/e/2PACX-1vQ0GhSxaPt2g3zVoJ4P_tEIz-wvtw0bt5sdaG9b234H0Y10dJu01ctV5YPrfZKCXZp57UvUPH7nJ3qQ/pub)_.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-
-
 <!-- ROADMAP -->
-
 ## Roadmap
 
 _For more plans, please see the [plan documentation](https://drive.google.com/file/d/1UHxCx8l3Wgu_6PQxfjx6K0d7gkP5ybov/view)_.
 
-### Task 1 check list - Due October 16.
+### Current Tasks. (Due Jan 2022)
+
+<details><summary>See current task list</summary><p>
+
+- [ ] Fully implement operational and conditional statement converter
+  - [x] Implement converter
+  - [ ] Fix potential bugs & issues.
+</br>
+- [ ] Refactor packages(modules) structures to do only relative jobs
+  - [ ] Object package only holds data
+  - [ ] Parser package holds only relavant modules
+    - [ ] Components package only does parsing job
+    - [ ] Syntax package only converts syntactical string
+  - [ ] Translator package only translate objects into python scripts
+  - [ ] Main.py only runs a root module of the packages.
+</br>
+- [ ] Accept parameters on sender and on receiver
+- [ ] Implement access of global variables from local field
+
+</p></details></ul>
+</br>
+
+<details><summary>Previous Tasks</summary><ul>
+<details><summary>First Tasks</summary><p>
+
+### First Task - Aug 2021 ~ Oct 2021
 - [x] Update mark down documentation.
 - [x] Create mock Python code output.
 - [x] Make UPPAAL parser.
@@ -371,8 +376,11 @@ _For more plans, please see the [plan documentation](https://drive.google.com/fi
 - [x] Make Python code generator/converter.
 - [x] Test simple diagram.
 
+</p></details></ul>
 
-### Task 2 check list - Due October 23.
+<ul><details><summary>Second Tasks</summary><p>
+
+### Task 2 check list - Oct 2021 ~ Nov 2021.
 - [x] Make complex diagram 1
 - [x] Update(enhance) UPPAAL parser
 - [x] Update(enhance) Python code generator/converter
@@ -381,12 +389,27 @@ _For more plans, please see the [plan documentation](https://drive.google.com/fi
 - [x] Update (enhance) Python code generator/converter
 - [x] Test complex diagram 1
 
+</p></details></ul>
+</details>
 
 See the [open issues](https://github.com/TCC2021SeniorProject/ModelTranslator/issues) for a full list of proposed features (and known issues).
 
-</br>
 
-## Testing Schedules
+
+<details>
+<summary>Testing schedules</summary>
+<ul><p>
+
+## General testing Schedules
+
+- [x] Test case 1 (Due Oct  9): Produce code from a simple model
+- [x] Test case 2 (Due Oct 17): Model comparatively massive size diagram
+- [x] Test case 3 (Due Oct 23): Build infinite loops / Redundant transitions.
+- [x] Test case 4-1 (Due Nov 21): Change models to python codes that MCCD accepts.
+- [ ] Test case 4-2 (Due Jan 1): Create executable model.
+- [ ] Test case 7 (Due Feb 1): Handling devices via web application on MCCD
+- [ ] Test case 8 (Due Jan 10): MCCD can be postponed until the device finishes its current job
+
 
 </br>
 
@@ -396,21 +419,17 @@ See the [open issues](https://github.com/TCC2021SeniorProject/ModelTranslator/is
 | Test case 2 | Tony, Cameron       | Oct 17   |
 | Test case 3 | Tony, Cameron       | Oct 23   |
 | Test case 4 | Tony, Cameron, Cael | Nov 21   |
-| Test case 7 | Tony, Cael          | Dec 12   |
-| Test case 8 | Tony, Cameron, Cael | Dec 12   |
+| Test case 7 | Tony, Cael          | Feb 1    |
+| Test case 8 | Tony, Cameron, Cael | Jan 10   |
+
+</p>
+</ul></details>
 
 </br>
 
 To view the specific testing details, **[click here](https://docs.google.com/document/d/e/2PACX-1vQC5scu0DfEu0nLqPVWZzML1m6oMh8Q2Oo86GEyt_GFx_NB7BA3BZWF44hMv6tEFyhgTrATsf8TUQL3/pub)**
 
 *MCCD* refers to Main Control Center Device.
-
-- [x] Test case 1 (Due Oct  9): Produce code from a simple model
-- [x] Test case 2 (Due Oct 17): Model comparatively massive size diagram
-- [x] Test case 3 (Due Oct 23): Build infinite loops / Redundant transitions.
-- [ ] Test case 4 (Due Nov 21): Change models to python codes that MCCD accepts.
-- [ ] Test case 7 (Due Dec 12): Handling devices via web application on MCCD
-- [ ] Test case 8 (Due Dec 12): MCCD can be postponed until the device finishes its current job
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -421,9 +440,13 @@ To view the specific testing details, **[click here](https://docs.google.com/doc
 **See the following link: [Style Guide for Python Code](https://www.python.org/dev/peps/pep-0008/)**
 
 **Follow rules for better readability: [Clean Code by Robert C. Martin](https://gist.github.com/wojteklu/73c6914cc446146b8b533c0988cf8d29)**
-</br>
 
-**Getter first, setter later for function definitions.**
+
+**Getter first, setter later for function definitions**
+
+**Only one thing in a function**
+
+**Consider portability and readability**
 
 
 <!-- LICENSE -->
@@ -450,7 +473,7 @@ Email: [sbhattacharyya@fit.edu](mailto:sbhattacharyya@fit.edu)
 
 > Caelan Shoop </br>
 > Email: [cshoop2018@my.fit.edu](mailto:cshoop2018@my.fit.edu) </br>
-> GitHub: [CCShoop](https://github.com/CCShoop) 
+> GitHub: [CCShoop](https://github.com/CCShoop)
 
 > Cameron Wright </br>
 > Email: [cameron2018@my.fit.edu](mailto:cameron2018@my.fit.edu) </br>

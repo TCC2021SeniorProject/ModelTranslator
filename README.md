@@ -204,7 +204,8 @@ Download UPPAAL to create your model
 
 </p></details></ul>
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+</br>
+</br>
 
 > ##### 3. Final output in python:
 
@@ -267,6 +268,7 @@ TestClass.Start()
 </br>
 </br>
 
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 ### Process logic flow
   <div align="center">

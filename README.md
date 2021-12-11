@@ -331,7 +331,7 @@ Roomba.Idle()
 
 ### Process logic flow
   <div align="center">
-    <img width="800" src="img/execution_process_flow.png">
+    <img width="800" src="img/execution_process_flow.svg">
   </div>
 </br>
 </br>

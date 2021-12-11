@@ -141,7 +141,7 @@ Download UPPAAL to create your model
 ### Example of how software works
 </br>
 
-> ##### 1. Build your own model in UPPAAL
+> #### 1. Build your own model in UPPAAL
 
  <details><summary>Expand to see the model images</summary><p>
 
@@ -170,7 +170,7 @@ Download UPPAAL to create your model
 </br>
 </br>
 
-> ##### 2. XML input of UPPAAL model
+> #### 2. XML input of UPPAAL model
 
 <details><summary>Expand to see the code</summary><p>
 
@@ -268,7 +268,7 @@ system Roomba;
 </br>
 </br>
 
-> ##### 3. Final output in python:
+> #### 3. Final output in python:
 
  <details><summary>Expand to see the code</summary><p>
 

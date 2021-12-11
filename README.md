@@ -146,7 +146,23 @@ Download UPPAAL to create your model
  <details><summary>Expand to see the model images</summary><p>
 
   <div align="center">
-    <img width="700" src="img/UPPAAL_model_1.jpg">
+    <p>Templates</p>
+    <img width="200" src="img/1.png">
+    </br>
+    <p>Global declaration</p>
+    <img width="200" src="img/2.png">
+    </br>
+    <p>System declaration</p>
+    <img width="300" src="img/3.png">
+    </br>
+    <p>First template</p>
+    <img width="300" src="img/4.png">
+    </br>
+    <p>Second template</p>
+    <img width="300" src="img/5.png">
+    </br>
+    <p>Third template</p>
+    <img width="300" src="img/5.png">
   </div>
 
 </p></details></ul>
@@ -160,56 +176,91 @@ Download UPPAAL to create your model
 
 ```xml
   <?xml version="1.0" encoding="utf-8"?>
-  <!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
-  <nta>
-    <declaration>// Global declarations.
-  int status1, charge1;</declaration>
-    <template>
-      <name x="9" y="9">Simple</name>
-      <parameter>int &amp;mode,  int &amp;battery</parameter>
-      <declaration>// Place local declarations here.
-  </declaration>
-      <location id="id0" x="-391" y="-323">
-        <name x="-408" y="-357">End</name>
-      </location>
-      <location id="id1" x="-603" y="-323">
-        <name x="-629" y="-357">Clean</name>
-      </location>
-      <location id="id2" x="-731" y="-323">
-        <name x="-756" y="-357">Ready</name>
-      </location>
-      <location id="id3" x="-952" y="-323">
-        <name x="-960" y="-357">Start</name>
-      </location>
-      <transition>
-        <source ref="id1"/>
-        <target ref="id0"/>
-        <label kind="guard" x="-578" y="-340">mode == 4 || battery &lt; 10</label>
-        <label kind="assignment" x="-535" y="-323">mode := 4</label>
-      </transition>
-      <transition>
-        <source ref="id2"/>
-        <target ref="id1"/>
-        <label kind="guard" x="-705" y="-340">mode == 3</label>
-      </transition>
-      <transition>
-        <source ref="id3"/>
-        <target ref="id2"/>
-        <label kind="guard" x="-926" y="-340">mode == 1 &amp;&amp; battery &gt; 10</label>
-      </transition>
-    </template>
-    <system>// Place template instantiations here.
-  r1 = Simple(status1, charge1);
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Global declaration(s)
+int[1,2] status;
+int battery;
+chan check_mode;
+</declaration>
+	<template>
+		<name x="0" y="0">all_tran_example</name>
+		<parameter>int &amp;mode, int &amp;charge</parameter>
+		<declaration>// Place local declarations here.</declaration>
+		<location id="id0" x="-1411" y="-425">
+			<name x="-1428" y="-459">Idle</name>
+		</location>
+		<location id="id1" x="-1173" y="-425">
+			<name x="-1190" y="-459">Run</name>
+		</location>
+		<location id="id2" x="-935" y="-425">
+			<name x="-952" y="-459">Dock</name>
+		</location>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id0"/>
+			<label kind="assignment" x="-1207" y="-340">mode = 0</label>
+			<nail x="-1020" y="-340"/>
+			<nail x="-1360" y="-340"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-1139" y="-425">mode == 4 || charge &lt; 10</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-1377" y="-425">mode == 1 &amp;&amp; charge &gt; 10</label>
+			<label kind="synchronisation" x="-1326" y="-442">check_mode?</label>
+		</transition>
+	</template>
+	<template>
+		<name>clean</name>
+		<parameter>int &amp;mode</parameter>
+		<location id="id3" x="-629" y="-272">
+			<name x="-646" y="-306">Clean</name>
+		</location>
+		<location id="id4" x="-773" y="-272">
+		</location>
+		<init ref="id4"/>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-748" y="-272">mode == 3</label>
+			<label kind="synchronisation" x="-748" y="-289">check_mode!</label>
+		</transition>
+	</template>
+	<template>
+		<name>explore</name>
+		<parameter>int &amp;mode</parameter>
+		<location id="id5" x="-850" y="-493">
+			<name x="-867" y="-527">Explore</name>
+		</location>
+		<location id="id6" x="-1020" y="-493">
+		</location>
+		<init ref="id6"/>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id5"/>
+			<label kind="guard" x="-986" y="-493">mode == 2</label>
+			<label kind="synchronisation" x="-986" y="-510">check_mode!</label>
+		</transition>
+	</template>
+	<system>// Template instantiation(s)
+Roomba = all_tran_example(status, battery);
+// Processe(s) to be composed into a system(s)
+system Roomba;
+    </system>
+	<queries>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>
 
-  // List one or more processes to be composed into a system.
-  system r1;</system>
-    <queries>
-      <query>
-        <formula></formula>
-        <comment></comment>
-      </query>
-    </queries>
-  </nta>
 ```
 
 </p></details></ul>
@@ -222,56 +273,54 @@ Download UPPAAL to create your model
  <details><summary>Expand to see the code</summary><p>
 
 ```python
-class TestClass:
+status = 0
+battery = 0
+check_mode = None #Channel variable
 
+class all_tran_example:
 	def __init__(self, ):
-		print('Running constructor')
-		self.status1 = 0
-		self.charge1 = 0
-		self.status2 = 0
-		self.charge2 = 0
-		self.status3 = 0
-		self.charge3 = 0
-
-	async def End(self):
-		exit()
+		pass
 
 	async def Dock(self):
-		await self.Ready()
-		await self.End()
-
-	async def Explore(self):
-		if self.mode == 4 or self.battery < 10 :
-			self.mode = 4
-			await self.Dock()
-		if self.mode == 3 :
-			await self.Clean()
-
-
-	async def Clean(self):
-		if self.mode == 4 or self.battery < 10 :
-			self.mode = 4
-			await self.Dock()
-
-
-	async def Ready(self):
-		if self.mode == 3 :
-			await self.Clean()
-		if self.mode == 2 :
-			await self.Explore()
-
-
-	async def Idle(self):
-		if self.battery > 10 and self.mode == 1 :
-			await self.Ready()
-
-
-	async def Start(self):
-		self.mode = 1
 		await self.Idle()
 
+	async def Run(self):
+		if mode  == 4  or charge  < 10:
+			await self.Dock()
 
-TestClass.Start()
+	async def Idle(self):
+		if mode  == 1  and charge  > 10:
+			await self.Run()
+
+class clean:
+	def __init__(self, ):
+		pass
+
+	async def Clean(self):
+		exit()
+
+	async def default_init(self):
+		if mode  == 3:
+			all_tran_example().Run()
+			await self.Clean()
+
+class explore:
+	def __init__(self, ):
+		pass
+
+	async def Explore(self):
+		exit()
+
+	async def default_init(self):
+		if mode  == 2:
+			all_tran_example().Run()
+			await self.Explore()
+
+Roomba = all_tran_example(status, battery)
+
+Roomba.Idle()
+
+
 ```
 
 </p></details></ul>

@@ -12,7 +12,7 @@
     <img alt="Carthage compatible" src="https://img.shields.io/badge/Stability-Unstable-red" />
     <img alt="Carthage compatible" src="https://img.shields.io/badge/Version-not published-red" />
     <img alt="Carthage compatible" src="https://img.shields.io/badge/Full documentation-not ready-red" />
-    <img alt="Carthage compatible" src="https://img.shields.io/badge/Update Date-12/7/2021-Green" />
+    <img alt="Carthage compatible" src="https://img.shields.io/badge/Update Date-12/10/2021-Green" />
   </p>
 
   <h3 align="center">MODEL TRANSLATOR</h3>
@@ -108,22 +108,32 @@ Download UPPAAL to create your model
 ## Current Features
 
 - The translator can handle the below features from UPPAAL
-
-- - Identifies Start and End node by name (This feature will be changed to tag identification)
+  - Identifies Start and End node by name (This feature will be changed to tag identification)
   - Change UPPAAL XML into abstract graph structure
   - Parse given global declaration from UPPAAL to variables
 
-- Transition object can handle:
+- General features:
+  - Handling multiple transitions
+  - Identifiying classes, nodes, transitions
+  - Handling system scripts
+  - Handling sync broadcasting and respoding
+  - Handling parameters
+  - Access of gloabal fields
 
-- - - Select (name)
-    - Guard (conditionals)
-    - Assignment (variable update in local)
+- Template:
+  - Stores every objects: transitions, nodes, local fields, etc.
 
+- Transition:
+  - Select (name)
+  - Guard (conditionals)
+  - Assignment (variable update in local)
+  - Sync
+  - Conditional statement conversion(UPPAAL syntax -> Python syntax)
   - Locate linked node sources
 
-  - Each UPPAAL node name is converted to the function declaration in python.
-
-  - Each transition point is converted to a function call in python
+- Node
+  - Node's name as function definition in Python
+  - Transition's destination is a function call
 
 </br>
 </br>

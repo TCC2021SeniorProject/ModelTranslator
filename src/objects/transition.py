@@ -7,18 +7,12 @@ from objects.global_set import GlobalSet
     Transition has one to one pointing behavior.
 
     @TODO:
-            0. Move all parsing feature to parser.transition_parser.py
             1. Update more assignment operators
-                - need to handle '!' as not
-                -
-            2. Make async, guard, assign, sync objects
+                - 'x:x?y' = ???
 
     @AUTHOR: Marco-Backman
 """
 class Transition():
-
-    guard_operator = [">", "<", "==", "=", ">=", "<="]
-
     def __init__(self):
         #XXX Import at this line to avoid cross importation
         from objects.node import Node
@@ -26,14 +20,14 @@ class Transition():
         from objects.template import Template
         self.name : str = None
         #stores reformed string
-        self.guard : str  = None
         self.template : Template = None
-        self.sync : Syncronization = None
-        self.sync_caller = False # True: !, False: ?
+        self.guard : str  = None
         self.assign : List[str] = None
         self.transition_from : Node = None
         self.transition_to : Node = None
         self.visited = False
+        self.sync : Syncronization = None
+        self.sync_caller = False # True: !, False: ?
 
     def get_from_id(self):
         return self.transition_from.get_id()
@@ -65,30 +59,11 @@ class Transition():
     def get_template(self):
         return self.template
 
-    def reform_conditional_state(self, guard : str):
-        temp_words = guard.split(" ")
-        for index, word in enumerate(temp_words):
-            #identify variable and comparing value
-            if word in self.guard_operator:
-                temp_words[index - 1] = "self." + temp_words[index - 1]
-            else:
-                continue
-        new_line = ""
-        for word in temp_words:
-            new_line += word + " "
-        return new_line.strip()
-
     def get_guard(self):
         return self.guard
 
-    def parse_gaurd_operator(self, guard : str):
-        guard = guard.replace("||", "or")
-        guard = guard.replace("&&", "and")
-        return guard
-
     def set_guard(self, guard : str):
-        guard = self.parse_gaurd_operator(guard)
-        self.guard = self.reform_conditional_state(guard)
+        self.guard = guard
 
     def get_sync(self):
         return self.sync
@@ -122,31 +97,9 @@ class Transition():
 
     def get_assign(self):
         return self.assign
-    """
-        '-' , '!' = 'not'
-
-        'x++' , '++x' = 'x += 1'
-
-        'x--' , '--x' = 'x -= 1'
-
-        'x => y' = 'not(x) or y
-
-        '>?' =  'max()'
-
-        '<?' = 'min()'
-
-        'x:x?y' = ???
-    """
-
-    def parse_assign_operator(self, assign_script: str) -> List[str]:
-        assign_list = []
-        assign_script = assign_script.replace(":=", "=")
-        assign_script = assign_script.replace("<=", "=")
-        assign_list = [assign.strip() for assign in assign_script.split(",")]
-        return assign_list
 
     def set_assign(self, assign_script : str):
-        self.assign = self.parse_assign_operator(assign_script)
+        self.assign = assign_script
 
     def print_info(self):
         print("\t Transition from: " + self.transition_from.id\

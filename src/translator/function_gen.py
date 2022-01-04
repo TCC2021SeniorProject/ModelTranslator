@@ -23,19 +23,19 @@ class FunctionScriptGen:
         self.template : Template = template
         self.global_set : GlobalSet = global_set
 
-    def make_constructor(self, param_list, variable_list):
+    def make_constructor(self, params : List[str]):
         script = "\tdef __init__(self, "
-        for param in param_list:
+        for param in params:
             script += param + ", "
         script += "):\n"
         #Noting to initialize
-        if len(variable_list) == 0:
+        if len(params) == 0:
             script += "\t\tpass\n"
             return  script + "\n"
-        for variable in variable_list:
-            variable : Variable
-            line = "self." + variable.get_variable_name()
-            line += " = " + str(variable.get_variable_value())
+        for param in params:
+            param : str
+            line = "self." + param
+            line += " = " + param
             script += "\t\t" + line + "\n"
         return script + "\n"
 

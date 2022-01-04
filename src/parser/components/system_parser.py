@@ -3,6 +3,7 @@ import xml.etree.ElementTree as ET
 
 from objects.system import System
 from objects.global_set import GlobalSet
+from objects.template import Template
 
 """
     Parses XML system tag and info into an object
@@ -16,8 +17,6 @@ from objects.global_set import GlobalSet
         r1.InitialNodeOfRoomba_Test()
 
     @TODO: Refactor required - unorganized
-           Parameter not handled
-           Multiple
 
     @AUTHOR: Marco-Backman
 """
@@ -25,7 +24,6 @@ from objects.global_set import GlobalSet
 class SystemParser:
     def parse_system_instance(line : str, global_sets : GlobalSet):
         elements = line.split("=")
-        print(elements)
         instance = elements[0].strip()         #r1
         template_str = elements[1].strip()        #Roomba_Test(parm1, parm2 ...);
         template_str = template_str.replace(")", "") #Roomba_Test(parm1, parm2 ...
@@ -33,11 +31,13 @@ class SystemParser:
         template_name = elements[0]               #Roomba_Test
         param_line = elements[1]               #parm1, parm2 ...
         params = param_line.split(",")
-
-        template = global_sets.get_template_by_name(template_name)
+        params = [s.strip() for s in params]
+        template : Template = global_sets.get_template_by_name(template_name)
         if (template == None): #Error template/init() not found
             print("No template defined")
             return
+        else: # Add parameters
+            template.set_parameters(params)
 
         sys_obj : System = global_sets.get_system_obj()
         sys_obj.add_instance_info(line, instance, template)

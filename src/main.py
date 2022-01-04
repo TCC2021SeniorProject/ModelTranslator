@@ -1,5 +1,4 @@
 import parser.XML_parser as Paser
-import pathlib
 import sys
 
 from objects.global_set import GlobalSet

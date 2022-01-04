@@ -25,7 +25,9 @@ class Template:
         self.end_state : List[Node] = []
         self.nodes : List[Node] = []
         self.transitions : List[Transition] = []
+        #unimplented
         self.variables : List[Variable] = []
+        self.parameters : List[Variable] = []
         self.valid_graph = False
 
     def get_template_name(self):
@@ -95,7 +97,6 @@ class Template:
     #Used for assign command from UPPAAL
     def update_variable(self, name, value):
         from objects.variable import Variable
-        #No existing element
         index = self.get_variable_index(name)
         new_variable = Variable()
         new_variable.set_variable_name(name)
@@ -105,19 +106,25 @@ class Template:
         else:
             self.variables[index] = new_variable
 
-    def get_variables(self):
-        return self.variables
+    def get_parameters(self):
+        return self.parameters
 
-    def get_variable(self, name):
+    def get_parameter(self, parameter_name):
         from objects.variable import Variable
-        if (len(self.variables) == 0):
+        if (len(self.parameters) == 0):
             return None
         else:
-            for variable in self.variables:
-                variable : Variable
-                if (variable.get_variable_name() == name):
-                    return variable
+            for parameter in self.parameters:
+                parameter : str
+                if (parameter == parameter_name):
+                    return parameter
             return None
+
+    def add_parameter(self, parameter : str):
+        self.parameters.append(parameter)
+
+    def set_parameters(self, parameters : List[str]):
+        self.parameters = parameters
 
     def get_variable_index(self, name) -> int:
         from objects.variable import Variable
@@ -131,6 +138,7 @@ class Template:
             return False
 
     def add_variable(self, variable):
+        print("Variable added")
         self.variables.append(variable)
 
     def set_variables(self, variables):

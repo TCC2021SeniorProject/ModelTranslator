@@ -1,4 +1,6 @@
 import xml.etree.ElementTree as ET
+from parser.syntax.cpyparser import SyntaxTree
+from typing import List
 
 from objects.global_set import GlobalSet
 from objects.node import Node
@@ -21,7 +23,7 @@ class TransitionParser:
         target : Node = None
         select : str = ""
         guard : str = None
-        synchronisation : str = None
+        synchronization : str = None
         assignment : str = None
         temp_transition = Transition()
 
@@ -41,7 +43,7 @@ class TransitionParser:
                     guard = sub_tag.text
                 #Variable synchroniztion
                 elif sub_tag.attrib.get('kind') == "synchronisation":
-                    synchronisation : str = sub_tag.text.strip()
+                    synchronization : str = sub_tag.text.strip()
                 #Changing value of existing variable
                 elif sub_tag.attrib.get('kind')  == "assignment":
                     assignment = sub_tag.text
@@ -51,9 +53,34 @@ class TransitionParser:
         temp_transition.set_name(select)
         temp_transition.set_template(template)
         if guard != None:
+            print("From " + guard)
+            guard = TransitionParser.reform_conditional_state(guard)
+            print("To " + guard)
             temp_transition.set_guard(guard)
         if assignment != None:
+            print("From " + assignment)
+            assignment = TransitionParser.parse_assign_operator(assignment)
+            print("To " + assignment)
             temp_transition.set_assign(assignment)
-        if synchronisation != None:
-            temp_transition.set_sync(synchronisation, global_set)
+        if synchronization != None:
+            temp_transition.set_sync(synchronization, global_set)
         return source, temp_transition
+
+    def parse_assign_operator(assign_script: str) -> List[str]:
+        assign_list = [assign.strip() for assign in assign_script.split(",")]
+        assign_list = [TransitionParser.reform_assingment_state(assign) for assign in assign_list]
+        assign_script = ""
+        for assign in assign_list:
+            assign_script += assign
+        return assign_script
+
+    def reform_assingment_state(statement : str):
+        synt_tree = SyntaxTree(statement)
+        statement = synt_tree.get_conditional_script(synt_tree.root, "")
+        return statement
+
+
+    def reform_conditional_state(statement : str):
+        synt_tree = SyntaxTree(statement)
+        statement = synt_tree.get_conditional_script(synt_tree.root, "")
+        return statement

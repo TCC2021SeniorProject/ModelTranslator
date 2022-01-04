@@ -14,7 +14,6 @@ from objects.variable import Variable
 """
 
 class DeclarationParser:
-
     def parse_identifier(words : List[str],\
                          var_value : str,\
                          previous_type : str)\

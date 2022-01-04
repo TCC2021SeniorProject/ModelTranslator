@@ -46,9 +46,9 @@ class ClassScriptGen:
 
     def append_function_script(self):
         #Make constructor
-        variables = self.template.get_variables()
+        parameters = self.template.get_parameters()
         func_script_gen = FunctionScriptGen(self.template, self.global_set)
-        script = func_script_gen.make_constructor([], variables)
+        script = func_script_gen.make_constructor(parameters)
         self.class_script += script
 
         #Traverse and stack up the nodes.

@@ -138,6 +138,86 @@ Download UPPAAL to create your model
 </br>
 </br>
 
+<!-- ROADMAP -->
+## Roadmap
+
+_For more plans, please see the [plan documentation](https://drive.google.com/file/d/1UHxCx8l3Wgu_6PQxfjx6K0d7gkP5ybov/view)_.
+
+### Current Tasks. (Due Jan 2022)
+
+<details open><summary>See current task list</summary><p>
+
+- [ ] Fully implement operational and conditional statement converter
+  - [x] Implement converter
+  - [ ] Fix potential bugs & issues.
+  - [ ] Identify variables.
+</br>
+
+- [x] Refactor packages(modules) structures to do only relative jobs
+  - [x] Object package only holds class data
+  - [x] Parser package holds only relavant modules
+    - [x] Components package only does parsing job
+    - [x] Syntax package only converts syntactical string
+  - [x] Translator package only translates objects into python scripts
+  - [x] Main.py only runs a root module of the packages.
+</br>
+
+- [ ] Accept parameters on sender and on receiver
+- [ ] Implement access of global variables from local field
+
+</p></details></ul>
+</br>
+
+<details><summary>Previous Tasks</summary><ul>
+<details><summary>First Tasks</summary><p>
+
+### First Task - Aug 2021 ~ Oct 2021
+- [x] Update mark down documentation.
+- [x] Create mock Python code output.
+- [x] Make UPPAAL parser.
+- [x] Program is able to traverse all the nodes through tranistion objects.
+- [x] Program is able to identify the validity of the model.
+- [x] Program is able to validate the node function (e.g. starting node, termination node, logic node, process node, etc)
+- [x] Make Python code generator/converter.
+- [x] Test simple diagram.
+
+</p></details></ul>
+
+<ul><details><summary>Second Tasks</summary><p>
+
+### Task 2 check list - Oct 2021 ~ Nov 2021.
+- [x] Make complex diagram 1
+- [x] Update(enhance) UPPAAL parser
+- [x] Update(enhance) Python code generator/converter
+- [x] Test complex diagram 1
+- [x] Update (enhance) UPPAAL parser
+- [x] Update (enhance) Python code generator/converter
+- [x] Test complex diagram 1
+
+</p></details></ul>
+</details>
+
+See the [open issues](https://github.com/TCC2021SeniorProject/ModelTranslator/issues) for a full list of proposed features (and known issues).
+
+
+
+<details>
+<summary>Testing schedules</summary>
+<ul><p>
+
+## General testing Schedules
+
+- [x] Test case 1 (Due Oct  9): Produce code from a simple model
+- [x] Test case 2 (Due Oct 17): Model comparatively massive size diagram
+- [x] Test case 3 (Due Oct 23): Build infinite loops / Redundant transitions.
+- [x] Test case 4-1 (Due Nov 21): Change models to python codes that MCCD accepts.
+- [ ] Test case 4-2 (Due Jan 20): Create executable model.
+- [ ] Test case 7 (Due Feb 1): Create a web application version of translator.
+- [ ] Test case 8 (Due Jan 10): Check main control device can be postponed until specified device finishes its current job
+
+
+
+
 ### Example of how software works
 </br>
 
@@ -396,80 +476,6 @@ Roomba.Idle()
 _For more examples, please refer to the [Design Documentation](https://docs.google.com/document/d/e/2PACX-1vQ0GhSxaPt2g3zVoJ4P_tEIz-wvtw0bt5sdaG9b234H0Y10dJu01ctV5YPrfZKCXZp57UvUPH7nJ3qQ/pub)_.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
-<!-- ROADMAP -->
-## Roadmap
-
-_For more plans, please see the [plan documentation](https://drive.google.com/file/d/1UHxCx8l3Wgu_6PQxfjx6K0d7gkP5ybov/view)_.
-
-### Current Tasks. (Due Jan 2022)
-
-<details><summary>See current task list</summary><p>
-
-- [ ] Fully implement operational and conditional statement converter
-  - [x] Implement converter
-  - [ ] Fix potential bugs & issues.
-</br>
-- [ ] Refactor packages(modules) structures to do only relative jobs
-  - [ ] Object package only holds data
-  - [ ] Parser package holds only relavant modules
-    - [ ] Components package only does parsing job
-    - [ ] Syntax package only converts syntactical string
-  - [ ] Translator package only translate objects into python scripts
-  - [ ] Main.py only runs a root module of the packages.
-</br>
-- [ ] Accept parameters on sender and on receiver
-- [ ] Implement access of global variables from local field
-
-</p></details></ul>
-</br>
-
-<details><summary>Previous Tasks</summary><ul>
-<details><summary>First Tasks</summary><p>
-
-### First Task - Aug 2021 ~ Oct 2021
-- [x] Update mark down documentation.
-- [x] Create mock Python code output.
-- [x] Make UPPAAL parser.
-- [x] Program is able to traverse all the nodes through tranistion objects.
-- [x] Program is able to identify the validity of the model.
-- [x] Program is able to validate the node function (e.g. starting node, termination node, logic node, process node, etc)
-- [x] Make Python code generator/converter.
-- [x] Test simple diagram.
-
-</p></details></ul>
-
-<ul><details><summary>Second Tasks</summary><p>
-
-### Task 2 check list - Oct 2021 ~ Nov 2021.
-- [x] Make complex diagram 1
-- [x] Update(enhance) UPPAAL parser
-- [x] Update(enhance) Python code generator/converter
-- [x] Test complex diagram 1
-- [x] Update (enhance) UPPAAL parser
-- [x] Update (enhance) Python code generator/converter
-- [x] Test complex diagram 1
-
-</p></details></ul>
-</details>
-
-See the [open issues](https://github.com/TCC2021SeniorProject/ModelTranslator/issues) for a full list of proposed features (and known issues).
-
-
-
-<details>
-<summary>Testing schedules</summary>
-<ul><p>
-
-## General testing Schedules
-
-- [x] Test case 1 (Due Oct  9): Produce code from a simple model
-- [x] Test case 2 (Due Oct 17): Model comparatively massive size diagram
-- [x] Test case 3 (Due Oct 23): Build infinite loops / Redundant transitions.
-- [x] Test case 4-1 (Due Nov 21): Change models to python codes that MCCD accepts.
-- [ ] Test case 4-2 (Due Jan 1): Create executable model.
-- [ ] Test case 7 (Due Feb 1): Handling devices via web application on MCCD
-- [ ] Test case 8 (Due Jan 10): MCCD can be postponed until the device finishes its current job
 
 
 </br>

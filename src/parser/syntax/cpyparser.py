@@ -132,23 +132,23 @@ class SyntaxTree:
             if index == (len(line) - 1):  #Hits the last index
                 if type(walk) is CharNode:
                     if char == ')':
-                        new_node = CharNode(remainder, walk)
+                        new_node = CharNode(remainder.strip(), walk)
                         walk.set_next(new_node)
                     else:
-                        new_node = CharNode(remainder + char, walk)
+                        new_node = CharNode(remainder.strip() + char, walk)
                         walk.set_next(new_node)
                 else:
                     if char == ')':
-                        walk.set_right(remainder)
+                        walk.set_right(remainder.strip())
                     else:
-                        walk.set_right(remainder + char)
+                        walk.set_right(remainder.strip() + char)
                 return
             elif char == ')': #Go up to next '('
                 if type (walk) is CharNode and remainder != "":
-                    new_node = CharNode(remainder, walk)
+                    new_node = CharNode(remainder.strip(), walk)
                     walk.set_next(new_node)
                 if type(walk) is Node and remainder != "":
-                    walk.set_right(remainder)
+                    walk.set_right(remainder.strip())
 
                 while walk.parent != None:
                     walk = walk.parent
@@ -168,7 +168,7 @@ class SyntaxTree:
                         if walk.next == None:
                             new_node = Node(conditional_operator[two_operator])
                             walk.set_next(new_node)
-                            new_node.set_left(remainder)
+                            new_node.set_left(remainder.strip())
                             new_node.set_parent(walk)
                             self.translate(line[(index + 2):].strip(), new_node)
                             return
@@ -184,19 +184,19 @@ class SyntaxTree:
                             else:
                                 walk.set_left(new_node)
                             new_node.set_parent(walk)
-                            new_node.set_left(remainder)
+                            new_node.set_left(remainder.strip())
                             self.translate(line[(index + 2):].strip(), new_node)
                             return
                     else:
                         if walk.left == None: #Normal case
-                            walk.set_left(remainder)
+                            walk.set_left(remainder.strip())
                             walk.set_operator(conditional_operator[two_operator])
                             self.translate(line[(index + 2):].strip(), walk) #Update parent
                             return
                         elif walk.right == None: #Right is empty
                             #Take right
                             new_child = Node(conditional_operator[two_operator])
-                            new_child.set_left(remainder)
+                            new_child.set_left(remainder.strip())
                             new_child.set_parent(walk)
                             walk.set_right(new_child)
                             self.translate(line[(index + 2):].strip(), new_child) #Update parent
@@ -246,7 +246,7 @@ class SyntaxTree:
             else:
                 script = self.get_conditional_script(walk.left, script)
             #check variables
-            script += str(walk.value) + " "
+            script += " " + str(walk.value) + " "
             if type(walk.right) is str:
                 script += walk.right
             else:

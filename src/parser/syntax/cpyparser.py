@@ -13,6 +13,9 @@
 """
 
 #Left - C syntax, Right - Python syntax
+from objects.template import Template
+
+
 conditional_single_operator = { "&" : 1,
                                 "|" : 1,
                                 ">" : 3,
@@ -239,20 +242,28 @@ class SyntaxTree:
                         return
             remainder += char
 
-    def get_conditional_script(self, walk, script : str):
+    def get_conditional_script(self, walk, script : str, template : Template):
         if type(walk) is Node:
             if type(walk.left) is str:
-                script += walk.left
+                #Check if this is a variable
+                if template.get_parameter(walk.left) == None:
+                    script += walk.left
+                else:
+                    script += "self." + walk.left
             else:
-                script = self.get_conditional_script(walk.left, script)
+                script = self.get_conditional_script(walk.left, script, template)
             #check variables
             script += " " + str(walk.value) + " "
             if type(walk.right) is str:
-                script += walk.right
+                #Check if this is a variable
+                if template.get_parameter(walk.right) == None:
+                    script += walk.right
+                else:
+                    script += "self." + walk.right
             else:
-                script = self.get_conditional_script(walk.right, script)
+                script = self.get_conditional_script(walk.right, script, template)
         elif type(walk) is CharNode: # CharNode type
             script += walk.value
-            script = self.get_conditional_script(walk.next, script)
+            script = self.get_conditional_script(walk.next, script, template)
             return script + ")" if walk.value == "(" else script
         return script

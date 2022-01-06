@@ -13,11 +13,11 @@ class all_tran_example:
 		await self.Idle()
 
 	async def Run(self):
-		if mode == 4 or charge < 10:
+		if self.mode == 4 or self.charge < 10:
 			await self.Dock()
 
 	async def Idle(self):
-		if mode == 1 and charge > 10:
+		if self.mode == 1 and self.charge > 10:
 			await self.Run()
 
 class clean:
@@ -28,7 +28,7 @@ class clean:
 		exit()
 
 	async def default_init(self):
-		if mode == 3:
+		if self.mode == 3:
 			all_tran_example().Run()
 			await self.Clean()
 
@@ -40,7 +40,7 @@ class explore:
 		exit()
 
 	async def default_init(self):
-		if mode == 2:
+		if self.mode == 2:
 			all_tran_example().Run()
 			await self.Explore()
 

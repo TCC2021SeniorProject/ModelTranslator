@@ -110,7 +110,6 @@ class Template:
         return self.parameters
 
     def get_parameter(self, parameter_name):
-        from objects.variable import Variable
         if (len(self.parameters) == 0):
             return None
         else:

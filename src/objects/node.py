@@ -11,7 +11,7 @@ from objects.transition import Transition
     parameters(s) : parameters
     transition(s) : One direction node pointer linkage
 
-    @TODO: Implement commit, parameter section
+    @TODO: Implement commit
 
     @AUTHOR: Marco-Backman
 """

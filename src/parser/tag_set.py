@@ -55,3 +55,8 @@ class TagSet:
         return {
             'comment' : True
         }.get(line.tag, False)
+
+    def identify_parameter_tag(line : ET.Element) -> bool:
+        return {
+            'parameter' : True
+        }.get(line.tag, False)

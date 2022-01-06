@@ -3,7 +3,9 @@ battery = 0
 check_mode = None #Channel variable
 
 class all_tran_example:
-	def __init__(self, status, battery, ):
+	def __init__(self, mode, charge, status, battery, ):
+		self.mode = mode
+		self.charge = charge
 		self.status = status
 		self.battery = battery
 
@@ -19,8 +21,8 @@ class all_tran_example:
 			await self.Run()
 
 class clean:
-	def __init__(self, ):
-		pass
+	def __init__(self, mode, ):
+		self.mode = mode
 
 	async def Clean(self):
 		exit()
@@ -31,8 +33,8 @@ class clean:
 			await self.Clean()
 
 class explore:
-	def __init__(self, ):
-		pass
+	def __init__(self, mode, ):
+		self.mode = mode
 
 	async def Explore(self):
 		exit()

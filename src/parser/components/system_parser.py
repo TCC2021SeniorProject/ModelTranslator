@@ -24,20 +24,23 @@ from objects.template import Template
 class SystemParser:
     def parse_system_instance(line : str, global_sets : GlobalSet):
         elements = line.split("=")
-        instance = elements[0].strip()         #r1
+        instance = elements[0].strip()            #r1
         template_str = elements[1].strip()        #Roomba_Test(parm1, parm2 ...);
         template_str = template_str.replace(")", "") #Roomba_Test(parm1, parm2 ...
         elements = template_str.split("(")
         template_name = elements[0]               #Roomba_Test
-        param_line = elements[1]               #parm1, parm2 ...
-        params = param_line.split(",")
-        params = [s.strip() for s in params]
+        param_line = elements[1]                  #parm1, parm2 ...
+        params = [s.strip() for s in param_line.split(",")]
         template : Template = global_sets.get_template_by_name(template_name)
         if (template == None): #Error template/init() not found
             print("No template defined")
             return
         else: # Add parameters
-            template.set_parameters(params)
+            if template.param_is_empty():
+                template.set_parameters(params)
+            else:
+                for param in params:
+                    template.add_parameters(param)
 
         sys_obj : System = global_sets.get_system_obj()
         sys_obj.add_instance_info(line, instance, template)

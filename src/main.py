@@ -2,7 +2,7 @@ import parser.XML_parser as Paser
 import sys
 
 from objects.global_set import GlobalSet
-from translator.py_export import Export
+from translator  .py_export import Export
 from translator.script_gen import TranslateModel
 
 """

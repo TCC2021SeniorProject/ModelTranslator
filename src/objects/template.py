@@ -123,8 +123,21 @@ class Template:
     def add_parameter(self, parameter : str):
         self.parameters.append(parameter)
 
+    def add_parameters(self, parameters : List[str]):
+        if isinstance(parameters, list):
+            for parameter in parameters:
+                self.parameters.append(parameter)
+        else:
+            self.parameters.append(parameters)
+
     def set_parameters(self, parameters : List[str]):
         self.parameters = parameters
+
+    def param_is_empty(self):
+        if len(self.parameters) == 0:
+            return True
+        else:
+            return False
 
     def get_variable_index(self, name) -> int:
         from objects.variable import Variable
@@ -138,7 +151,6 @@ class Template:
             return False
 
     def add_variable(self, variable):
-        print("Variable added")
         self.variables.append(variable)
 
     def set_variables(self, variables):

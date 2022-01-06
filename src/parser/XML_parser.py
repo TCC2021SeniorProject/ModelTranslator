@@ -4,6 +4,7 @@ from parser.components.declaration_parser import DeclarationParser
 from parser.components.node_parser import NodeParser
 from parser.components.system_parser import SystemParser
 from parser.components.transition_parser import TransitionParser
+from parser.components.parameter_parser import ParamParser
 from parser.tag_set import TagSet
 
 from typing import List
@@ -97,6 +98,10 @@ class ParseXML:
                         raise Exception("Node is null")
                     template.add_node(node)
 
+                elif TagSet.identify_parameter_tag(line):
+                    params = ParamParser.parse_param(line)
+                    template.add_parameters(params)
+
                 elif TagSet.identify_init_tag(line):
                     #Init may have no name
                     id = line.attrib.get('ref')
@@ -121,6 +126,7 @@ class ParseXML:
                 self.set_end(node, template)
             self.global_set.add_template(template)
 
+        #Parse system tag
         for system in self.root.findall("system"):
             for line in system.iter():
                 if TagSet.identify_system_tag(line):

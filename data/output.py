@@ -1,13 +1,13 @@
+import asyncio
+
 status = 0
 battery = 0
 check_mode = None #Channel variable
 
 class all_tran_example:
-	def __init__(self, mode, charge, status, battery, ):
+	def __init__(self, mode, charge, ):
 		self.mode = mode
 		self.charge = charge
-		self.status = status
-		self.battery = battery
 
 	async def Dock(self):
 		await self.Idle()
@@ -44,7 +44,8 @@ class explore:
 			all_tran_example().Run()
 			await self.Explore()
 
+loop = asyncio.get_event_loop()
+
 Roomba = all_tran_example(status, battery)
 
-Roomba.Idle()
-
+loop.run_until_complete(Roomba.Idle())

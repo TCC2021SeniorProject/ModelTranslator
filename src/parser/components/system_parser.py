@@ -24,7 +24,8 @@ from objects.template import Template
 class SystemParser:
     def parse_system_instance(line : str, global_sets : GlobalSet):
         elements = line.split("=")
-        instance = elements[0].strip()            #r1
+        instance = elements[0].strip()
+         #r1
         template_str = elements[1].strip()        #Roomba_Test(parm1, parm2 ...);
         template_str = template_str.replace(")", "") #Roomba_Test(parm1, parm2 ...
         elements = template_str.split("(")
@@ -35,12 +36,6 @@ class SystemParser:
         if (template == None): #Error template/init() not found
             print("No template defined")
             return
-        else: # Add parameters
-            if template.param_is_empty():
-                template.set_parameters(params)
-            else:
-                for param in params:
-                    template.add_parameters(param)
 
         sys_obj : System = global_sets.get_system_obj()
         sys_obj.add_instance_info(line, instance, template)

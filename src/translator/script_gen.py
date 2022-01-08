@@ -29,7 +29,7 @@ class TranslateModel:
         self.start_node = None
 
         self.global_var_script = ""
-        self.entire_script = ""
+        self.entire_script = "import asyncio\n\n"
 
     #Holds entire single class scripts - class, init(), def().
     def make_class_script(self, template : Template):
@@ -53,8 +53,10 @@ class TranslateModel:
             self.entire_script += self.make_class_script(template)
 
         #Instance declaration and calls
+        #Use this on Python version lower than 3.7
+        self.entire_script += "loop = asyncio.get_event_loop()\n\n"
         self.entire_script += self.global_set.get_dec_scripts() + "\n"
-        self.entire_script += self.global_set.get_instance_calls() + "\n"
+        self.entire_script += self.global_set.get_instance_calls()
 
     def get_full_scripts(self):
         return self.entire_script

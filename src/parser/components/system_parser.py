@@ -24,21 +24,22 @@ from objects.template import Template
 class SystemParser:
     def parse_system_instance(line : str, global_sets : GlobalSet):
         elements = line.split("=")
-        instance = elements[0].strip()
-         #r1
-        template_str = elements[1].strip()        #Roomba_Test(parm1, parm2 ...);
+        instance = elements[0].strip()               #instance variable name
+        template_str = elements[1].strip()           #instance declaration with params;
         template_str = template_str.replace(")", "") #Roomba_Test(parm1, parm2 ...
         elements = template_str.split("(")
-        template_name = elements[0]               #Roomba_Test
-        param_line = elements[1]                  #parm1, parm2 ...
-        params = [s.strip() for s in param_line.split(",")]
+        template_name = elements[0]                  #Only class name
+        param_line = elements[1]                     #Parameters
         template : Template = global_sets.get_template_by_name(template_name)
+        template.set_instance_name(instance)
         if (template == None): #Error template/init() not found
             print("No template defined")
             return
 
         sys_obj : System = global_sets.get_system_obj()
         sys_obj.add_instance_info(line, instance, template)
+        params = [s.strip() for s in param_line.split(",")]
+        sys_obj.add_sys_param(params)
 
     def parse_system(et : ET, global_sets : GlobalSet):
         content = et.text
@@ -59,10 +60,12 @@ class SystemParser:
                 sys_obj : System = global_sets.get_system_obj()
                 sys_obj.add_call(line) #append - r1
 
-            else: # r1 = Roomba_Test(param1, param2, ...)
+            #Instance declaration
+            else:
                 line = line.replace(";", "")
                 line = line.strip()
                 SystemParser.parse_system_instance(line, global_sets)
                 new_lines.append(line)
+
 
         return new_lines

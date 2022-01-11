@@ -53,8 +53,9 @@ class FunctionScriptGen:
                         script += "\t"
                     target_node : Node = sync_transition.get_to_node()
                     sync = sync_transition.get_sync()
-                    class_name = sync.get_caller_location()
-                    script +=  class_name + "()." + target_node.get_name() + "()\n"
+                    class_name = sync.get_caller_instance()
+                    #sync parameter comes here
+                    script +=  class_name + "." + target_node.get_name() + "()\n"
         return script
 
     def make_tranision_to_script(self, transition : Transition):

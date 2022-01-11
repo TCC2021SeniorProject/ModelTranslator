@@ -19,6 +19,7 @@ class System:
         #instance declaration in full string
         self.instance_declare : List[str] = [] #key - instance name
         self.instances : Dict[Template] = {}   #key - instance name
+        self.sys_parameter : List[str] = []    #System parameter used for sync content
         self.instance_call : List[str] = []    #will contain the name of the instances
 
     #If system keyword is raised
@@ -48,6 +49,16 @@ class System:
 
     def add_call(self, instance_name : str):
         self.instance_call.append(instance_name)
+
+    def get_sys_parem(self):
+        return self.sys_parameter
+
+    def add_sys_param(self, params : List[str]):
+        if isinstance(params, list):
+            for parameter in params:
+                self.sys_parameter.append(parameter)
+        else: #param is just a plain text
+            self.sys_parameter.append(params)
 
     def print_info(self):
         for inst_dec in self.instance_declare:

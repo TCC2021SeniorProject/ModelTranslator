@@ -17,10 +17,17 @@ from objects.transition import Transition
 
 class Syncronization():
     def __init__(self, name : str):
+        self.instance_name : str = ""
         self.caller_location : Template = None
         self.caller : Transition = None    #!
         self.responder : Transition = None #?
         self.name : str = name
+
+    def get_instance_name(self):
+        return self.instance_name
+
+    def get_caller_instance(self):
+        return self.caller_location.get_instance_name()
 
     def get_caller_location(self):
         return self.caller_location.get_template_name()

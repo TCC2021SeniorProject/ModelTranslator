@@ -29,7 +29,7 @@ class clean:
 
 	async def default_init(self):
 		if self.mode == 3:
-			all_tran_example().Run()
+			Roomba.Run()
 			await self.Clean()
 
 class explore:
@@ -41,7 +41,7 @@ class explore:
 
 	async def default_init(self):
 		if self.mode == 2:
-			all_tran_example().Run()
+			Roomba.Run()
 			await self.Explore()
 
 loop = asyncio.get_event_loop()

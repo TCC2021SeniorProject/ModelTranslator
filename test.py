@@ -18,12 +18,14 @@ class test:
 
 class test2:
     def __init__(self, a):
-        self.a = a
+        self.c = a
+        self.c = 10
 
     async def calculate(self):
-        await test(a, b).add()
+        await inst1.add()
 
-inst = test2(10)
+inst1 = test(a, b)
+inst2 = test2(a)
 #Use this on Python version lower than 3.7
 loop = asyncio.get_event_loop()
-loop.run_until_complete(inst.calculate())
+loop.run_until_complete(inst2.calculate())

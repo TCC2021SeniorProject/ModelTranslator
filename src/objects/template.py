@@ -29,6 +29,7 @@ class Template:
         self.variables : List[Variable] = []
         self.parameters : List[Variable] = []
         self.valid_graph = False
+        self.intance_name : str = ""
 
     def get_template_name(self):
         return self.name
@@ -165,6 +166,12 @@ class Template:
         for node in self.nodes:
             node : Node
             node.set_unvisited()
+
+    def get_instance_name(self):
+        return self.intance_name
+
+    def set_instance_name(self, intance_name):
+        self.intance_name = intance_name
 
     def print_info(self):
         #Template

@@ -147,10 +147,10 @@ _For more plans, please see the [plan documentation](https://drive.google.com/fi
 
 <details open><summary>See current task list</summary><p>
 
-- [ ] Fully implement operational and conditional statement converter
+- [x] Fully implement operational and conditional statement converter
   - [x] Implement converter
-  - [ ] Fix potential bugs & issues.
-  - [ ] Identify variables.
+  - [x] Fix potential bugs & issues.
+  - [x] Identify variables.
 </br>
 
 - [x] Refactor packages(modules) structures to do only relative jobs
@@ -162,8 +162,8 @@ _For more plans, please see the [plan documentation](https://drive.google.com/fi
   - [x] Main.py only runs a root module of the packages.
 </br>
 
-- [ ] Accept parameters on sender and on receiver
-- [ ] Implement access of global variables from local field
+- [x] Accept parameters on sender and on receiver
+- [-] Implement access of global variables from local field
 
 </p></details></ul>
 </br>
@@ -213,9 +213,10 @@ See the [open issues](https://github.com/TCC2021SeniorProject/ModelTranslator/is
 - [x] Test case 4-1 (Due Nov 21): Change models to python codes that MCCD accepts.
 - [ ] Test case 4-2 (Due Jan 20): Create executable model.
 - [ ] Test case 7 (Due Feb 1): Create a web application version of translator.
-- [ ] Test case 8 (Due Jan 10): Check main control device can be postponed until specified device finishes its current job
+- [ ] Test case 8 (Due Feb 29): Check main control device can be postponed until specified device finishes its current job
 
-
+</p></ul>
+</details>
 
 
 ### Example of how software works
@@ -223,8 +224,8 @@ See the [open issues](https://github.com/TCC2021SeniorProject/ModelTranslator/is
 
 > #### 1. Build your own model in UPPAAL
 
- <details><summary>Expand to see the model images</summary><p>
-
+</details open>
+ <p>
   <div align="center">
     <p>Templates</p>
     <img width="200" src="img/1.png">
@@ -244,15 +245,16 @@ See the [open issues](https://github.com/TCC2021SeniorProject/ModelTranslator/is
     <p>Third template</p>
     <img width="300" src="img/5.png">
   </div>
-
-</p></details></ul>
+</p>
+</ul>
+</details>
 
 </br>
 </br>
 
 > #### 2. XML input of UPPAAL model
 
-<details><summary>Expand to see the code</summary><p>
+<details open><summary>Expand to see the code</summary><p>
 
 ```xml
   <?xml version="1.0" encoding="utf-8"?>
@@ -350,60 +352,73 @@ system Roomba;
 
 > #### 3. Final output in python:
 
- <details><summary>Expand to see the code</summary><p>
+ <ul>
+ <details open>
+ <summary>Expand to see the code</summary>
+
+ <p>
 
 ```python
+import asyncio
+
 status = 0
 battery = 0
 check_mode = None #Channel variable
 
 class all_tran_example:
-	def __init__(self, ):
-		pass
+	def __init__(self, mode, charge, ):
+		self.mode = mode
+		self.charge = charge
 
 	async def Dock(self):
 		await self.Idle()
 
 	async def Run(self):
-		if mode  == 4  or charge  < 10:
+		if self.mode == 4 or self.charge < 10:
 			await self.Dock()
 
 	async def Idle(self):
-		if mode  == 1  and charge  > 10:
+		if self.mode == 1 and self.charge > 10:
 			await self.Run()
 
 class clean:
-	def __init__(self, ):
-		pass
+	def __init__(self, mode, ):
+		self.mode = mode
 
 	async def Clean(self):
 		exit()
 
 	async def default_init(self):
-		if mode  == 3:
-			all_tran_example().Run()
+		if self.mode == 3:
+			Roomba.Run()
 			await self.Clean()
 
 class explore:
-	def __init__(self, ):
-		pass
+	def __init__(self, mode, ):
+		self.mode = mode
 
 	async def Explore(self):
 		exit()
 
 	async def default_init(self):
-		if mode  == 2:
-			all_tran_example().Run()
+		if self.mode == 2:
+			Roomba.Run()
 			await self.Explore()
+
+loop = asyncio.get_event_loop()
 
 Roomba = all_tran_example(status, battery)
 
-Roomba.Idle()
+loop.run_until_complete(Roomba.Idle())
 
 
 ```
 
-</p></details></ul>
+</p>
+
+</details>
+
+</ul>
 </br>
 </br>
 
@@ -476,18 +491,6 @@ Roomba.Idle()
 _For more examples, please refer to the [Design Documentation](https://docs.google.com/document/d/e/2PACX-1vQ0GhSxaPt2g3zVoJ4P_tEIz-wvtw0bt5sdaG9b234H0Y10dJu01ctV5YPrfZKCXZp57UvUPH7nJ3qQ/pub)_.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
-
-</br>
-
-| Case        | Testing Responder   | Due Date |
-| ----------- | ------------------- | -------- |
-| Test case 1 | Tony, Cameron, Cael | Oct 9    |
-| Test case 2 | Tony, Cameron       | Oct 17   |
-| Test case 3 | Tony, Cameron       | Oct 23   |
-| Test case 4 | Tony, Cameron, Cael | Nov 21   |
-| Test case 7 | Tony, Cael          | Feb 1    |
-| Test case 8 | Tony, Cameron, Cael | Jan 10   |
 
 </p>
 </ul></details>

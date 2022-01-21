@@ -1,9 +1,11 @@
-import parser.XML_parser as Paser
 import sys
 
 from objects.global_set import GlobalSet
-from translator  .py_export import Export
+from translator.py_export import Export
 from translator.script_gen import TranslateModel
+
+import parser.XML_parser as Paser
+from file import FileHandler
 
 """
     XXX Main class
@@ -32,31 +34,6 @@ from translator.script_gen import TranslateModel
     @TARGET USER: UPPAAL users and developers
 """
 
-# @TODO Argument should be: 1. execution file 2. input file
-
-# 1. all_tran_example.xml
-# 2. fisher.xml
-default_input_directory = "./data/all_tran_example.xml"
-
-def identify_system_argument():
-    arg_list = sys.argv
-    arg_len = len(arg_list)
-    if arg_len == 2:
-        return arg_list[1]
-    elif arg_len > 2:
-        raise Exception('Invalid number of arguments are given')
-    else:
-        print("Using default input file directory: " + default_input_directory)
-        return default_input_directory
-
-def locate_file(file_name : str):
-    try:
-        f = open(file_name, 'r')
-        f.close()
-    except IOError:
-        print("File not found")
-        raise
-
 def generate_scripts(objects : GlobalSet):
     #Tranlate into python script - single template
     model_translator = TranslateModel(objects)
@@ -64,16 +41,28 @@ def generate_scripts(objects : GlobalSet):
     scripts = model_translator.get_full_scripts()
     return scripts
 
-def main():
-    #Read XML files
+def main(arguments):
+    #Required files - must be in full directory format
     file_name = ""
-    try:
-        file_name = identify_system_argument()
-        locate_file(file_name)
-    except Exception:
-        error_type, error_instance, traceback = sys.exc_info()
-        error_instance.args = error_instance.args[0]
-        raise(error_instance)
+    predef_files = []
+
+    if (len(arguments) == 0):
+        print("Running with default XML file")
+        handler = FileHandler("all_tran_example.xml", [])
+        file_name = handler.get_XML_file()
+    elif (len(arguments) == 1):
+        print("Only XML file is provided")
+        handler = FileHandler(arguments[0], [])
+        file_name = handler.get_XML_file()
+
+    elif (len(arguments) > 1):
+        print("Full files are provided")
+        handler = FileHandler(arguments[0], arguments[1:])
+        file_name = handler.get_XML_file()
+        predef_files = handler.get_predef_files()
+    else:
+        raise Exception("Invalid arguments")
+
 
     #Parse and form into model
     objects : GlobalSet = Paser.generate_model(file_name)
@@ -85,4 +74,4 @@ def main():
     Export.make_file(scripts)
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv[1:])

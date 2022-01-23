@@ -1,5 +1,5 @@
 import xml.etree.ElementTree as ET
-from parser.syntax.cpyparser import SyntaxTree
+from parsers.syntax.cpyparser import SyntaxTree
 from typing import List
 
 from objects.global_set import GlobalSet

@@ -1,11 +1,11 @@
 import xml.etree.ElementTree as ET
 
-from parser.components.declaration_parser import DeclarationParser
-from parser.components.node_parser import NodeParser
-from parser.components.system_parser import SystemParser
-from parser.components.transition_parser import TransitionParser
-from parser.components.parameter_parser import ParamParser
-from parser.tag_set import TagSet
+from parsers.components.declaration_parser import DeclarationParser
+from parsers.components.node_parser import NodeParser
+from parsers.components.system_parser import SystemParser
+from parsers.components.transition_parser import TransitionParser
+from parsers.components.parameter_parser import ParamParser
+from parsers.tag_set import TagSet
 
 from typing import List
 

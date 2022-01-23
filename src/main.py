@@ -4,7 +4,7 @@ from objects.global_set import GlobalSet
 from translator.py_export import Export
 from translator.script_gen import TranslateModel
 
-import parser.XML_parser as Paser
+from parsers import XML_parser as Paser
 from file import FileHandler
 
 """

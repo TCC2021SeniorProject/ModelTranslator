@@ -12,9 +12,12 @@ import os
 """
 
 default_XML_file_dir = "../data/"
+default_XML_file_dir_root = "./ModelTranslator/data/"
 #"upload" path is provided from webserver
-download_XML_file_dir = "../../uploads/"
-download_predef_file_dir = "../../uploads/"
+download_XML_file_dir = "../../"
+download_XML_file_dir_root = "./"
+download_predef_file_dir = "../../"
+download_predef_file_dir_root = "./"
 
 class FileHandler:
 
@@ -30,24 +33,34 @@ class FileHandler:
         if(self.check_XML_file() == False):
             raise Exception("XML file not found")
 
-    def locate_file(file_name : str):
-        try:
-            f = open(file_name, 'r')
-            f.close()
-        except IOError:
-            print("File not found")
-            raise Exception
-
     #Check download first
     def check_XML_file(self):
         #in the download file path
         downloaded_XML_path = download_XML_file_dir + self.xml_file_name
+        downloaded_XML_path = downloaded_XML_path.replace("\\", "/")
+        print("Python - XML path: " + downloaded_XML_path)
+        if os.path.isfile(downloaded_XML_path):
+            self.xml_relative_path = downloaded_XML_path
+            return True
+
+        downloaded_XML_path = download_XML_file_dir_root + self.xml_file_name
+        downloaded_XML_path = downloaded_XML_path.replace("\\", "/")
+        print("Python - XML path: " + downloaded_XML_path)
         if os.path.isfile(downloaded_XML_path):
             self.xml_relative_path = downloaded_XML_path
             return True
 
         #in the data file path
         default_XML_path = default_XML_file_dir + self.xml_file_name
+        downloaded_XML_path = downloaded_XML_path.replace("\\", "/")
+        print("Python - XML path: " + downloaded_XML_path)
+        if os.path.isfile(default_XML_path):
+            self.xml_relative_path = default_XML_path
+            return True
+
+        default_XML_path = default_XML_file_dir_root + self.xml_file_name
+        downloaded_XML_path = downloaded_XML_path.replace("\\", "/")
+        print("Python - XML path: " + downloaded_XML_path)
         if os.path.isfile(default_XML_path):
             self.xml_relative_path = default_XML_path
             return True

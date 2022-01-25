@@ -3,8 +3,7 @@ import sys
 from objects.global_set import GlobalSet
 from translator.py_export import Export
 from translator.script_gen import TranslateModel
-
-from parsers import XML_parser as Paser
+from parsers.XML_parser import generate_model
 from file import FileHandler
 
 """
@@ -65,7 +64,7 @@ def main(arguments):
 
 
     #Parse and form into model
-    objects : GlobalSet = Paser.generate_model(file_name)
+    objects : GlobalSet = generate_model(file_name)
 
     #Generate scripts based on the model
     scripts = generate_scripts(objects)

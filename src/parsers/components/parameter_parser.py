@@ -12,7 +12,18 @@ from objects.variable import Variable
 
 class ParamParser:
     def parse_param(line : ET):
-        params = [s.strip() for s in line.text.split(',')]
+        #Remove all charaters within the enclosed range - ex) int[0,1] a -> int a
+        new_line = ""
+        open = False
+        for char in line.text:
+            if char == '[':
+                open = True
+            elif char == ']':
+                open = False
+                continue
+            if open == False:
+                new_line += char
+        params = [s.strip() for s in (new_line.split(','))]
         params_name = []
         for param in params:
             param_name = param.split(' ')

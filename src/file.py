@@ -11,13 +11,16 @@ import os
     @AUTHOR: Marco-Backman
 """
 
+#In the data file
 default_XML_file_dir = "../data/"
 default_XML_file_dir_root = "./ModelTranslator/data/"
 #"upload" path is provided from webserver
-download_XML_file_dir = "../../"
-download_XML_file_dir_root = "./"
-download_predef_file_dir = "../../"
-download_predef_file_dir_root = "./"
+#For Uploaded XML Files
+download_XML_file_dir = "../../upload/"
+download_XML_file_dir_root = "./upload/"
+
+download_predef_file_dir = "../../upload/"
+download_predef_file_dir_root = "./upload/"
 
 class FileHandler:
 
@@ -35,7 +38,7 @@ class FileHandler:
 
     #Check download first
     def check_XML_file(self):
-        #in the download file path
+        #in the download file path from current working path
         downloaded_XML_path = download_XML_file_dir + self.xml_file_name
         downloaded_XML_path = downloaded_XML_path.replace("\\", "/")
         print("Python - XML path: " + downloaded_XML_path)
@@ -43,6 +46,7 @@ class FileHandler:
             self.xml_relative_path = downloaded_XML_path
             return True
 
+        #in the download file path from root path
         downloaded_XML_path = download_XML_file_dir_root + self.xml_file_name
         downloaded_XML_path = downloaded_XML_path.replace("\\", "/")
         print("Python - XML path: " + downloaded_XML_path)
@@ -50,16 +54,17 @@ class FileHandler:
             self.xml_relative_path = downloaded_XML_path
             return True
 
-        #in the data file path
+        #in the data file path from current working path
         default_XML_path = default_XML_file_dir + self.xml_file_name
-        downloaded_XML_path = downloaded_XML_path.replace("\\", "/")
+        downloaded_XML_path = default_XML_path.replace("\\", "/")
         print("Python - XML path: " + downloaded_XML_path)
         if os.path.isfile(default_XML_path):
             self.xml_relative_path = default_XML_path
             return True
 
+        #in the data file path from current working path
         default_XML_path = default_XML_file_dir_root + self.xml_file_name
-        downloaded_XML_path = downloaded_XML_path.replace("\\", "/")
+        downloaded_XML_path = default_XML_path.replace("\\", "/")
         print("Python - XML path: " + downloaded_XML_path)
         if os.path.isfile(default_XML_path):
             self.xml_relative_path = default_XML_path

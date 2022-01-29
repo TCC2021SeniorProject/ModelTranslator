@@ -1,67 +1,471 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
 <nta>
-	<declaration>// Global declarations. 
-int status1, charge1;</declaration>
-	<template>
-		<name x="8" y="8">Roomba_Test</name>
-		<parameter>int &amp;mode,  int &amp;battery</parameter>
-		<declaration>// Place local declarations here.
+	<declaration>// Place global declarations here.
+
+int altitude[2];
+int fuel[2];
+int temp[2];
+bool technical_sensor[2];
+int bat[2]; // It will store the battery life of indivisual drone
+int drone_number; // variable to store the drone which is in use or that is checking or updating different variables 
+ 
+int time_server; // total time taken to server the request at the server side
+int time[5]; // array to store the time taken by the drone to reach the requesting location
+// We have not used clock variable for storing time taken since clock variables can't return values, they can only be used for verification
+
+int global_key; // Variable to store the global key sent by the server
+
+int x_server; //x_server and y_server stores the coordiantes of the building that generates a request
+int y_server;
+
+broadcast chan request; // synchronisation event for request generation from node
+chan serve; // server synchronisation event from the drone once the nearest drone has been seleceted
+chan request_from_building; // Synchronisation event from building to the server
+chan start; // Synchronisation event when the drone starts and sends communication to get the sensor values
+
+int x_coord; // x co-ordinate of the requesting node
+int y_coord; // y co-ordinate of the requesting node
+
+
+int x[2]; // array to store linear x co-ordinate of drone 1 and 2
+int y[2]; // array to store linear y co-ordinate of drone 1 and 2
+
+int dist[2]; // array to store the linear distances of drone 1 and 2
+
+int update_dist[3];
+int shortest_distance[3];
+
+int chosen; // to store the drone value which is chosen to serve the request
+int serving_drone; // to store the drone which is serving the request
+
+// we can check if serve==chosen i.e, the drone chosen should be the one to serve the request
+
+
+int selected_drone[2];
+
+
+// Functions
+// sendcoordinates(x,y) To send the coordinates of requesting node for linear distance calculation
+// time_to_serve_request() To calculate the time taken to serve the request for time analysis and also to observe any abnormal behavior
+
+
+
+// update_distance() function updates the calculated distance of each individual drone to a global list named update_distance[]
+
+void update_distance(int distance, int i)
+{
+	update_dist[i] = distance;
+}
+
+
+
 </declaration>
-		<location id="id0" x="-170" y="-365">
-			<name x="-178" y="-397">Dock</name>
+	<template>
+		<name>Sensor_Input</name>
+		<declaration>// Place local declarations here
+
+// get_sensor_value() function gets the sensor value for the respective drones
+
+void get_sensor_value(int number)
+{
+    altitude[number] = 1000;
+    fuel[number] = 100;
+    temp[number] = 25;
+    technical_sensor[number] = true;
+    bat[number] = 90;
+    
+}
+
+// int altitude[2];
+// int fuel[2];
+// int temp[2];
+// bool technical_sensor[2];
+// int bat[2];        </declaration>
+		<location id="id0" x="-977" y="-17">
+			<name x="-994" y="-51">Start</name>
 		</location>
-		<location id="id1" x="-392" y="-440">
-			<name x="-416" y="-472">Explore</name>
+		<location id="id1" x="-688" y="-17">
+			<name x="-722" y="-51">get_sensor</name>
+			<committed/>
 		</location>
-		<location id="id2" x="-392" y="-288">
-			<name x="-416" y="-280">Clean</name>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<nail x="-824" y="59"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-850" y="-42">start?</label>
+			<label kind="assignment" x="-943" y="-17">get_sensor_value(drone_number)</label>
+		</transition>
+	</template>
+	<template>
+		<name x="5" y="5">Drone</name>
+		<parameter>int i</parameter>
+		<declaration>// Place local declarations here.
+
+int xsquare;
+int ysquare;
+int sum1;
+//double square_root;
+int square_root_int;
+int min = 32767; // initially the value of min is 32767 since it is the max value an integer can hold in uppaal
+int min_index;
+int time_sensor_value = 20;
+bool availability[2] = {true, false}; // Initially all drones are available
+int key; // local variable to store the decrypted key value
+
+// checksensor() function returns if all sensors and parameters are working normally for the selected drone
+
+bool checksensor(int i)
+	{
+		// Gets the altitude, fuel, temp and technical sensor values from the drone in real time and checks if all the parameters are normal
+        if (altitude[i] &gt;= 100 &amp;&amp; fuel[i] &gt; 50 &amp;&amp; temp[i] &lt; 100 &amp;&amp; technical_sensor[i] == true) 
+			return true; 
+		else
+			return false;
+	}
+
+// check_availability() function checks if the drone is available to serve the request
+
+bool check_availability(int i)
+    {
+        //Check and return the availability of drone i
+        return availability[i];
+    }
+
+
+// battery() function returns the battery power
+
+int battery(int i)
+	{
+		return bat[i];
+	}
+
+// linear_distance() function returns the calculated linear distance i.e the linear distance of the drone from the requesting node
+
+int  linear_distance(int a, int b)
+	{
+		xsquare = (x_coord-a)*(x_coord-a);
+		ysquare = (y_coord-b)*(y_coord-b);
+		sum1 = xsquare + ysquare;
+		//square_root = sqrt(sum1);
+		//square_root_int = fint(sqrt(sum1));
+		return sum1; // fint fucntion converts boolean or floating point value to integer
+	}
+// update_shortestdistance function wherein each drone calculates the drone which is nearest to the requested node and updates in a global list 
+
+void update_shortest_distance(int x) //x stores the drone which is updating the list
+	{
+		for (i : int[0,2]) 
+		{
+			if (update_dist[i] &lt; min)
+				min = update_dist[i];
+				min_index = i;
+		}
+		shortest_distance[x] = min;
+		// The selected drone list consists of index of the drone which is nearest to the requesting node
+		selected_drone[x] = min_index;
+	}
+
+// time_to_reach_reqloq() function calculates and returns the total time taken by the drone to reach the node that generated the serve request
+
+int time_to_reach_reqloc(int i)
+    {
+        // Gets the time sensor value from the drone and returns it
+        return time_sensor_value;
+    }
+
+
+// decrypt() function decrypts theB1: int[0,100] value of the global key and stores it in a local key variable
+void decrypt()
+{
+    key = global_key+23;
+    key = key*3;
+    key = key*5;
+}
+
+// check_authenticity function decrypts the encrypted key and checks the authenticity of the request generated by the server
+int check_authenticity()
+{
+    
+    if (key == 12345)
+        return 1;
+    else 
+        return 0;
+}
+
+    
+
+
+		
+		
+		
+
+
+		
+
+
+
+
+
+ </declaration>
+		<location id="id2" x="1963" y="2290">
+			<name x="1953" y="2256">S6</name>
 		</location>
-		<location id="id3" x="-664" y="-368">
-			<name x="-688" y="-400">Ready</name>
+		<location id="id3" x="2482" y="2295">
+			<name x="2472" y="2265">S5</name>
 		</location>
-		<location id="id4" x="-896" y="-368">
-			<name x="-912" y="-400">Idle</name>
+		<location id="id4" x="3085" y="2295">
+			<name x="3077" y="2311">S4</name>
 		</location>
-		<init ref="id4"/>
+		<location id="id5" x="3077" y="1938">
+			<name x="3067" y="1908">S3</name>
+		</location>
+		<location id="id6" x="2864" y="1938">
+			<name x="2854" y="1908">S2</name>
+		</location>
+		<location id="id7" x="2414" y="1938">
+			<name x="2379" y="1896">S1_ready</name>
+		</location>
+		<location id="id8" x="1963" y="1938">
+			<name x="1921" y="1904">S0_Start</name>
+			<committed/>
+		</location>
+		<location id="id9" x="2601" y="1938">
+			<name x="2542" y="1896">S1_Availabilty_Check</name>
+		</location>
+		<location id="id10" x="2805" y="1734">
+			<name x="2762" y="1700">Report_Error</name>
+		</location>
+		<location id="id11" x="2167" y="1938">
+			<name x="2141" y="1904">S0_check</name>
+		</location>
+		<location id="id12" x="2516" y="1725">
+			<name x="2491" y="1742">Sn_Stop</name>
+		</location>
+		<init ref="id8"/>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id12"/>
+			<label kind="guard" x="2312" y="1802">checksensor(i)==false || battery(i)&lt;50</label>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id9"/>
+			<label kind="guard" x="2388" y="1870">checksensor(i) == true &amp;&amp; battery(i) &gt;= 50</label>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id11"/>
+			<label kind="synchronisation" x="2048" y="1938">start!</label>
+			<label kind="assignment" x="2006" y="1912">drone_number = i</label>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id10"/>
+			<label kind="guard" x="2601" y="1845">check_authenticity() != 1</label>
+		</transition>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id8"/>
+			<label kind="guard" x="2065" y="2091">check_availability(i) == false</label>
+			<label kind="synchronisation" x="2133" y="2048">request?</label>
+			<nail x="2159" y="2091"/>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id6"/>
+			<label kind="guard" x="2626" y="1921">check_authenticity() == 1</label>
+			<label kind="assignment" x="2618" y="1947">dist[i] = linear_distance(x[i],y[i])</label>
+		</transition>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id7"/>
+			<label kind="guard" x="2193" y="1921">check_availability(i) == true</label>
+			<label kind="synchronisation" x="2227" y="1947">request?</label>
+			<label kind="assignment" x="2227" y="1964">decrypt()</label>
+			<nail x="2176" y="1938"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id3"/>
+			<label kind="guard" x="2694" y="2295">selected_drone[i]==i</label>
+			<label kind="assignment" x="2694" y="2270">availability[i] = false</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id8"/>
+			<label kind="guard" x="2337" y="2111">selected_drone[i]!=i</label>
+		</transition>
 		<transition>
 			<source ref="id2"/>
-			<target ref="id0"/>
-			<label kind="guard" x="-376" y="-312">mode == 4 || battery &lt; 10</label>
-			<label kind="assignment" x="-312" y="-288">mode := 4</label>
-			<nail x="-200" y="-288"/>
-		</transition>
-		<transition>
-			<source ref="id1"/>
-			<target ref="id0"/>
-			<label kind="guard" x="-376" y="-440">mode == 4 || battery &lt; 10</label>
-			<label kind="assignment" x="-312" y="-464">mode := 4</label>
-			<nail x="-208" y="-440"/>
-		</transition>
-		<transition>
-			<source ref="id1"/>
-			<target ref="id2"/>
-			<label kind="guard" x="-464" y="-376">mode == 3</label>
+			<target ref="id8"/>
+			<label kind="assignment" x="1870" y="2134">time[i] = time_to_reach_reqloc(i), 
+availability[i] = true</label>
+			<nail x="1963" y="2145"/>
 		</transition>
 		<transition>
 			<source ref="id3"/>
 			<target ref="id2"/>
-			<label kind="guard" x="-512" y="-312">mode == 3</label>
-			<nail x="-560" y="-288"/>
+			<label kind="synchronisation" x="2167" y="2270">serve!</label>
+			<label kind="assignment" x="2133" y="2295">serving_drone=i</label>
 		</transition>
 		<transition>
-			<source ref="id3"/>
-			<target ref="id1"/>
-			<label kind="guard" x="-520" y="-440">mode == 2</label>
-			<nail x="-568" y="-440"/>
+			<source ref="id5"/>
+			<target ref="id4"/>
+			<label kind="assignment" x="2941" y="2100">update_shortest_distance(i)</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id5"/>
+			<label kind="assignment" x="2881" y="1913">update_distance(dist[i],i)</label>
+		</transition>
+	</template>
+	<template>
+		<name>Server</name>
+		<declaration>// Place local declarations here
+int time_value;
+int local_key; // local variable to store the encrypted key value
+
+// sendcoordinates() function stores the x and y coordinates of the requesting node globally
+void sendcoordinates(int x, int y)
+    {
+        x_coord = x;
+        y_coord = y;
+    }
+
+// time_to_serve_request() function returns the total time taken by a drone to serve the request (It does not include the time taken to make the decision by the drones)
+int time_to_serve_request()
+    {
+        // Gets and returns the time sensor value from the drone and also from the server end 
+        return time_value;
+    }
+
+// encrypted_key() function encrypts a key while sending request to the drones
+void encrypted_key(int i)
+{
+    local_key = i/5;
+    local_key = local_key/3;
+    global_key = local_key - 23;
+}
+ 
+ </declaration>
+		<location id="id13" x="705" y="289">
+			<name x="665" y="257">S3_serving</name>
+		</location>
+		<location id="id14" x="519" y="289">
+			<name x="425" y="255">S2_wait_for_communication</name>
+		</location>
+		<location id="id15" x="-40" y="288">
+			<name x="-72" y="256">S0_Start</name>
+		</location>
+		<location id="id16" x="195" y="289">
+			<name x="127" y="255">S1_wait_for_request</name>
+		</location>
+		<init ref="id15"/>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id14"/>
+			<label kind="synchronisation" x="306" y="263">request!</label>
+			<label kind="assignment" x="246" y="297">sendcoordinates(x_server,y_server), 
+encrypted_key(12345)</label>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id16"/>
+			<label kind="synchronisation" x="-8" y="272">request_from_building?</label>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id15"/>
+			<label kind="assignment" x="204" y="501">time_server = time_to_serve_request()</label>
+			<nail x="331" y="501"/>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id13"/>
+			<label kind="synchronisation" x="569" y="289">serve?</label>
+		</transition>
+	</template>
+	<template>
+		<name>Input</name>
+		<declaration>// Local declarations
+//int X; // X and Y store the coordinates of the building from where the request is generated
+//int Y;
+//int B1;
+// send_coordiantes_server() functions sends the cooridnates of the building to the server
+
+int random_number; // variable to store the generated random number 
+
+void send_coordinates_server(int x1, int y1)
+{
+    x_server = x1;
+    y_server = y1;
+}
+
+</declaration>
+		<location id="id17" x="-442" y="-25">
+			<name x="-459" y="0">Start</name>
+		</location>
+		<location id="id18" x="102" y="-221">
+			<name x="76" y="-256">Building1</name>
+		</location>
+		<location id="id19" x="153" y="136">
+			<name x="143" y="102">Building2</name>
+		</location>
+		<location id="id20" x="-136" y="-25">
+			<name x="-204" y="-8">generate_random</name>
+		</location>
+		<init ref="id17"/>
+		<transition>
+			<source ref="id20"/>
+			<target ref="id19"/>
+			<label kind="guard" x="-17" y="34">random_number&gt;50</label>
+			<label kind="synchronisation" x="-42" y="59">request_from_building!</label>
+			<label kind="assignment" x="-51" y="85">send_coordinates_server(20, 30)</label>
+		</transition>
+		<transition>
+			<source ref="id20"/>
+			<target ref="id18"/>
+			<label kind="guard" x="-42" y="-153">random_number&lt;=50</label>
+			<label kind="synchronisation" x="-76" y="-136">request_from_building!</label>
+			<label kind="assignment" x="-102" y="-119">send_coordinates_server(2, 3)</label>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id20"/>
+			<label kind="assignment" x="-399" y="-51">random_number = fint(random(100))</label>
 		</transition>
 	</template>
 	<system>// Place template instantiations here.
-r1 = Roomba_Test(status1, charge1);
-
+Drone1 = Drone(0);
+Drone2 = Drone(1);
+Server1 = Server();
+Sensor_Input1 = Sensor_Input();
+Input_Request = Input();
 // List one or more processes to be composed into a system.
-system r1;</system>
+system Drone1, Drone2, Server1, Sensor_Input1, Input_Request;</system>
 	<queries>
+		<query>
+			<formula>A[] not deadlock</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>A&lt;&gt; Drone1.S0_Start &amp;&amp; Drone2.S0_Start &amp;&amp; Server1.S2_wait_for_communication</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; Drone1.S0_Start &amp;&amp; Drone2.S0_Start &amp;&amp; Server1.S2_wait_for_communication</formula>
+			<comment>Is it possible the server sends a request but the drones are not ready to recieve it yet?</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; Drone1.S0_Start &amp;&amp; Drone2.S0_Start &amp;&amp; not Server1.S2_wait_for_communication</formula>
+			<comment></comment>
+		</query>
 		<query>
 			<formula></formula>
 			<comment></comment>

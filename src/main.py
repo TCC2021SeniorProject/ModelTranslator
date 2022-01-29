@@ -47,7 +47,7 @@ def main(arguments):
 
     if (len(arguments) == 0):
         print("Running with default XML file")
-        handler = FileHandler("all_tran_example.xml", [])
+        handler = FileHandler("test.xml", [])
         file_name = handler.get_XML_file()
     elif (len(arguments) == 1):
         print("Only XML file is provided")

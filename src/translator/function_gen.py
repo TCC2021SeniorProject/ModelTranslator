@@ -6,6 +6,9 @@ from objects.node import Node
 from objects.transition import Transition
 from objects.global_set import GlobalSet
 
+from predefine.objects.global_obj import PredefGlobalObject
+from predefine.objects.function_obj import PredefFunction
+
 """
     Script setting info
         Guard  - Conditionals
@@ -14,14 +17,16 @@ from objects.global_set import GlobalSet
                  Must be called before any await execution.
 
     @TODO: Implement auto indentation.
+            Implement predef class append
 
     @AUTHOR: Marco-Backman
 """
 
 class FunctionScriptGen:
-    def __init__(self, template : Template, global_set : GlobalSet):
+    def __init__(self, template : Template, global_set : GlobalSet, predef_objs : List[PredefGlobalObject]):
         self.template : Template = template
         self.global_set : GlobalSet = global_set
+        self.predef_objs : List[PredefGlobalObject] = predef_objs
 
     def make_constructor(self, params : List[str]):
         script = "\tdef __init__(self, "
@@ -84,6 +89,13 @@ class FunctionScriptGen:
 
     def make_function_script(self, node : Node):
         function_scripts = "\tasync def " + node.get_name() + "(self):\n"
+        for predef_obj in self.predef_objs:
+            predef_function : PredefFunction \
+                = predef_obj.get_function_by_name(node.get_name())
+            if predef_function == None:
+                continue
+            function_scripts += "\n" + predef_function.get_partial_content()
+
         transition_list = node.get_transitions()
         for transition in transition_list:
             transition : Transition

@@ -4,10 +4,12 @@ class Export:
         try:
             with open("./uploads/output.py","w") as file:
                 file.write(scripts)
+                print("File exported")
         except:
             try:
                with open("../../uploads/output.py","w") as file:
                     file.write(scripts)
+                    print("File exported to uploads")
             except:
                raise Exception("File not found")
 
@@ -15,10 +17,12 @@ class Export:
         try:
             with open("./uploads/output.py","a") as file:
                 file.write(scripts)
+                print("File exported")
         except:
             try:
                with open("../../uploads/output.py","a") as file:
                     file.write(scripts)
+                    print("File exported to uploads")
             except:
                raise Exception("File not found")
 

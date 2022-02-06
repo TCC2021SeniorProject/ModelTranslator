@@ -53,14 +53,10 @@ class TransitionParser:
         temp_transition.set_name(select)
         temp_transition.set_template(template)
         if guard != None:
-            print("From " + guard)
             guard = TransitionParser.reform_conditional_state(guard, template)
-            print("To " + guard)
             temp_transition.set_guard(guard)
         if assignment != None:
-            print("From " + assignment)
             assignment = TransitionParser.parse_assign_operator(assignment, template)
-            print("To " + assignment)
             temp_transition.set_assign(assignment)
         if synchronization != None:
             temp_transition.set_sync(synchronization, global_set)

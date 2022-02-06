@@ -1,3 +1,5 @@
+from typing import List
+
 from objects.template import Template
 from objects.node import Node
 from objects.transition import Transition
@@ -5,19 +7,20 @@ from objects.global_set import GlobalSet
 
 from translator.function_gen import FunctionScriptGen
 
+from predefine.objects.global_obj import PredefGlobalObject
+
 """
-
-
     @TODO:
 
     @AUTHOR: Marco-Backman
 """
 
 class ClassScriptGen:
-    def __init__(self, template : Template, global_set : GlobalSet):
+    def __init__(self, template : Template, global_set : GlobalSet, predef_obj : List[PredefGlobalObject]):
         self.template = template
         self.class_script = ""
         self.global_set = global_set
+        self.predef_obj : List[PredefGlobalObject] = predef_obj
 
     def append_class_def_script(self):
         class_name = self.template.get_template_name()
@@ -47,7 +50,7 @@ class ClassScriptGen:
     def append_function_script(self):
         #Make constructor
         parameters = self.template.get_parameters()
-        func_script_gen = FunctionScriptGen(self.template, self.global_set)
+        func_script_gen = FunctionScriptGen(self.template, self.global_set, self.predef_obj)
         script = func_script_gen.make_constructor(parameters)
         self.class_script += script
 

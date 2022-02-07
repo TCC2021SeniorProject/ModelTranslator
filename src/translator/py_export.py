@@ -1,26 +1,26 @@
 
 class Export:
-    def make_file(scripts):
+    def make_file(scripts, request_id):
         try:
-            with open("./uploads/output.py","w") as file:
+            with open("./uploads/" + request_id + "_output.py","w") as file:
                 file.write(scripts)
                 print("File exported")
         except:
             try:
-               with open("../../uploads/output.py","w") as file:
+               with open("../../uploads/" + request_id + "_output.py","w") as file:
                     file.write(scripts)
                     print("File exported to uploads")
             except:
                raise Exception("File not found")
 
-    def append_to_file(scripts):
+    def append_to_file(scripts, request_id):
         try:
-            with open("./uploads/output.py","a") as file:
+            with open("./uploads/" + request_id + "_output.py","a") as file:
                 file.write(scripts)
                 print("File exported")
         except:
             try:
-               with open("../../uploads/output.py","a") as file:
+               with open("../../uploads/" + request_id + "_output.py","a") as file:
                     file.write(scripts)
                     print("File exported to uploads")
             except:

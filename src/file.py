@@ -18,8 +18,8 @@ default_file_dir = "../data/"
 default_file_dir_root = "./ModelTranslator/data/"
 #"upload" path is provided from webserver
 #For Uploaded XML Files
-download_file_dir = "../../upload/"
-download_file_dir_root = "./upload/"
+download_file_dir = "../../uploads/"
+download_file_dir_root = "./uploads/"
 
 
 class FileHandler:

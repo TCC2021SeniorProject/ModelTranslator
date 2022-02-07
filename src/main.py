@@ -2,6 +2,8 @@ import sys
 
 from typing import List
 
+from click import argument
+
 from predefine.predef_parser import PredefParser
 from objects.global_set import GlobalSet
 from translator.py_export import Export
@@ -44,28 +46,32 @@ def generate_scripts(objects : GlobalSet, predef_objects : List[PredefGlobalObje
     scripts = model_translator.get_full_scripts()
     return scripts
 
+#fist argument - request id
+#second argument - XML file name
+#Third ~ n argument - predefined codes
 def main(arguments):
-    #Required files - must be in full directory format
+    #Check empty argument
+    if len(arguments) == 0:
+        raise Exception("Empty arguments")
     file_name = ""
     predef_files = []
     predef_objects : List[PredefGlobalObject] = []
-
-    if (len(arguments) == 0):
+    request_id = arguments[0]
+    print("Requestor id: " + request_id)
+    if (len(arguments) == 1):
         print("Running with default XML file")
         handler = FileHandler("all_tran_example.xml", [])
         file_name = handler.get_XML_file()
-    elif (len(arguments) == 1):
+    elif (len(arguments) == 2):
         print("Only XML file is provided")
-        handler = FileHandler(arguments[0], [])
+        handler = FileHandler(arguments[1], [])
         file_name = handler.get_XML_file()
-    elif (len(arguments) > 1):
+    elif (len(arguments) >= 3):
         print("Full files are provided")
-        handler = FileHandler(arguments[0], arguments[1:])
+        handler = FileHandler(arguments[1], arguments[2:])
         file_name = handler.get_XML_file()
         handler.check_predef_files()
         predef_files = handler.get_predef_files()
-    else:
-        raise Exception("Invalid arguments")
 
     #Parse XML file into object models
     objects : GlobalSet = generate_model(file_name)
@@ -85,7 +91,7 @@ def main(arguments):
 
 
     #Export scripts to file
-    Export.make_file(scripts)
+    Export.make_file(scripts, request_id)
 
 if __name__ == '__main__':
     main(sys.argv[1:])

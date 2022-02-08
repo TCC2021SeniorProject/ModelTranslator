@@ -2,8 +2,6 @@ import sys
 
 from typing import List
 
-from click import argument
-
 from predefine.predef_parser import PredefParser
 from objects.global_set import GlobalSet
 from translator.py_export import Export

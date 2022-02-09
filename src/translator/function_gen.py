@@ -86,6 +86,13 @@ class FunctionScriptGen:
             if (len(line) > 1):
                 script += line
             script += "\t\t\tawait self." + target_node.get_name() + "()\n"
+        #Assignment exists
+        elif transition.assign != None:
+            script += "\t\tself." + transition.assign +"\n"
+            script += self.make_sync_transtion_script(transition, 3)
+            if (len(line) > 1):
+                script += line
+            script += "\t\tawait self." + target_node.get_name() + "()\n"
         else: #No conditional sync (and/or) def call
             script += self.make_sync_transtion_script(transition, 3)
             if (len(line) > 1):

@@ -43,7 +43,7 @@ int keepDancing = 4;
 		<transition>
 			<source ref="id5"/>
 			<target ref="id3"/>
-			<label kind="assignment" x="144" y="-110">keepDancing = keepDancing + 1</label>
+			<label kind="assignment" x="144" y="-110">keepDancing = keepDancing - 1</label>
 		</transition>
 		<transition>
 			<source ref="id4"/>

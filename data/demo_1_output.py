@@ -17,6 +17,7 @@ class Roomba_Instance:
 			await self.Right()
 
 	async def Right(self):
+		self.keepDancing = keepDancing -1
 		await self.Forward()
 
 	async def Backward(self):

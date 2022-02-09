@@ -139,6 +139,9 @@ class Template:
         else:
             return False
 
+    def get_variables(self):
+        return self.variables
+
     def get_variable_index(self, name) -> int:
         from objects.variable import Variable
         if (len(self.variables) == 0):

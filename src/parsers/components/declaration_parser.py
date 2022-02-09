@@ -103,6 +103,7 @@ class DeclarationParser:
             elif line[0:2] == "//": #skip comment
                 continue
             #Remove constraints
+            print("local declaration: " + line)
             line = re.sub("\[[^]]*\]", "", line)
             variables = DeclarationParser.parse_attribute(line)
             if variables == -1:

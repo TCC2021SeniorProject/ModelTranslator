@@ -1,4 +1,5 @@
 import xml.etree.ElementTree as ET
+import re
 
 from parsers.components.declaration_parser import DeclarationParser
 from parsers.components.node_parser import NodeParser
@@ -72,7 +73,7 @@ class ParseXML:
         XXX Crucial function of Parser class
     """
     def convert_to_object(self) -> None:
-        #Global declaration
+        #Global declaration = re.findall("<declaration.*>((.|\n)*?)<\/declaration>"
         for elem in self.root.findall("declaration"):
             glob_variable_list = DeclarationParser.parse_declaration(elem.text)
             self.global_set.set_global_variables(glob_variable_list)

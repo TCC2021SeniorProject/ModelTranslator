@@ -49,24 +49,20 @@ def generate_scripts(objects : GlobalSet, predef_objects : List[PredefGlobalObje
 #Third ~ n argument - predefined codes
 def main(arguments):
     #Check empty argument
-    if len(arguments) == 0:
-        raise Exception("Empty arguments")
     file_name = ""
     predef_files = []
     predef_objects : List[PredefGlobalObject] = []
-    request_id = arguments[0]
-    print("Requestor id: " + request_id)
-    if (len(arguments) == 1):
+    if (len(arguments) == 0):
         print("Running with default XML file")
         handler = FileHandler("all_tran_example.xml", [])
         file_name = handler.get_XML_file()
-    elif (len(arguments) == 2):
+    elif (len(arguments) == 1):
         print("Only XML file is provided")
-        handler = FileHandler(arguments[1], [])
+        handler = FileHandler(arguments[0], [])
         file_name = handler.get_XML_file()
-    elif (len(arguments) >= 3):
+    elif (len(arguments) >= 2):
         print("Full files are provided")
-        handler = FileHandler(arguments[1], arguments[2:])
+        handler = FileHandler(arguments[0], arguments[1:])
         file_name = handler.get_XML_file()
         handler.check_predef_files()
         predef_files = handler.get_predef_files()
@@ -75,7 +71,6 @@ def main(arguments):
     objects : GlobalSet = generate_model(file_name)
 
     #Parse predefined script(python) files into object models
-    print(predef_files)
     for file in predef_files:
         if (file == None):
             continue
@@ -89,7 +84,7 @@ def main(arguments):
 
 
     #Export scripts to file
-    Export.make_file(scripts, request_id)
+    Export.make_file(scripts, file_name)
 
 if __name__ == '__main__':
     main(sys.argv[1:])

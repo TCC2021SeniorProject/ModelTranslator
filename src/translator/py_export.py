@@ -1,26 +1,29 @@
 
 class Export:
-    def make_file(scripts, request_id):
+    def make_file(scripts, XMLFileName):
+        XMLFileName = XMLFileName.replace(".xml", "")
+        print("File name:" + XMLFileName)
         try:
-            with open("./uploads/" + request_id + "_output.py","w") as file:
+            with open(XMLFileName + "_output.py","w") as file:
                 file.write(scripts)
                 print("File exported")
         except:
             try:
-               with open("../../uploads/" + request_id + "_output.py","w") as file:
+               with open(XMLFileName + "_output.py","w") as file:
                     file.write(scripts)
                     print("File exported to uploads")
             except:
                raise Exception("File not found")
 
-    def append_to_file(scripts, request_id):
+    def append_to_file(scripts, XMLFileName):
+        XMLFileName = XMLFileName.replace(".xml", "")
         try:
-            with open("./uploads/" + request_id + "_output.py","a") as file:
+            with open(XMLFileName + "_output.py","w") as file:
                 file.write(scripts)
                 print("File exported")
         except:
             try:
-               with open("../../uploads/" + request_id + "_output.py","a") as file:
+               with open(XMLFileName + "_output.py","w") as file:
                     file.write(scripts)
                     print("File exported to uploads")
             except:

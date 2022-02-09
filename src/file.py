@@ -18,7 +18,7 @@ default_file_dir = "../data/"
 default_file_dir_root = "./ModelTranslator/data/"
 #"upload" path is provided from webserver
 #For Uploaded XML Files
-download_file_dir = "../../uploads/"
+download_file_dir = "../..//uploads/"
 download_file_dir_root = "./uploads/"
 
 
@@ -37,6 +37,9 @@ class FileHandler:
 
     #Check download first
     def check_XML_file(self):
+        #print current working path
+        print("Current working path" + str(os.getcwd()))
+
         #in the download file path from current working path
         downloaded_XML_path = download_file_dir + self.xml_file_name
         downloaded_XML_path = downloaded_XML_path.replace("\\", "/")
@@ -48,7 +51,7 @@ class FileHandler:
 
         #in the download file path from root path
         downloaded_XML_root_path = download_file_dir_root + self.xml_file_name
-        downloaded_XML_root_path = downloaded_XML_path.replace("\\", "/")
+        downloaded_XML_root_path = downloaded_XML_root_path.replace("\\", "/")
         print("Python - XML path: " + downloaded_XML_root_path)
         if os.path.isfile(downloaded_XML_root_path):
             print("\tFile found in download root path")

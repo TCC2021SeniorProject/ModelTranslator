@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Global vars
+int[0,1] request1, request2;
+int[1,2] turn;</declaration>
+	<template>
+		<name x="5" y="5">Mutex_Clean</name>
+		<parameter>const int[1,2] self, int[0,1] &amp;request_self, int[0,1] &amp;request_other</parameter>
+		<declaration>// Place local declarations here.</declaration>
+		<location id="id0" x="-178" y="-93">
+			<name x="-188" y="-127">Idle</name>
+		</location>
+		<location id="id1" x="119" y="-93">
+			<name x="109" y="-127">Want</name>
+		</location>
+		<location id="id2" x="119" y="76">
+			<name x="145" y="59">Wait</name>
+		</location>
+		<location id="id3" x="-178" y="68">
+			<name x="-195" y="85">Clean</name>
+		</location>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id0"/>
+			<label kind="assignment" x="-289" y="-25">request_self := 0</label>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-93" y="119">request_other == 0</label>
+			<nail x="59" y="119"/>
+			<nail x="-102" y="119"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-93" y="0">turn == self</label>
+			<nail x="59" y="25"/>
+			<nail x="-102" y="25"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id2"/>
+			<label kind="assignment" x="127" y="-25">turn := (self==1?2:1)</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="assignment" x="-93" y="-93">request_self := 1</label>
+		</transition>
+	</template>
+	<system>// Templates
+Roomba1 = Mutex_Clean(1, request1, request2);
+Roomba2 = Mutex_Clean(2, request2, request1);
+
+
+// System processes
+system Roomba1, Roomba2;
+    </system>
+	<queries>
+		<query>
+			<formula>A[]not(Roomba1.Clean and Roomba2.Clean)</formula>
+			<comment>A = For all paths
+[] = Always
+</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt;not(Roomba1.Clean and Roomba2.Clean)</formula>
+			<comment>E = At least one path
+&lt;&gt; = Sometimes</comment>
+		</query>
+	</queries>
+</nta>

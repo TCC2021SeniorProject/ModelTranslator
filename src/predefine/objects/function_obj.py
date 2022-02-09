@@ -13,8 +13,8 @@ class SingleLine():
 
     def get_line_with_indent(self):
         temp_line = ""
-        for i in range(self.spaces):
-            temp_line += " "
+        for i in range(int(self.spaces / 4)):
+            temp_line += "\t"
         return temp_line + self.line
 
 class PredefFunction():
@@ -45,14 +45,14 @@ class PredefFunction():
         full_script = ""
         for i in range(len(self.content)):
             full_script += self.content[i].get_line_with_indent() + "\n"
-        return full_script
+        return full_script + "\n"
 
     #Returns full content with declaration
     def get_full_content(self):
         full_script = self.declaration
         for i in range(len(self.content)):
             full_script += self.content[i].get_line_with_indent() + "\n"
-        return full_script
+        return full_script + "\n"
 
     def get_declaration(self):
         return self.declaration

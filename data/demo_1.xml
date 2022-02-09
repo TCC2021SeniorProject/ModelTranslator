@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+	//this is test
+</declaration>
+	<template>
+		<name x="5" y="5">Roomba_Instance</name>
+		<declaration>// Place local declarations here.
+int keepDancing = 4;
+		</declaration>
+		<location id="id0" x="-238" y="-93">
+			<name x="-248" y="-127">Connect</name>
+		</location>
+		<location id="id1" x="637" y="-93">
+			<name x="627" y="-127">Dock</name>
+		</location>
+		<location id="id2" x="-144" y="-93">
+			<name x="-154" y="-127">Ready</name>
+		</location>
+		<location id="id3" x="399" y="-93">
+			<name x="389" y="-127">Forward</name>
+		</location>
+		<location id="id4" x="-42" y="-93">
+			<name x="-52" y="-127">Backward</name>
+		</location>
+		<location id="id5" x="110" y="-93">
+			<name x="100" y="-127">Right</name>
+		</location>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id1"/>
+			<label kind="guard" x="459" y="-110">keepDancing == 0</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id5"/>
+			<label kind="guard" x="144" y="-34">keepDancing != 0</label>
+			<nail x="399" y="-34"/>
+			<nail x="110" y="-34"/>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id3"/>
+			<label kind="assignment" x="144" y="-110">keepDancing = keepDancing + 1</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id5"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id4"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id2"/>
+			<nail x="-178" y="-93"/>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+Process = Roomba_Instance();
+// List one or more processes to be composed into a system.
+system Process;
+    </system>
+	<queries>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>

@@ -79,6 +79,7 @@ class PredefParser():
             temp_line = ""
             #Iteration by single charater
             while index < len(line):
+                line.replace("    ", "\t")
                 temp_line += line[index]
                 # comment
                 if temp_line == '#':
@@ -120,6 +121,8 @@ class PredefParser():
                     pass
                 elif len(temp_line) > 5:
                     if def_open == True:
+                        line.replace("    ", "\t")
+                        line = "\t" + line
                         function_object.append_line(line, space_num)
                     break
                 if def_open == True and def_opening_level == space_num:

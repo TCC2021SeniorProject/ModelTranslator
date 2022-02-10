@@ -108,20 +108,21 @@ class FunctionScriptGen:
     def make_function_script(self, node : Node):
         function_scripts = "\tasync def " + node.get_name() + "(self):\n"
         for predef_obj in self.predef_objs:
-            print("Getting name: " + node.get_name())
+            print("Getting name from node: " + node.get_name())
             predef_function : PredefFunction \
                 = predef_obj.get_function_by_name(node.get_name())
             if predef_function == None:
-                print("Name not found: " + node.get_name())
+                print("Name not found from predef: " + node.get_name())
                 continue
             else:
-                print("Getting name: " + predef_function.name)
+                print("Getting name from predef: " + predef_function.name)
             function_scripts += "\n" + predef_function.get_partial_content()
 
         transition_list = node.get_transitions()
         for transition in transition_list:
             transition : Transition
             function_scripts += self.make_tranision_to_script(transition)
+
         if self.template.is_end(node):
             function_scripts += "\t\texit()\n"
         return function_scripts

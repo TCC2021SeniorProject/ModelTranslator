@@ -18,13 +18,13 @@ default_file_dir = "../data/"
 default_file_dir_root = "./ModelTranslator/data/"
 #"upload" path is provided from webserver
 #For Uploaded XML Files
-download_file_dir = "../..//uploads/"
-download_file_dir_root = "./uploads/"
+download_file_dir = "../../"
+download_file_dir_root = "./"
 
 
 class FileHandler:
-    def __init__(self, xml_file_path, arguments):
-        self.xml_file_name = xml_file_path
+    def __init__(self, xml_file_name, arguments):
+        self.xml_file_name = xml_file_name
         self.predef_file_names = []
         self.predef_file_names.extend(arguments)
 
@@ -97,7 +97,12 @@ class FileHandler:
         #no_files_found = list(set(default_predef_files) ^ set(self.predef_relative_paths))
         print("Matched predefined file path: %s" % self.predef_relative_paths)
 
-    def get_XML_file(self):
+    #No path, No extenstion
+    def get_XML_file_name(self):
+        return self.xml_file_name
+
+    #Path, Extenstion
+    def get_XML_file_with_path(self):
         return self.xml_final_path
 
     def get_predef_files(self) -> List[str]:

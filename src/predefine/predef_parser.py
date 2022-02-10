@@ -9,7 +9,7 @@ from predefine.objects.import_obj import PredefImport
         2. Global field executions are ignored
         3. Any other declaration than function and imports are ignored
 
-    @TODO: Refactor required on loops/
+    @TODO: Refactor required in loops
 '''
 
 #Corresponds to a single file
@@ -81,23 +81,31 @@ class PredefParser():
             while index < len(line):
                 line.replace("    ", "\t")
                 temp_line += line[index]
-                # comment
-                if temp_line == '#':
-                    break
-                # multi-line comment
-                elif temp_line == "'''":
-                    skip = True
-                    break
+                
                 # def - start capturing until it reaches the same level again
-                elif temp_line == "def":
-                    #Nested function - continue capturing
-                    if def_open == True:
-                        continue
+                if temp_line == "def":
                     def_open = True
                     def_name = self.get_name(line[index + 1:].strip())
                     function_object = PredefFunction(line, def_name, space_num)
                     def_opening_level = space_num
-                    print("def found: " + def_name + " - capturing content")
+                    print("def found: " + def_name)
+                    break
+
+                if len(temp_line) > 5:
+                    if def_open == True:
+                        line.replace("    ", "\t")
+                        line = "\t" + line
+                        print("Taking lines def content: " + def_name + " : " + line)
+                        function_object.append_line(line, space_num)
+                    else:
+                        print("Not taking lines def content: " + line)
+                    break
+                # comment
+                elif temp_line == '#':
+                    break
+                # multi-line comment
+                elif temp_line == "'''":
+                    skip = True
                     break
                 #import
                 elif temp_line == "from":
@@ -118,23 +126,29 @@ class PredefParser():
                     #get name
                 # global(keyword)
                 elif temp_line == "global":
-                    pass
-                elif len(temp_line) > 5:
-                    if def_open == True:
-                        line.replace("    ", "\t")
-                        line = "\t" + line
-                        function_object.append_line(line, space_num)
+                    print("Global keyword found")
                     break
-                if def_open == True and def_opening_level == space_num:
+
+                line = line.strip()
+                if def_open == True and def_opening_level == space_num and len(line) > 2:
                     #Stop captures when opening level and closing level are the same
-                    print("Captured def content")
-                    def_open = False
+                    print("Closing def content: " + def_name + " : " + line)
                     #Append function_obj to global_obj
                     self.global_object.add_function(def_name, function_object)
-                    script : PredefFunction\
-                        = self.global_object.get_function_by_name(def_name)
-                    #print("Adding: \n" + script.get_partial_content())
+                    def_open = False
+                elif def_open == True and (i == len(lines) - 1):
+                    line.replace("    ", "\t")
+                    line = "\t" + line
+                    print("Taking lines def content: " + def_name + " : " + line)
+                    function_object.append_line(line, space_num)
+                    #Stop captures when opening level and closing level are the same
+                    print("Closing def content: " + def_name + " : " + line)
+                    #Append function_obj to global_obj
+                    self.global_object.add_function(def_name, function_object)
+                    def_open = False
+                    break
                 index += 1
+        
 
     def get_result_data(self) -> PredefGlobalObject:
         return self.global_object

@@ -49,26 +49,27 @@ def generate_scripts(objects : GlobalSet, predef_objects : List[PredefGlobalObje
 #Third ~ n argument - predefined codes
 def main(arguments):
     #Check empty argument
-    file_name = ""
+    file_path = ""
+    handler = None
     predef_files = []
     predef_objects : List[PredefGlobalObject] = []
     if (len(arguments) == 0):
         print("Running with default XML file")
         handler = FileHandler("all_tran_example.xml", [])
-        file_name = handler.get_XML_file()
     elif (len(arguments) == 1):
         print("Only XML file is provided")
         handler = FileHandler(arguments[0], [])
-        file_name = handler.get_XML_file()
     elif (len(arguments) >= 2):
         print("Full files are provided")
         handler = FileHandler(arguments[0], arguments[1:])
-        file_name = handler.get_XML_file()
         handler.check_predef_files()
         predef_files = handler.get_predef_files()
-
+        
+    if handler != None:
+        file_path = handler.get_XML_file_with_path()
+        file_name = handler.get_XML_file_name()
     #Parse XML file into object models
-    objects : GlobalSet = generate_model(file_name)
+    objects : GlobalSet = generate_model(file_path)
 
     #Parse predefined script(python) files into object models
     for file in predef_files:

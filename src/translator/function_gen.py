@@ -32,20 +32,20 @@ class FunctionScriptGen:
         content_exist = False
         script = "\tdef __init__(self, "
         for param in params:
-            script += param + ", "
+            script += str(param) + ", "
         script += "):\n"
         #Noting to initialize
         for param in params:
             param : str
-            line = "self." + param
-            line += " = " + param
+            line = "self." + str(param)
+            line += " = " + str(param)
             script += "\t\t" + line + "\n"
             content_exist = True
 
         for variable in self.template.get_variables():
             variable : Variable
-            line = "self." + variable.get_variable_name()
-            line += " = " + variable.get_variable_value()
+            line = "self." + str(variable.get_variable_name())
+            line += " = " + str(variable.get_variable_value())
             script += "\t\t" + line + "\n"
             content_exist = True
 
@@ -71,7 +71,7 @@ class FunctionScriptGen:
                     sync = sync_transition.get_sync()
                     class_name = sync.get_caller_instance()
                     #sync parameter comes here
-                    script +=  class_name + "." + target_node.get_name() + "()\n"
+                    script +=  str(class_name) + "." + str(target_node.get_name()) + "()\n"
         return script
 
     def make_tranision_to_script(self, transition : Transition):
@@ -81,23 +81,23 @@ class FunctionScriptGen:
         # Conditional call(Guard) with sync (and/or) def call
         target_node = transition.get_to_node()
         if transition.guard != None:
-            script += "\t\tif self." + transition.guard +":\n"
+            script += "\t\tif self." + str(transition.guard) +":\n"
             script += self.make_sync_transtion_script(transition, 3)
             if (len(line) > 1):
                 script += line
-            script += "\t\t\tawait self." + target_node.get_name() + "()\n"
+            script += "\t\t\tawait self." + str(target_node.get_name()) + "()\n"
         #Assignment exists
         elif transition.assign != None:
             script += "\t\tself." + transition.assign +"\n"
             script += self.make_sync_transtion_script(transition, 3)
             if (len(line) > 1):
                 script += line
-            script += "\t\tawait self." + target_node.get_name() + "()\n"
+            script += "\t\tawait self." + str(target_node.get_name()) + "()\n"
         else: #No conditional sync (and/or) def call
             script += self.make_sync_transtion_script(transition, 3)
             if (len(line) > 1):
                 script += line
-            script += "\t\tawait self." + target_node.get_name() + "()\n"
+            script += "\t\tawait self." + str(target_node.get_name()) + "()\n"
 
         # Update(Assign), set variable
         if transition.assign != None:
@@ -106,17 +106,17 @@ class FunctionScriptGen:
         return script
 
     def make_function_script(self, node : Node):
-        function_scripts = "\tasync def " + node.get_name() + "(self):\n"
+        function_scripts = "\tasync def " + str(node.get_name()) + "(self):\n"
         for predef_obj in self.predef_objs:
-            print("Getting name from node: " + node.get_name())
+            print("Getting name from node: " + str(node.get_name()))
             predef_function : PredefFunction \
                 = predef_obj.get_function_by_name(node.get_name())
             if predef_function == None:
-                print("Name not found from predef: " + node.get_name())
+                print("Name not found from predef: " + str(node.get_name()))
                 continue
             else:
                 print("Getting name from predef: " + predef_function.name)
-            function_scripts += "\n" + predef_function.get_partial_content()
+            function_scripts += "\n" + str(predef_function.get_partial_content())
 
         transition_list = node.get_transitions()
         for transition in transition_list:

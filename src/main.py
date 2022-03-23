@@ -26,15 +26,7 @@ from file import FileHandler
                 - Cases where transator does not support
                 - Invalid input file dir or output file dir
 
-           Resolve coupling problem
-                -There are multiple cross importation to be fixed.
-                    - Node - Transition, Variable
-                    - System - object. modules
-                    - GlobalSets - object. modules
-                    - Template - Variable
-
-    @AUTHOR: Marco-Backman
-    @TARGET USER: UPPAAL users and developers
+    @AUTHOR: SungJun (Tony) Baek.
 """
 
 def generate_scripts(objects : GlobalSet, predef_objects : List[PredefGlobalObject]):
@@ -44,9 +36,8 @@ def generate_scripts(objects : GlobalSet, predef_objects : List[PredefGlobalObje
     scripts = model_translator.get_full_scripts()
     return scripts
 
-#fist argument - request id
-#second argument - XML file name
-#Third ~ n argument - predefined codes
+#first argument - XML file name
+#second ~ n argument - predefined codes
 def main(arguments):
     #Check empty argument
     file_path = ""
@@ -66,8 +57,11 @@ def main(arguments):
         predef_files = handler.get_predef_files()
         
     if handler != None:
+        #Contains path + filename
         file_path = handler.get_XML_file_with_path()
+        #Contains filename only
         file_name = handler.get_XML_file_name()
+
     #Parse XML file into object models
     objects : GlobalSet = generate_model(file_path)
 

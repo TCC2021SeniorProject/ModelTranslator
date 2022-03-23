@@ -95,13 +95,29 @@ class DeclarationParser:
     def parse_declaration(declaration_str : str) -> List[Variable]:
         lines = re.split("\n|;", declaration_str)
         lines = [line.strip() for  line in lines]
+        isMultiLineComment = False
         total_variales = []
         for line in lines:
             line = line.strip()
-            if line == "":      #skip empty
+            #Comment percolation
+            if isMultiLineComment is True:
+                if  "*/" in line:
+                    index = line.index("*/")
+                    line = line[index + 2:].strip()
+                    isMultiLineComment = False
+                else:
+                    continue
+            elif "//" in line: #comment out from that index
+                index = line.index("//")
+                line = line[:index].strip()
+            elif "/*" in line:
+                index = line.index("/*")
+                line = line[:index].strip()
+                isMultiLineComment = True
+            #skip empty line
+            if line == "":
                 continue
-            elif line[0:2] == "//": #skip comment
-                continue
+
             #Remove constraints
             print("local declaration: " + line)
             line = re.sub("\[[^]]*\]", "", line)

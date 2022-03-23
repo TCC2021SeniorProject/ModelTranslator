@@ -15,17 +15,17 @@ typedef int[0,Tasks-1] t_id;
 const int Procs = 3;                 // Number of resources
 typedef int[0,Procs-1] r_id;
 
-typedef struct { 
-  time_t initial_offset;
-  time_t min_period;
-  time_t max_period;
-  time_t offset;
-  time_t deadline;
-  time_t bcet;
-  time_t wcet;
-  r_id resource;
-  int pri;  
-} task_t;
+	typedef struct { 
+	time_t initial_offset;
+	time_t min_period;
+	time_t max_period;
+	time_t offset;
+	time_t deadline;
+	time_t bcet;
+	time_t wcet;
+	r_id resource;
+	int pri;  
+	} task_t;
 
 //init_offset, min_period, max_period, offset, deadline, bcet, wcet, resource, priority
 const task_t task[Tasks] = {
@@ -108,7 +108,7 @@ void removeTask() {
   int i = 0;
   buffer[id].length--;
   do {
-    buffer[id].element[i] = buffer[id].element[i+1];
+    buffer[id].element[i] = buffer[id].element[i + 1];
     i++;
   } while (i &lt; buffer[id].length);
   buffer[id].element[buffer[id].length] = 0;

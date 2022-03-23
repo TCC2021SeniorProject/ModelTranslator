@@ -7,8 +7,12 @@ from objects.variable import Variable
     Parses XML declaration tag and info into an object
 
     @TODO:
-    Implement typedef
-    Implement const - act as a normal var
+    Implement unsupported inline-code features in the future:
+        - typedef
+        - inline functions with parameters
+        - any type of array and clock
+        - loops and conditionals
+    Current inline-code feature can only perform variable declaration with value assignment
 
     @AUTHOR: Marco-Backman
 """
@@ -24,7 +28,6 @@ var_type_dic = {'int'     : 0,
                 'arr'     : 4}
 
 class DeclarationParser:
-
     def parse_identifier(words : List[str],\
                          var_value : str,\
                          previous_type : str) -> Variable and str:
@@ -50,9 +53,9 @@ class DeclarationParser:
                 var_obj = Variable(var_type, var_name , var_value)
                 return var_obj, var_type
             elif words[0] == "typedef": #Typedef not implemented
-                None, None
+                return -2, ""
             else:
-                print("Unsupported type identifier")
+                print("\tUnsupported type identifier")
                 return -1, ""
         else: #Skip error
             return -1, ""
@@ -75,52 +78,69 @@ class DeclarationParser:
             else:
                 words = element.split()
 
-
             var_obj, var_type\
               = DeclarationParser.parse_identifier(words, var_value, var_type)
-                        #If variable type is not supportive, skip line
+
+            #If variable type is not supportive, skip line
             if (var_type_dic.get(var_type) is None):
-                print("Type not supported")
+                print("\tType not supported")
                 return -1
-            if var_obj == None:
-                print("Typedef not supported")
+            if var_obj == -2:
+                print("\tTypedef not supported")
                 return -1
             elif var_obj == -1:
-                print("Declrartion syntax error on: " + element)
+                print("\tDeclrartion syntax error on: " + element)
                 return -1
             else:
                 variables.append(var_obj)
         return variables
 
+    def remove_comments(line : str, is_multi_comment : bool) -> str:
+        line = line.strip()
+        if is_multi_comment is True:
+            if  "*/" in line:
+                index = line.index("*/")
+                line = line[index + 2:].strip()
+                is_multi_comment = False
+            else: #Make parser to skip all comment lines by returning empty string
+                return "", is_multi_comment
+        elif "//" in line: #comment out from that index
+            index = line.index("//")
+            line = line[:index].strip()
+        elif "/*" in line:
+            index = line.index("/*")
+            line = line[:index].strip()
+            is_multi_comment = True
+        return line, is_multi_comment
+
+    def curly_braces(line : str, in_curly_braces : bool):
+        pass
+
+    #Begining section of inline code
     def parse_declaration(declaration_str : str) -> List[Variable]:
         lines = re.split("\n|;", declaration_str)
         lines = [line.strip() for  line in lines]
-        isMultiLineComment = False
+        is_multi_comment = False
+        curly_braces = [] #For curly braces identification
+        f = [] #For curly braces identification
         total_variales = []
         for line in lines:
-            line = line.strip()
             #Comment percolation
-            if isMultiLineComment is True:
-                if  "*/" in line:
-                    index = line.index("*/")
-                    line = line[index + 2:].strip()
-                    isMultiLineComment = False
-                else:
-                    continue
-            elif "//" in line: #comment out from that index
-                index = line.index("//")
-                line = line[:index].strip()
-            elif "/*" in line:
-                index = line.index("/*")
-                line = line[:index].strip()
-                isMultiLineComment = True
+            line, is_multi_comment \
+                = DeclarationParser.remove_comments(line, is_multi_comment)
+
             #skip empty line
             if line == "":
                 continue
+            
+            #Skip brackets -> Translator does not interpret function yet.
 
-            #Remove constraints
-            print("local declaration: " + line)
-            line = re.sub("\[[^]]*\]", "", line)
+            #Skip curly brackets -> If whole_command is not empty, means curly braces are not closed yet
+            
+            #Remove constraints -> Refactor this
+            line = re.sub("\[[^]]*\]", "", line) #Remove content surrounded with '[' and ']'
+
+            print("declaration: " + line)
             variables = DeclarationParser.parse_attribute(line)
             if variables == -1:
                 continue

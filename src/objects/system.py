@@ -17,8 +17,8 @@ class System:
     def __init__(self):
         from objects.template import Template
         #instance declaration in full string
-        self.instance_declare : List[str] = [] #key - instance name
-        self.instances : Dict[Template] = {}   #key - instance name
+        self.instance_declare : List[str] = [] #key - instance name (For declaration)
+        self.instances : Dict[Template] = {}   #key - instance name (For instance call stack)
         self.sys_parameter : List[str] = []    #System parameter used for sync content
         self.instance_call : List[str] = []    #will contain the name of the instances
 
@@ -28,6 +28,7 @@ class System:
     def find_templates(self, instace_name : str) -> str:
         try:
             template_name : str = self.instances[instace_name]
+            print("template_name" + str(template_name))
             init_function = self.get_init_name(template_name)
             return instace_name + "." + init_function
         except:

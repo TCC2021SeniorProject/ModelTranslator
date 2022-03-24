@@ -16,11 +16,12 @@ from objects.template import Template
         r1 = Roomba_Test(param1, param2, ...)
         r1.InitialNodeOfRoomba_Test()
 
-    @TODO: Refactor required - unorganized
+    @TODO: Refactor required - unorganized - inefficient
 
     @AUTHOR: Marco-Backman
 """
 
+#It can take declared instance, or template name as an instance
 class SystemParser:
     def parse_system_instance(line : str, global_sets : GlobalSet):
         elements = line.split("=")
@@ -37,20 +38,42 @@ class SystemParser:
             return
 
         sys_obj : System = global_sets.get_system_obj()
+        template_list = global_sets.get_templates()
+        for temp_template in template_list:
+            sys_obj.add_instance_info(line, temp_template.name, temp_template)
         sys_obj.add_instance_info(line, instance, template)
         params = [s.strip() for s in param_line.split(",")]
         sys_obj.add_sys_param(params)
 
-    def parse_system(et : ET, global_sets : GlobalSet):
-        content = et.text
-        lines = re.split("\n", content)
+    def remove_comments(line : str, is_multi_comment : bool) -> str:
+        line = line.strip()
+        if is_multi_comment is True:
+            if  "*/" in line:
+                index = line.index("*/")
+                line = line[index + 2:].strip()
+                is_multi_comment = False
+            else: #Make parser to skip all comment lines by returning empty string
+                return "", is_multi_comment
+        elif "//" in line: #comment out from that index
+            index = line.index("//")
+            line = line[:index].strip()
+        elif "/*" in line:
+            index = line.index("/*")
+            line = line[:index].strip()
+            is_multi_comment = True
+        return line, is_multi_comment
+
+    def parse_system(system_content : str, global_sets : GlobalSet):
         new_lines = []
+        is_multi_comment = False
+        lines = system_content.split("\n")
         for line in lines:
             line = line.strip()
-            if line[0:2] == "//":         #Skip comment line
+            line, is_multi_comment \
+                = SystemParser.remove_comments(line, is_multi_comment)
+
+            if line == "":
                 continue
-            elif len(line) < 2:
-                continue                  #Skip empty line
 
             #system keyword -> Run defined instance
             if "system" in line: # system r1 -> r1.init(params)
@@ -66,6 +89,4 @@ class SystemParser:
                 line = line.strip()
                 SystemParser.parse_system_instance(line, global_sets)
                 new_lines.append(line)
-
-
         return new_lines

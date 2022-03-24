@@ -126,12 +126,10 @@ class ParseXML:
                 self.set_end(node, template)
             self.global_set.add_template(template)
 
-        #Parse system tag
-        for system in self.root.findall("system"):
-            for line in system.iter():
-                if TagSet.identify_system_tag(line):
-                    self.system_script \
-                      = SystemParser.parse_system(line, self.global_set)
+        #Parse system tag (Only one unique tag)
+        system = self.root.find("system")
+        self.system_script \
+            = SystemParser.parse_system(system.text, self.global_set)
 """
     XXX Root function of this class
         - This will be called first

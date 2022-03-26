@@ -1,5 +1,3 @@
-from typing import List
-
 from objects.transition import Transition
 
 """
@@ -26,8 +24,8 @@ class Node:
         self.is_commit = False
         self.visited = False
         #Not implemented yet.
-        self.parameter_list : List[Variable] = []
-        self.transition_list : List[Transition] = []
+        self.parameter_list : list[Variable] = []
+        self.transition_list : list[Transition] = []
 
     def get_id(self) -> str:
         return self.id
@@ -41,7 +39,7 @@ class Node:
     def set_name(self, name : str):
         self.name = name
 
-    def get_transitions(self) -> List[Transition]:
+    def get_transitions(self) -> list[Transition]:
         return self.transition_list
 
     def add_transition(self, transition : Transition):

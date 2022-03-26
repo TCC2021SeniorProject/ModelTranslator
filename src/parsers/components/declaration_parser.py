@@ -1,4 +1,3 @@
-from typing import List
 import re
 
 from objects.variable import Variable
@@ -28,7 +27,7 @@ var_type_dic = {'int'     : 0,
                 'arr'     : 4}
 
 class DeclarationParser:
-    def parse_identifier(words : List[str],\
+    def parse_identifier(words : list[str],\
                          var_value : str,\
                          previous_type : str) -> Variable and str:
         if len(words) == 1:
@@ -63,7 +62,7 @@ class DeclarationParser:
     #Line example: const int k = 2 or const int k
     def parse_attribute(line):
         comma_seperated = re.split(",", line)
-        variables : List[Variable] = []
+        variables : list[Variable] = []
         var_type = ""
         for element in comma_seperated:
             var_value = ""
@@ -117,7 +116,7 @@ class DeclarationParser:
         pass
 
     #Begining section of inline code
-    def parse_declaration(declaration_str : str) -> List[Variable]:
+    def parse_declaration(declaration_str : str) -> list[Variable]:
         lines = re.split("\n|;", declaration_str)
         lines = [line.strip() for  line in lines]
         is_multi_comment = False

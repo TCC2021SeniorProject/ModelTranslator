@@ -1,68 +1,70 @@
-
-from typing import Dict, List
+from objects.instance import Instance
+from objects.template import Template
+from objects.node import Node
 
 """
     Stores UPPAAL system commands into objects
     1. Converts instance call
     2. Converts an UPPAAL instance declaration into python script
-        - Currently, System class will simply take an entire line
-    3. Ignores every comment
 
-    @TODO: Handle parameters
+    @TODO:
 
     @AUTHOR: Marco-Backman
 """
 
 class System:
     def __init__(self):
-        from objects.template import Template
-        #instance declaration in full string
-        self.instance_declare : List[str] = [] #key - instance name (For declaration)
-        self.instances : Dict[Template] = {}   #key - instance name (For instance call stack)
-        self.sys_parameter : List[str] = []    #System parameter used for sync content
-        self.instance_call : List[str] = []    #will contain the name of the instances
+        #instance is called by instance variable name - "instance_name"
+        self.instances : dict[Instance] = {}
+        #Calls should have either one of two:
+        #   1. Class call by default class name without instance declaration
+        #   2. Instance call by declared instacne "name"
+        self.instance_calls : list[str] = []
 
-    #If system keyword is raised
-    #Rename def name and varaibles - confusing
-    #Refactor the functionality this should not contain any script convertation
-    def find_templates(self, instace_name : str) -> str:
+    #Find a default function to start on specified instance(template)
+    #Returns function name
+    def find_init_function(self, instace_name : str) -> str:
         try:
-            template_name : str = self.instances[instace_name]
-            print("template_name" + str(template_name))
-            init_function = self.get_init_name(template_name)
-            return instace_name + "." + init_function
+            instance : Instance = self.instances[instace_name]
+            template : Template = instance.template
+            start_state : Node = template.get_start()
+            return start_state.name
         except:
-            print("Wrong instance name!")
+            print("Instance not found!")
             return ""
 
-    def get_init_name(self, template) -> str:
-        target_node = template.start_state
-        script : str = str(target_node.get_name()) + "("
-        # add parameters here
+    def get_instances(self) -> dict[str, Instance]:
+        return self.instances
 
-        script += ")"
-        return script
+    def get_instance_by_name(self, instance_name : str) -> Instance:
+        if instance_name in self.instances.keys():
+            return self.instances[instance_name]
+        else:
+            return ""
 
-    def add_instance_info(self, full_inst : str, instance : str, template):
-        print("System added: " + instance + ", " + str(template.name))
-        self.instance_declare.append(full_inst)
-        self.instances[instance] = template
+    #Adds system declaration details and its template name with its initial function
+    def add_instance(self, instance_name : str, template : Template, params):
+        new_instance = Instance(instance_name, template)
 
-    def add_call(self, instance_name : str):
-        self.instance_call.append(instance_name)
+        new_instance.set_parameter(params)
 
-    def get_sys_parem(self):
-        return self.sys_parameter
+        #This has to come first before finding and setting init function
+        self.instances[instance_name] = new_instance
 
-    def add_sys_param(self, params : List[str]):
-        if isinstance(params, list):
-            for parameter in params:
-                self.sys_parameter.append(parameter)
-        else: #param is just a plain text
-            self.sys_parameter.append(params)
+        initial_function = self.find_init_function(instance_name)
+        new_instance.set_init_function(initial_function)
+
+        
 
     def print_info(self):
-        for inst_dec in self.instance_declare:
-            print("system declared: " + inst_dec)
-        for inst_call in self.instance_call:
-            print("system declared: " + inst_call)
+        for key in self.instances:
+            print("system declared: " + self.instances[key].get_instance_name())
+
+        for calls in self.instance_calls:
+            print("system called: " + calls)
+
+    def get_instance_calls(self) -> list[str]:
+        return self.instance_calls
+
+    def add_instance_calls(self, instance_name):
+        self.instance_calls.append(instance_name)

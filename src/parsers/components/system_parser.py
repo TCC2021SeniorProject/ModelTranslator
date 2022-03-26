@@ -1,49 +1,81 @@
-import re
-import xml.etree.ElementTree as ET
-
 from objects.system import System
-from objects.global_set import GlobalSet
 from objects.template import Template
+from objects.global_set import GlobalSet
+from objects.instance import Instance
 
 """
-    Parses XML system tag and info into an object
+    Parses system tag from XML file and form up into object data.
 
-    Suppose input is given like:
-        r1 = Roomba_Test(param1, param2, ...);
-        system r1
+    There are two methods of system calls.
+    System section has only instance declaration with optional parameters,
+      and instance call with optional parameters
 
-    Then this will change into:
-        r1 = Roomba_Test(param1, param2, ...)
-        r1.InitialNodeOfRoomba_Test()
+    #Method 1 - Declare name and call
 
-    @TODO: Refactor required - unorganized - inefficient
+        Suppose input is given like:
+            r1 = Roomba_Test(param1, param2, ...);
+            system r1
+
+        Then this will change into:
+            r1 = Roomba_Test(param1, param2, ...)
+            r1.InitialNodeOfRoomba_Test()
+
+    #Method 2 - Call by template name
+
+        Suppose input is given like:
+            system r1
+
+        Then this will change into:
+            r1.InitialNodeOfRoomba_Test()
+
+
+    @TODO:
 
     @AUTHOR: Marco-Backman
 """
 
 #It can take declared instance, or template name as an instance
 class SystemParser:
-    def parse_system_instance(line : str, global_sets : GlobalSet):
-        elements = line.split("=")
-        instance = elements[0].strip()               #instance variable name
-        template_str = elements[1].strip()           #instance declaration with params;
-        template_str = template_str.replace(")", "") #Roomba_Test(parm1, parm2 ...
-        elements = template_str.split("(")
-        template_name = elements[0]                  #Only class name
-        param_line = elements[1]                     #Parameters
-        template : Template = global_sets.get_template_by_name(template_name)
-        template.set_instance_name(instance)
-        if (template == None): #Error template/init() not found
-            print("No template defined")
+    #Line conatins a full command of instance declaration
+    def parse_instance_declare(line : str, global_sets: GlobalSet):
+        #Get instance name
+        index = line.index("=")
+        instance_name = line[:index].strip()
+
+        #Get class name
+        remainder = line[index + 1:].strip()
+        index = remainder.index("(")
+        template_name = remainder[:index].strip()
+
+        #Get Parameter
+        end_index = remainder.index(")")
+        parameters = remainder[index + 1: end_index].strip()
+
+        #Get template by class name
+        target_template : Template \
+            = global_sets.get_template_by_name(template_name)
+
+        #Boundary check
+        if (target_template == None):
+            print("No template defined for :" + template_name)
             return
 
+        #Update system object with parameters
         sys_obj : System = global_sets.get_system_obj()
-        template_list = global_sets.get_templates()
-        for temp_template in template_list:
-            sys_obj.add_instance_info(line, temp_template.name, temp_template)
-        sys_obj.add_instance_info(line, instance, template)
-        params = [s.strip() for s in param_line.split(",")]
-        sys_obj.add_sys_param(params)
+        #This may produce a single string or list of string
+        #Boundary check is required on system object when adding parameters
+        params = [s.strip() for s in parameters.split(",")]
+
+        #Add instance to instance object
+        print("Instance decaration added as: " + instance_name + " on " + target_template.get_template_name())
+        sys_obj.add_instance(instance_name, target_template, params)
+
+    #Add instance name
+    def parse_instance_call(call_name, global_sets: GlobalSet):
+        system = global_sets.get_system_obj()
+        print("Adding calls as: " + call_name)
+        system.add_instance_calls(call_name)
+        
 
     def remove_comments(line : str, is_multi_comment : bool) -> str:
         line = line.strip()
@@ -63,30 +95,34 @@ class SystemParser:
             is_multi_comment = True
         return line, is_multi_comment
 
-    def parse_system(system_content : str, global_sets : GlobalSet):
-        new_lines = []
+    #Parse XML system syntax into an object
+    def parse_system(system_content : str, global_sets):
+        new_lines = ""
         is_multi_comment = False
-        lines = system_content.split("\n")
-        for line in lines:
-            line = line.strip()
+        for line in system_content.split("\n"):
             line, is_multi_comment \
                 = SystemParser.remove_comments(line, is_multi_comment)
-
+            new_lines += line
+        commands = new_lines.split(";")
+        for line in commands:
+            line = line.strip()
             if line == "":
                 continue
 
-            #system keyword -> Run defined instance
-            if "system" in line: # system r1 -> r1.init(params)
+            #system keyword -> Calls defined instance or calls class(template)
+            elif "system" in line: # system r1 -> r1.init(params)
                 line = line.replace("system", "")
-                line = line.replace(";", "")
-                line = line.strip()
-                sys_obj : System = global_sets.get_system_obj()
-                sys_obj.add_call(line) #append - r1
+                #multiple instances can be called by comma-separation
+                if ',' in line:
+                    calls = line.split(",")
+                    for call in calls:
+                        SystemParser.parse_instance_call(call.strip(), global_sets)
+                #single instance call
+                else:
+                    #Returns instance call
+                    SystemParser.parse_instance_call(line.strip(), global_sets)
 
             #Instance declaration
             else:
-                line = line.replace(";", "")
                 line = line.strip()
-                SystemParser.parse_system_instance(line, global_sets)
-                new_lines.append(line)
-        return new_lines
+                SystemParser.parse_instance_declare(line, global_sets)

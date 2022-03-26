@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Global vars
+int direct1, direct2;
+int request1, request2;</declaration>
+	<template>
+		<name x="5" y="5">roomba</name>
+		<parameter>int &amp;request, int &amp;mode</parameter>
+		<declaration>// Place local declarations here.</declaration>
+		<location id="id0" x="-178" y="-59">
+			<name x="-188" y="-93">Idle</name>
+		</location>
+		<location id="id1" x="-25" y="-59">
+			<name x="-35" y="-93">Initialized</name>
+		</location>
+		<location id="id2" x="153" y="-59">
+			<name x="143" y="-93">Waiting</name>
+		</location>
+		<location id="id3" x="-25" y="34">
+			<name x="-34" y="42">Dancing</name>
+		</location>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-17" y="-34">mode == 1</label>
+			<label kind="assignment" x="-17" y="-17">request = 3</label>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id3"/>
+			<label kind="guard" x="34" y="17">mode == 3</label>
+			<label kind="assignment" x="34" y="34">request = 4</label>
+			<nail x="153" y="34"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id2"/>
+			<label kind="guard" x="17" y="-76">mode == 2</label>
+			<label kind="assignment" x="17" y="-59">request = 3</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-153" y="-76">mode == 1</label>
+			<label kind="assignment" x="-153" y="-59">request = 2</label>
+		</transition>
+	</template>
+	<template>
+		<name>MCCD</name>
+		<parameter>int &amp;req1, int &amp;req2, int &amp;mode1, int &amp;mode2</parameter>
+		<location id="id4" x="-1054" y="-790">
+			<name x="-1062" y="-824">com_init</name>
+		</location>
+		<location id="id5" x="-748" y="-790">
+			<name x="-748" y="-824">check_init</name>
+		</location>
+		<location id="id6" x="-748" y="-646">
+			<name x="-739" y="-680">com_dance</name>
+		</location>
+		<location id="id7" x="-901" y="-595">
+			<name x="-911" y="-629">dancing2</name>
+		</location>
+		<location id="id8" x="-901" y="-697">
+			<name x="-909" y="-731">dancing1</name>
+		</location>
+		<location id="id9" x="-1054" y="-654">
+			<name x="-1122" y="-688">com_dock</name>
+		</location>
+		<init ref="id4"/>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id9"/>
+			<label kind="assignment" x="-1002" y="-595">mode2 = 1</label>
+			<nail x="-1020" y="-595"/>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id9"/>
+			<label kind="assignment" x="-1011" y="-697">mode1 = 1</label>
+			<nail x="-1020" y="-697"/>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id6"/>
+			<label kind="guard" x="-977" y="-544">req1 == 4 || req2 == 4</label>
+			<nail x="-1054" y="-544"/>
+			<nail x="-748" y="-544"/>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id7"/>
+			<label kind="guard" x="-867" y="-595">req2 == 4</label>
+			<nail x="-782" y="-595"/>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id8"/>
+			<label kind="guard" x="-867" y="-697">req1 == 4</label>
+			<nail x="-782" y="-697"/>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id4"/>
+			<label kind="guard" x="-1045" y="-765">req1 == 2 &amp;&amp; req2 == 2</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id6"/>
+			<label kind="guard" x="-739" y="-773">req1 == 1 &amp;&amp; req2 == 1</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id5"/>
+			<label kind="assignment" x="-986" y="-807">mode1 = 1, mode2 = 1</label>
+		</transition>
+	</template>
+	<system>// Templates
+Laptop = MCCD(request1, direct1, request2, direct2);
+Roomba1 = roomba(request1, direct1);
+Roomba2 = roomba(request2, direct2);
+
+// System processes
+system Laptop, Roomba1, Roomba2;
+    </system>
+	<queries>
+		<query>
+			<formula>A[]not(Roomba1.Clean and Roomba2.Clean)</formula>
+			<comment>A = For all paths
+[] = Always
+</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt;not(Roomba1.Clean and Roomba2.Clean)</formula>
+			<comment>E = At least one path
+&lt;&gt; = Sometimes</comment>
+		</query>
+	</queries>
+</nta>

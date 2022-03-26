@@ -1,6 +1,3 @@
-from re import template
-from typing import List
-
 from objects.node import Node
 from objects.transition import Transition
 
@@ -22,14 +19,13 @@ class Template:
         from objects.variable import Variable
         self.name = ""
         self.start_state : Node = None
-        self.end_state : List[Node] = []
-        self.nodes : List[Node] = []
-        self.transitions : List[Transition] = []
+        self.end_state : list[Node] = []
+        self.nodes : list[Node] = []
+        self.transitions : list[Transition] = []
         #unimplented
-        self.variables : List[Variable] = []
-        self.parameters : List[Variable] = []
+        self.variables : list[Variable] = []
+        self.parameters : list[Variable] = []
         self.valid_graph = False
-        self.intance_name : str = ""
 
     def get_template_name(self):
         return self.name
@@ -40,7 +36,7 @@ class Template:
         else:
             self.name = name
 
-    def get_nodes(self) -> List[Node]:
+    def get_nodes(self) -> list[Node]:
         return self.nodes
 
     def get_node_by_id(self, id) -> Node:
@@ -58,7 +54,7 @@ class Template:
     def get_transition_num(self) -> int:
         return len(self.transitions)
 
-    def set_transitions(self, transitions : List[Transition]):
+    def set_transitions(self, transitions : list[Transition]):
         self.transitions = transitions
 
     def add_transitions(self, transition: Transition):
@@ -83,7 +79,7 @@ class Template:
                 return True
         return False
 
-    def get_end_list(self) -> List[Node]:
+    def get_end_list(self) -> list[Node]:
         if len(self.end_state) == 0:
             return None
         return self.end_state
@@ -123,14 +119,14 @@ class Template:
     def add_parameter(self, parameter : str):
         self.parameters.append(parameter)
 
-    def add_parameters(self, parameters : List[str]):
+    def add_parameters(self, parameters : list[str]):
         if isinstance(parameters, list):
             for parameter in parameters:
                 self.parameters.append(parameter)
         else:
             self.parameters.append(parameters)
 
-    def set_parameters(self, parameters : List[str]):
+    def set_parameters(self, parameters : list[str]):
         self.parameters = parameters
 
     def param_is_empty(self):
@@ -169,12 +165,6 @@ class Template:
         for node in self.nodes:
             node : Node
             node.set_unvisited()
-
-    def get_instance_name(self):
-        return self.intance_name
-
-    def set_instance_name(self, intance_name):
-        self.intance_name = intance_name
 
     def print_info(self):
         #Template

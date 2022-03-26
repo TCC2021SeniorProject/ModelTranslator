@@ -1,7 +1,3 @@
-from typing import List
-
-from objects.global_set import GlobalSet
-
 """
     Transition's node links cannot be void
     Transition has one to one pointing behavior.
@@ -22,7 +18,7 @@ class Transition():
         #stores reformed string
         self.template : Template = None
         self.guard : str  = None
-        self.assign : List[str] = None
+        self.assign : list[str] = None
         self.transition_from : Node = None
         self.transition_to : Node = None
         self.visited = False
@@ -68,7 +64,8 @@ class Transition():
     def get_sync(self):
         return self.sync
 
-    def set_sync(self, sync_name : str, global_set : GlobalSet):
+    def set_sync(self, sync_name : str, global_set):
+        from objects.global_set import GlobalSet
         from objects.sync import Syncronization
         if (sync_name[-1:] == '?'):   # sync: '!'(responder)
             sync_name = sync_name[0:-1]
@@ -76,6 +73,7 @@ class Transition():
             self.sync.set_template(self.template)
             self.sync.set_responder(self)
             self.sync_caller = False
+            global_set : GlobalSet = None
             global_set.add_sync_transitions(sync_name, self)
         elif (sync_name[-1:] == '!'): # sync: '?'(caller)
             #This will only be used for name identification

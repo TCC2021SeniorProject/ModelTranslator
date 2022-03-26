@@ -106,21 +106,3 @@ class GlobalSet:
         else:
             self.system_object.print_info()
             print()
-
-    #Call this before get_instance_calls()
-    def get_dec_scripts(self):
-        script = ""
-        declarations = self.system_object.instance_declare
-        for declaration in declarations:
-            script += declaration + "\n"
-        return script
-
-    #Call this after get_instance_delcaration_scripts()
-    def get_instance_calls(self):
-        script = ""
-        calls = self.system_object.instance_call
-        for call in calls:
-            #Use this on Python version lower than 3.7
-            script += "loop.run_until_complete("\
-                 + str(self.system_object.find_templates(call)) + ")\n"
-        return script

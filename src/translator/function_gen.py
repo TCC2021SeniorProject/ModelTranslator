@@ -32,7 +32,7 @@ class FunctionScriptGen:
         for param in params:
             script += str(param) + ", "
         script += "):\n"
-        #Noting to initialize
+
         for param in params:
             param : str
             line = "self." + str(param)

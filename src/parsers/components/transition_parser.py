@@ -47,7 +47,6 @@ class TransitionParser:
                 #Changing value of existing variable
                 elif sub_tag.attrib.get('kind')  == "assignment":
                     assignment = sub_tag.text
-                    #Need to be implemented
         temp_transition.set_from(source)
         temp_transition.set_to(target)
         temp_transition.set_name(select)
@@ -62,12 +61,13 @@ class TransitionParser:
             temp_transition.set_sync(synchronization, global_set)
         return source, temp_transition
 
+    #Consider moving script generation part to translator
     def parse_assign_operator(assign_script: str, template : Template) -> list[str]:
         assign_list = [assign.strip() for assign in assign_script.split(",")]
         assign_list = [TransitionParser.reform_assingment_state(assign, template) for assign in assign_list]
         assign_script = ""
         for assign in assign_list:
-            assign_script += assign
+            assign_script += (assign + "\n\t\t")
         return assign_script
 
     def reform_assingment_state(statement : str, template : Template):

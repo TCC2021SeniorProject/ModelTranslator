@@ -30,7 +30,7 @@ class clean:
 
 	async def default_init(self):
 		if self.self.mode == 3:
-			Roomba.Run()
+			all_tran_example.Run()
 			await self.Clean()
 
 class explore:
@@ -42,12 +42,9 @@ class explore:
 
 	async def default_init(self):
 		if self.self.mode == 2:
-			Roomba.Run()
+			all_tran_example.Run()
 			await self.Explore()
 
 loop = asyncio.get_event_loop()
-Roomba = all_tran_example(status, battery)
-Roomba = all_tran_example(status, battery)
-Roomba = all_tran_example(status, battery)
 Roomba = all_tran_example(status, battery)
 loop.run_until_complete(Roomba.Idle())

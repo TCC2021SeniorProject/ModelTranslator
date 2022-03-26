@@ -1,5 +1,3 @@
-from typing import Dict, List
-
 from objects.system import System
 """
     Holds all the objects that is require for global field in UPPAAL
@@ -15,10 +13,10 @@ class GlobalSet:
         from objects.template import Template
         from objects.transition import Transition
         from objects.variable import Variable
-        self.templates : List[Template] = []
-        self.global_variables : List[Variable] = []
+        self.templates : list[Template] = []
+        self.global_variables : list[Variable] = []
         #key - channel name, value - list of Transition
-        self.sync_transitions : Dict[List[Transition]] = {}
+        self.sync_transitions : dict[str, list[Transition]] = {}
         self.system_object : System = System()
 
     def get_template_by_name(self, name):

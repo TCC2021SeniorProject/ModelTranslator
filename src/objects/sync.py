@@ -26,8 +26,9 @@ class Syncronization():
     def get_instance_name(self):
         return self.instance_name
 
+    #Why need this?
     def get_caller_instance(self):
-        return self.caller_location.get_instance_name()
+        return self.caller_location.get_template_name()
 
     def get_caller_location(self):
         return self.caller_location.get_template_name()

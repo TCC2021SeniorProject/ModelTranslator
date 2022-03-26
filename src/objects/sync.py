@@ -1,5 +1,3 @@
-from typing import List
-
 from objects.template import Template
 from objects.transition import Transition
 

@@ -1,7 +1,5 @@
 import xml.etree.ElementTree as ET
 
-from objects.variable import Variable
-
 """
     Parses XML node tag and info into an object
 

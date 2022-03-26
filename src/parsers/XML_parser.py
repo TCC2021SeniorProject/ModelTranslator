@@ -1,5 +1,4 @@
 import xml.etree.ElementTree as ET
-import re
 
 from parsers.components.declaration_parser import DeclarationParser
 from parsers.components.node_parser import NodeParser
@@ -7,8 +6,6 @@ from parsers.components.system_parser import SystemParser
 from parsers.components.transition_parser import TransitionParser
 from parsers.components.parameter_parser import ParamParser
 from parsers.tag_set import TagSet
-
-from typing import List
 
 from objects.global_set import GlobalSet
 from objects.node import Node
@@ -41,7 +38,7 @@ class ParseXML:
     def set_end(self, node : Node, template : Template):
         template.add_end(node)
 
-    def find_end(self, template : Template) -> List[Node]:
+    def find_end(self, template : Template) -> list[Node]:
         end_nodes = []
         nodes = template.get_nodes()
         for node in nodes:
@@ -52,7 +49,7 @@ class ParseXML:
 
     #Find sync in global variables and store into sync objects
     def initialize_syncs(self):
-        glob_variable_list : List[Variable] \
+        glob_variable_list : list[Variable] \
              = self.global_set.get_global_variables()
         for variable in glob_variable_list:
             if variable.is_channel():

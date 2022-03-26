@@ -1,4 +1,3 @@
-from typing import List
 from predefine.objects.global_obj import PredefGlobalObject
 from predefine.objects.function_obj import PredefFunction
 from predefine.objects.import_obj import PredefImport

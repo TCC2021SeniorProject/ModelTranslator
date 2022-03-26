@@ -1,4 +1,5 @@
 from objects.system import System
+
 """
     Holds all the objects that is require for global field in UPPAAL
     XXX This is not used for local level

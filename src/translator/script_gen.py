@@ -1,7 +1,6 @@
 from predefine.objects.global_obj import PredefGlobalObject
 
 from objects.global_set import GlobalSet
-from objects.system import System
 from objects.template import Template
 from objects.variable import Variable
 from objects.instance import Instance

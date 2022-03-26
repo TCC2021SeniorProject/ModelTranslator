@@ -1,5 +1,3 @@
-from typing import List
-
 from objects.template import Template
 from objects.node import Node
 from objects.transition import Transition
@@ -16,11 +14,11 @@ from predefine.objects.global_obj import PredefGlobalObject
 """
 
 class ClassScriptGen:
-    def __init__(self, template : Template, global_set : GlobalSet, predef_obj : List[PredefGlobalObject]):
+    def __init__(self, template : Template, global_set : GlobalSet, predef_obj : list[PredefGlobalObject]):
         self.template = template
         self.class_script = ""
         self.global_set = global_set
-        self.predef_obj : List[PredefGlobalObject] = predef_obj
+        self.predef_obj : list[PredefGlobalObject] = predef_obj
 
     def append_class_def_script(self):
         class_name = self.template.get_template_name()

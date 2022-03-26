@@ -1,7 +1,6 @@
 from objects.system import System
 from objects.template import Template
 from objects.global_set import GlobalSet
-from objects.instance import Instance
 
 """
     Parses system tag from XML file and form up into object data.

@@ -1,7 +1,5 @@
 import sys
 
-from typing import List
-
 from predefine.predef_parser import PredefParser
 from objects.global_set import GlobalSet
 from translator.py_export import Export
@@ -29,7 +27,7 @@ from file import FileHandler
     @AUTHOR: SungJun (Tony) Baek.
 """
 
-def generate_scripts(objects : GlobalSet, predef_objects : List[PredefGlobalObject]):
+def generate_scripts(objects : GlobalSet, predef_objects : list[PredefGlobalObject]):
     #Tranlate into python script - single template
     model_translator = TranslateModel(objects, predef_objects)
     model_translator.make_full_scripts()
@@ -43,7 +41,7 @@ def main(arguments):
     file_path = ""
     handler = None
     predef_files = []
-    predef_objects : List[PredefGlobalObject] = []
+    predef_objects : list[PredefGlobalObject] = []
     if (len(arguments) == 0):
         print("Running with default XML file")
         handler = FileHandler("all_tran_example.xml", [])

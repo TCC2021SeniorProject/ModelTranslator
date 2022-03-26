@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as ET
+
 from parsers.syntax.cpyparser import SyntaxTree
-from typing import List
 
 from objects.global_set import GlobalSet
 from objects.node import Node
@@ -62,7 +62,7 @@ class TransitionParser:
             temp_transition.set_sync(synchronization, global_set)
         return source, temp_transition
 
-    def parse_assign_operator(assign_script: str, template : Template) -> List[str]:
+    def parse_assign_operator(assign_script: str, template : Template) -> list[str]:
         assign_list = [assign.strip() for assign in assign_script.split(",")]
         assign_list = [TransitionParser.reform_assingment_state(assign, template) for assign in assign_list]
         assign_script = ""

@@ -8,6 +8,7 @@
 
     @AUTHOR: Marco-Backman
 """
+
 class Transition():
     def __init__(self):
         #XXX Import at this line to avoid cross importation

@@ -1,5 +1,3 @@
-from typing import Dict
-
 from objects.sync import Syncronization
 
 """

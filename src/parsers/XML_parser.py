@@ -106,7 +106,6 @@ class ParseXML:
                     self.set_start(node, template)
 
                 elif TagSet.identify_transition_tag(line):
-                    print("global set:"+ str(self.global_set))
                     node, transition \
                       = TransitionParser.parse_transition(line, template, self.global_set)
                     if node != None:

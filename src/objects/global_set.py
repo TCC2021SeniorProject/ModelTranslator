@@ -50,7 +50,6 @@ class GlobalSet:
 
     #Returns list of transitions
     def get_sync_transitions(self, sync_name : str):
-        print("Looking for sync name: " + sync_name)
         value = self.sync_transitions[sync_name]
         return value
 
@@ -96,7 +95,7 @@ class GlobalSet:
                     transition : Transition
                     sync : Syncronization = transition.get_sync()
                     print("\t sync name: " + sync.get_name())
-                    print("\t\t sync location: " + sync.get_caller_location())
+                    print("\t sync location: " + sync.get_caller_location())
 
     def print_system_info(self):
         print("----System info----")
@@ -104,4 +103,3 @@ class GlobalSet:
             print("No system declared\n")
         else:
             self.system_object.print_info()
-            print()

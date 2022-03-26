@@ -79,14 +79,14 @@ class FunctionScriptGen:
         # Conditional call(Guard) with sync (and/or) def call
         target_node = transition.get_to_node()
         if transition.guard != None:
-            script += "\t\tif self." + str(transition.guard) +":\n"
+            script += "\t\tif " + str(transition.guard) +":\n"
             script += self.make_sync_transtion_script(transition, 3)
             if (len(line) > 1):
                 script += line
             script += "\t\t\tawait self." + str(target_node.get_name()) + "()\n"
         #Assignment exists
         elif transition.assign != None:
-            script += "\t\tself." + transition.assign +"\n"
+            script += "\t\t" + transition.assign +"\n"
             script += self.make_sync_transtion_script(transition, 3)
             if (len(line) > 1):
                 script += line

@@ -3,16 +3,18 @@ from typing import List
 from predefine.objects.variable_obj import PredefVariable
 
 '''
-    @TODO : indentation need to be aligned to original location
+    @TODO : -indentation need to be aligned to original location
+            -parameters for predefined file are not implemented
 '''
 
 class SingleLine():
-    def __init__(self, line, spaces):
+    def __init__(self, line : str, spaces : int):
         self.line : str = line
         self.spaces : int = spaces
 
     def get_line_with_indent(self):
         temp_line = ""
+        print(int(self.spaces / 4))
         for i in range(int(self.spaces / 4)):
             temp_line += "\t"
         return temp_line + self.line
@@ -34,7 +36,7 @@ class PredefFunction():
         return self.indented_depth
 
     #Append whole line including indentation
-    def append_line(self, line, spaces):
+    def append_line(self, line : str, spaces : int):
         self.content.append(SingleLine(line, spaces))
 
     def get_content(self) -> List[SingleLine]:
@@ -44,7 +46,7 @@ class PredefFunction():
     def get_partial_content(self):
         full_script = ""
         for i in range(len(self.content)):
-            full_script += self.content[i].get_line_with_indent() + "\n"
+            full_script += "\t" + self.content[i].get_line_with_indent() + "\n"
         return full_script + "\n"
 
     #Returns full content with declaration

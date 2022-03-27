@@ -4,6 +4,7 @@ from predefine.objects.function_obj import PredefFunction
 from predefine.objects.import_obj import PredefImport
 from predefine.objects.variable_obj import PredefVariable
 
+#Global does not refer to global keyword in python; rather, it refers to the meaning "global"
 class PredefGlobalObject():
     def __init__(self):
         #Global should always have 0 indentation level
@@ -14,7 +15,7 @@ class PredefGlobalObject():
         self.global_function : Dict[PredefFunction, str] = {}
         #variables not in the class - need to implement
         self.global_variable : List[PredefVariable] = []
-
+        
     def get_indent_depth(self):
         return self.indented_depth
 

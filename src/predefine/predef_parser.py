@@ -1,3 +1,6 @@
+from calendar import c
+import re
+
 from predefine.objects.global_obj import PredefGlobalObject
 from predefine.objects.function_obj import PredefFunction
 from predefine.objects.import_obj import PredefImport
@@ -5,17 +8,17 @@ from predefine.objects.import_obj import PredefImport
 '''
     Current features:
         1. Only captures functions and imports
-        2. Global field executions are ignored
-        3. Any other declaration than function and imports are ignored
+        2. Global field executions and Assignments are ignored
+        3. Any declaration other than function and imports are ignored
 
-    @TODO: Refactor required in loops
+    @TODO:
 '''
 
 #Corresponds to a single file
 class PredefParser():
     def __init__(self, file):
         self.file = file
-        self.global_object : PredefGlobalObject = PredefGlobalObject()
+        self.predef_global_object : PredefGlobalObject = PredefGlobalObject()
 
     #Return lines of string
     def readFile (self):
@@ -42,112 +45,90 @@ class PredefParser():
 
     #Main function
     def processFile(self):
-        lines = self.readFile()
 
-        skip = False # for multiline comments
+        #Reuses(overwrites to a new one) on def keyword
         function_object : PredefFunction = None
-        def_name = ""
+
         def_open = False
-        def_opening_level = 0
-        #Not implemented yet
-        class_name = ""
-        class_open = False
-        class_opening_level = 0
+        def_indent_count = 0 #For checking def indentation
+
+        #Comments
+        multiline_comment_started = False
 
         #Read file line by line
-        for i in range (len(lines)):
-            #Identify multiple lines
-            if skip == True:
-                if len(lines > 2):
-                    if lines[-3:] == "'''":
-                        skip = False
-                continue
-            line = lines[i]
-            #Empty line
-            if len(line) == 0:
+        lines = self.readFile()
+        for line_num, line in enumerate(lines):
+
+            if line_num == len(lines) - 1 and def_open:
+                print("End of the line")
+                def_open = False
+
+            #Identify comments and ignore them
+            if multiline_comment_started == True:
                 continue
 
-            space_num = 0
-            #Count indentation
-            while(line[space_num] == ' '):
-                space_num += 1
+            if "'''" in line:
+                #Multiline comment start
+                if multiline_comment_started == True:
+                    multiline_comment_started = False
+                    index = line.index("'''")
+                    line = line[index + 3:].strip() #Takes script after the end of the comment
+                #Multiline comment end
+                else: 
+                    multiline_comment_started = True
+                    index = line.index("'''")
+                    line = line[:index].strip()
+
+            #Skipline on multiline comments
+            elif multiline_comment_started == True:
+                continue
+
+            #Remove single line comment
+            if "#" in line:
+                index = line.index("#")
+                line = line[:index].strip()
+
+            #Count indentation (just space or tabs in spaces) - but not tabs
+            indent_count = re.findall('^([" "]*)', line)
+            indent_count = len(indent_count[0])
+
+            #Skip empty line
+            if line.strip() == "":
+                continue
+
+            #Remove all trailing and preceding spaces(including indentation)
             line = line.strip()
-
-            #Global parameters
-            index = 0
-            temp_line = ""
-            #Iteration by single charater
-            while index < len(line):
-                line.replace("    ", "\t")
-                temp_line += line[index]
-                
-                # def - start capturing until it reaches the same level again
-                if temp_line == "def":
-                    def_open = True
-                    def_name = self.get_name(line[index + 1:].strip())
-                    function_object = PredefFunction(line, def_name, space_num)
-                    def_opening_level = space_num
-                    print("def found: " + def_name)
-                    break
-
-                if len(temp_line) > 5:
-                    if def_open == True:
-                        line.replace("    ", "\t")
-                        line = "\t" + line
-                        print("Taking lines def content: " + def_name + " : " + line)
-                        function_object.append_line(line, space_num)
-                    else:
-                        print("Not taking lines def content: " + line)
-                    break
-                # comment
-                elif temp_line == '#':
-                    break
-                # multi-line comment
-                elif temp_line == "'''":
-                    skip = True
-                    break
-                #import
-                elif temp_line == "from":
-                    self.global_object.add_import(PredefImport(line))
-                    print("import found")
-                    break
-                # class
-                elif temp_line == "class":
-                    class_name = self.get_name(line[index + 1:].strip())
-                    print("class found " + class_name)
-                    break
-                    #get name
-                # import
-                elif temp_line == "import":
-                    self.global_object.add_import(PredefImport(line))
-                    print("import found")
-                    break
-                    #get name
-                # global(keyword)
-                elif temp_line == "global":
-                    print("Global keyword found")
-                    break
-
-                line = line.strip()
-                if def_open == True and def_opening_level == space_num and len(line) > 2:
-                    #Stop captures when opening level and closing level are the same
-                    print("Closing def content: " + def_name + " : " + line)
-                    #Append function_obj to global_obj
-                    self.global_object.add_function(def_name, function_object)
+            
+            #store into if def is opend 
+            if def_open == True:
+                #Check if indentation level is not reduced
+                if indent_count < def_indent_count: #end def repeat a same line
                     def_open = False
-                elif def_open == True and (i == len(lines) - 1):
-                    line.replace("    ", "\t")
-                    line = "\t" + line
-                    print("Taking lines def content: " + def_name + " : " + line)
-                    function_object.append_line(line, space_num)
-                    #Stop captures when opening level and closing level are the same
-                    print("Closing def content: " + def_name + " : " + line)
-                    #Append function_obj to global_obj
-                    self.global_object.add_function(def_name, function_object)
-                    def_open = False
-                    break
-                index += 1
+                else: #Take entire line as instruction of a function 
+                    function_object.append_line(line, indent_count)
+                    continue
+
+
+            if (line[0:3] == "def"): #Function declaration
+                print("Open def")
+                def_open = True
+                index = line.index("(")
+                def_name = line[3:index].strip() #Only name
+                function_object = PredefFunction(line, def_name, line[3:].strip())
+                self.predef_global_object.add_function(def_name, function_object)
+                def_indent_count = indent_count + 1 # def contents have one more indentation
         
+            elif (line[0:4] == "from"): #Import
+                self.predef_global_object.add_import(PredefImport(line))
+
+            elif (line[0:6] == "import"): #Import
+                self.predef_global_object.add_import(PredefImport(line))
+
+            elif (line[0:5] == "class"): #Class - not implemented
+                pass
+
+            elif (line[0:6] == "global"): #Global - not implemented
+                pass
 
     def get_result_data(self) -> PredefGlobalObject:
-        return self.global_object
+        return self.predef_global_object

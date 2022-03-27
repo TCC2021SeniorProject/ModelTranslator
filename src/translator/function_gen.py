@@ -104,18 +104,21 @@ class FunctionScriptGen:
         return script
 
     def make_function_script(self, node : Node):
+        #Create function declaration line
         function_scripts = "\tasync def " + str(node.get_name()) + "(self):\n"
+
+        #Append predefined scripts -> Refactor this to kay, value map
+        # -> No need for a loop
         for predef_obj in self.predef_objs:
-            print("Getting name from node: " + str(node.get_name()))
             predef_function : PredefFunction \
                 = predef_obj.get_function_by_name(node.get_name())
+            #No match
             if predef_function == None:
-                print("Name not found from predef: " + str(node.get_name()))
                 continue
             else:
-                print("Getting name from predef: " + predef_function.name)
-            function_scripts += "\n" + str(predef_function.get_partial_content())
+                function_scripts += str(predef_function.get_partial_content())
 
+        #Append predefined scripts
         transition_list = node.get_transitions()
         for transition in transition_list:
             transition : Transition

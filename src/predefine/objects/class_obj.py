@@ -1,7 +1,3 @@
-from predefine.objects.function_obj import Function
-from predefine.objects.import_obj import Function
-from predefine.objects.variable_obj import Function
-
 class PredefClass():
     def __init__(self, line):
         self.indented_depth : int = self.count_space(line)

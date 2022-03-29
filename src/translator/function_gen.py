@@ -69,7 +69,7 @@ class FunctionScriptGen:
                     else:
                         for i in range(depth):
                             script += "\t"
-                    target_node : Node = sync_transition.get_to_node()
+                    target_node : Node = sync_transition.get_from_node()
                     sync = sync_transition.get_sync()
                     class_name = sync.get_caller_instance()
                     #sync parameter comes here

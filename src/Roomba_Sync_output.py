@@ -20,7 +20,7 @@ class MCCD:
 
 	async def com_dance(self):
 		if self.request == 1:
-			RasPi.Docking()
+			RasPi.Dancing()
 			await self.com_dock()
 
 	async def com_init(self):
@@ -28,7 +28,7 @@ class MCCD:
 			await self.com_dance()
 
 	async def com_connect(self):
-		RasPi.Initalized()
+		RasPi.Idle()
 		await self.com_init()
 
 class RasPi:
@@ -42,7 +42,7 @@ class RasPi:
 	async def Docking(self):
 		self.request = 3
 		
-		MCCD.com_init()
+		MCCD.com_dock()
 		await self.Initalized()
 
 	async def Dancing(self):
@@ -53,7 +53,7 @@ class RasPi:
 	async def Initalized(self):
 		self.request = 1
 		
-		MCCD.com_dance()
+		MCCD.com_init()
 		await self.Dancing()
 
 	async def Idle(self):

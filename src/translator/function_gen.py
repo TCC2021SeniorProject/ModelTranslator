@@ -63,8 +63,12 @@ class FunctionScriptGen:
             #Find targeted node
             if sync_transitions != None:
                 for sync_transition in sync_transitions:
-                    for i in range(depth):
-                        script += "\t"
+                    if transition.guard == None:
+                        for i in range(depth - 1): #No guard -> one less indentation
+                            script += "\t"
+                    else:
+                        for i in range(depth):
+                            script += "\t"
                     target_node : Node = sync_transition.get_to_node()
                     sync = sync_transition.get_sync()
                     class_name = sync.get_caller_instance()
@@ -75,7 +79,6 @@ class FunctionScriptGen:
     def make_tranision_to_script(self, transition : Transition):
         script = ""
         line = ""
-
         # Conditional call(Guard) with sync (and/or) def call
         target_node = transition.get_to_node()
         if transition.guard != None:

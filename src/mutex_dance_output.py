@@ -1,6 +1,4 @@
 import asyncio
-import time
-from pycreate2 import Create2
 
 direct1 = 0
 direct2 = 0
@@ -21,8 +19,6 @@ class roomba:
 			await self.Dancing()
 
 	async def Initialized(self):
-		roomba.start()
-
 		if self.mode == 2:
 			await self.Waiting()
 
@@ -38,10 +34,6 @@ class MCCD:
 		self.mode2 = mode2
 
 	async def com_dock(self):
-		roomba.seek_dock()
-		time.sleep(2)
-		roomba.close()
-
 		if self.req1 == 4 or self.req2 == 4:
 			await self.com_dance()
 		if self.req1 == 2 and self.req2 == 2:
@@ -58,27 +50,6 @@ class MCCD:
 		await self.com_dock()
 
 	async def com_dance(self):
-		roomba.drive_direct(-190, -190)
-		time.sleep(1)
-		roomba.drive_direct(-400, 400)
-		time.sleep(1)
-		roomba.drive_direct(190, 190)
-		time.sleep(1)
-		roomba.drive_direct(-400, 400)
-		time.sleep(1)
-		roomba.drive_direct(190, 190)
-		time.sleep(1)
-		roomba.drive_direct(-400, 400)
-		time.sleep(1)
-		roomba.drive_direct(190, 190)
-		time.sleep(1)
-		roomba.drive_direct(-400, 400)
-		time.sleep(1)
-		roomba.drive_direct(190, 190)
-		time.sleep(1)
-		roomba.drive_stop()
-		done = 1
-
 		if self.req2 == 4:
 			await self.dancing2()
 		if self.req1 == 4:
@@ -89,13 +60,6 @@ class MCCD:
 			await self.com_dance()
 
 	async def com_init(self):
-		global done
-		done = 0
-		try:
-			roomba = Create2('/dev/ttyUSB0')
-		except:
-			roomba = Create2('/dev/ttyUSB1')
-
 		self.mode1 = 1
 		self.mode2 = 1
 		

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+chan connection, initalize, dance,  dock;
+int request;</declaration>
+	<template>
+		<name x="5" y="5">MCCD</name>
+		<parameter>chan &amp;connection, chan &amp;initalize, chan &amp;dance, chan &amp;dock, int &amp;request</parameter>
+		<declaration>// Place local declarations here.</declaration>
+		<location id="id0" x="-1505" y="-994">
+			<name x="-1515" y="-1028">com_connect</name>
+		</location>
+		<location id="id1" x="-1198" y="-994">
+			<name x="-1208" y="-1028">com_init</name>
+		</location>
+		<location id="id2" x="-969" y="-994">
+			<name x="-979" y="-1028">com_dance</name>
+		</location>
+		<location id="id3" x="-969" y="-858">
+			<name x="-977" y="-850">com_dock</name>
+		</location>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-1181" y="-884">request == 2</label>
+			<label kind="synchronisation" x="-1181" y="-858">dock?</label>
+			<nail x="-1198" y="-858"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-960" y="-960">request == 1</label>
+			<label kind="synchronisation" x="-960" y="-943">dance!</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-1173" y="-1011">request == 0 || request == 3</label>
+			<label kind="synchronisation" x="-1173" y="-994">initalize?</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-1436" y="-994">connection!</label>
+		</transition>
+	</template>
+	<template>
+		<name>RasPi</name>
+		<parameter>chan &amp;connection, chan &amp;initalize, chan &amp;dance, chan &amp;dock, int &amp;request</parameter>
+		<location id="id4" x="-2847" y="-2975">
+			<name x="-2857" y="-3009">Idle</name>
+		</location>
+		<location id="id5" x="-2592" y="-2975">
+			<name x="-2602" y="-3009">Initalized</name>
+		</location>
+		<location id="id6" x="-2371" y="-2864">
+			<name x="-2384" y="-2856">Docking</name>
+		</location>
+		<location id="id7" x="-2371" y="-2975">
+			<name x="-2381" y="-3009">Dancing</name>
+		</location>
+		<init ref="id4"/>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="-2574" y="-2881">dock!</label>
+			<label kind="assignment" x="-2574" y="-2864">request = 3</label>
+			<nail x="-2592" y="-2864"/>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id6"/>
+			<label kind="synchronisation" x="-2371" y="-2936">dance?</label>
+			<label kind="assignment" x="-2371" y="-2919">request = 2</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id7"/>
+			<label kind="synchronisation" x="-2574" y="-2992">initalize!</label>
+			<label kind="assignment" x="-2574" y="-2975">request = 1</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="-2805" y="-2992">connection?</label>
+			<label kind="assignment" x="-2805" y="-2975">request = 0</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+Laptop = MCCD(connection, initalize, dance, dock, request);
+
+Pi = RasPi(connection, initalize, dance, dock, request);
+
+// List one or more processes to be composed into a system.
+system Laptop, Pi;
+    </system>
+	<queries>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>

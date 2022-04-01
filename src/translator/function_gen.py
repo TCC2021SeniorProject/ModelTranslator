@@ -62,7 +62,8 @@ class FunctionScriptGen:
               = self.global_set.get_sync_transitions(sync_name)
             #Find targeted node
             if sync_transitions != None:
-                for sync_transition in sync_transitions:
+                task_list = []
+                for index, sync_transition in enumerate(sync_transitions):
                     if transition.guard == None:
                         for i in range(depth - 1): #No guard -> one less indentation
                             script += "\t"
@@ -72,8 +73,18 @@ class FunctionScriptGen:
                     target_node : Node = sync_transition.get_from_node()
                     sync = sync_transition.get_sync()
                     class_name = sync.get_caller_instance()
-                    #sync parameter comes here
-                    script +=  str(class_name) + "." + str(target_node.get_name()) + "()\n"
+                    #Sync script with create_task
+                    #Create threaded task
+                    task_variable_name = target_node.get_name() + "_task_" + str(index)
+                    task_list.append(task_variable_name)
+                    script += task_variable_name
+                    script += " = loop.create_task(" + str(class_name) + "." + str(target_node.get_name()) + "())\n"
+                #parallel thread tasks Execution script
+                script += "\t\tawait asyncio.wait("
+                for task in task_list:
+                    script += task +", "
+                script += "])\n"
+
         return script
 
     def make_tranision_to_script(self, transition : Transition):
@@ -109,6 +120,7 @@ class FunctionScriptGen:
     def make_function_script(self, node : Node):
         #Create function declaration line
         function_scripts = "\tasync def " + str(node.get_name()) + "(self):\n"
+        function_scripts += "\t\tawait asyncio.sleep(0.01)\n"
 
         #Append predefined scripts -> Refactor this to kay, value map
         # -> No need for a loop

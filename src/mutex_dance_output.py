@@ -11,18 +11,22 @@ class roomba:
 		self.mode = mode
 
 	async def Dancing(self):
+		await asyncio.sleep(0.01)
 		if self.mode == 1:
 			await self.Initialized()
 
 	async def Waiting(self):
+		await asyncio.sleep(0.01)
 		if self.mode == 3:
 			await self.Dancing()
 
 	async def Initialized(self):
+		await asyncio.sleep(0.01)
 		if self.mode == 2:
 			await self.Waiting()
 
 	async def Idle(self):
+		await asyncio.sleep(0.01)
 		if self.mode == 1:
 			await self.Initialized()
 
@@ -34,32 +38,38 @@ class MCCD:
 		self.mode2 = mode2
 
 	async def com_dock(self):
+		await asyncio.sleep(0.01)
 		if self.req1 == 4 or self.req2 == 4:
 			await self.com_dance()
 		if self.req1 == 2 and self.req2 == 2:
 			await self.com_init()
 
 	async def dancing1(self):
+		await asyncio.sleep(0.01)
 		self.mode1 = 1
 		
 		await self.com_dock()
 
 	async def dancing2(self):
+		await asyncio.sleep(0.01)
 		self.mode2 = 1
 		
 		await self.com_dock()
 
 	async def com_dance(self):
+		await asyncio.sleep(0.01)
 		if self.req2 == 4:
 			await self.dancing2()
 		if self.req1 == 4:
 			await self.dancing1()
 
 	async def check_init(self):
+		await asyncio.sleep(0.01)
 		if self.req1 == 1 and self.req2 == 1:
 			await self.com_dance()
 
 	async def com_init(self):
+		await asyncio.sleep(0.01)
 		self.mode1 = 1
 		self.mode2 = 1
 		

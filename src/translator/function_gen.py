@@ -65,10 +65,10 @@ class FunctionScriptGen:
                 task_list = []
                 for index, sync_transition in enumerate(sync_transitions):
                     if transition.guard == None:
-                        for i in range(depth - 1): #No guard -> one less indentation
+                        for _ in range(depth - 1): #No guard -> one less indentation
                             script += "\t"
                     else:
-                        for i in range(depth):
+                        for _ in range(depth):
                             script += "\t"
                     target_node : Node = sync_transition.get_from_node()
                     sync = sync_transition.get_sync()
@@ -80,41 +80,46 @@ class FunctionScriptGen:
                     script += task_variable_name
                     script += " = loop.create_task(" + str(class_name) + "." + str(target_node.get_name()) + "())\n"
                 #parallel thread tasks Execution script
-                script += "\t\tawait asyncio.wait(["
+                if transition.guard == None:
+                    for _ in range(depth - 1): #No guard -> one less indentation
+                        script += "\t"
+                else:
+                    for _ in range(depth):
+                        script += "\t"
+                script += "await asyncio.wait(["
                 for task in task_list:
                     script += task +", "
                 script += "])\n"
 
         return script
 
+    #Transition has guard, assignment, sync, empty transition
     def make_tranision_to_script(self, transition : Transition):
         script = ""
         line = ""
+        guard_present = False
         # Conditional call(Guard) with sync (and/or) def call
         target_node = transition.get_to_node()
         if transition.guard != None:
+            guard_present = True
             script += "\t\tif " + str(transition.guard) +":\n"
             script += self.make_sync_transtion_script(transition, 3)
             if (len(line) > 1):
                 script += line
             script += "\t\t\tawait self." + str(target_node.get_name()) + "()\n"
-        #Assignment exists
-        elif transition.assign != None:
-            script += "\t\t" + transition.assign +"\n"
-            script += self.make_sync_transtion_script(transition, 3)
-            if (len(line) > 1):
-                script += line
-            script += "\t\tawait self." + str(target_node.get_name()) + "()\n"
         else: #No conditional sync (and/or) def call
             script += self.make_sync_transtion_script(transition, 3)
             if (len(line) > 1):
                 script += line
-            script += "\tawait self." + str(target_node.get_name()) + "()\n"
+            script += "\t\tawait self." + str(target_node.get_name()) + "()\n"
 
         # Update(Assign), set variable
         if transition.assign != None:
-            for assign in transition.assign:
-                line += "\t\t\tself." + assign + "\n"
+            print(transition.assign)
+            if guard_present:
+                script += "\t\t\t" + transition.assign + "\n"
+            else:
+                script += "\t\t" + transition.assign + "\n"
         return script
 
     def make_function_script(self, node : Node):

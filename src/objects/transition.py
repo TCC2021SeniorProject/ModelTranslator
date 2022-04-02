@@ -19,7 +19,7 @@ class Transition():
         #stores reformed string
         self.template : Template = None
         self.guard : str  = None
-        self.assign : list[str] = None
+        self.assign : str = None
         self.transition_from : Node = None
         self.transition_to : Node = None
         self.visited = False
@@ -92,11 +92,11 @@ class Transition():
             return True
         return False
 
-    def get_assign(self):
+    def get_assign(self) -> str:
         return self.assign
 
-    def set_assign(self, assign_script : str):
-        self.assign = assign_script
+    def set_assign(self, assign : str):
+        self.assign = assign
 
     def print_info(self):
         print("\t Transition from: " + self.transition_from.id\

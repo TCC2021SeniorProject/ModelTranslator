@@ -138,13 +138,15 @@ class Template:
     def get_variables(self):
         return self.variables
 
-    def get_variable_index(self, name) -> int:
+    def get_variable_index(self, name : str) -> int:
         from objects.variable import Variable
         if (len(self.variables) == 0):
             return False
         else:
             for index, variable in enumerate(self.variables):
                 variable : Variable
+                print("\t\tstored string: " + variable.get_variable_name() + ".")
+                print("\t\tgiven string: " + name + ".")
                 if (variable.get_variable_name() == name):
                     return index
             return False

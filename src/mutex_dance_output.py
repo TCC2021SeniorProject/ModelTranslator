@@ -46,14 +46,10 @@ class MCCD:
 
 	async def dancing1(self):
 		await asyncio.sleep(0.01)
-		self.mode1 = 1
-		
 		await self.com_dock()
 
 	async def dancing2(self):
 		await asyncio.sleep(0.01)
-		self.mode2 = 1
-		
 		await self.com_dock()
 
 	async def com_dance(self):
@@ -70,9 +66,6 @@ class MCCD:
 
 	async def com_init(self):
 		await asyncio.sleep(0.01)
-		self.mode1 = 1
-		self.mode2 = 1
-		
 		await self.check_init()
 
 loop = asyncio.get_event_loop()

@@ -246,20 +246,26 @@ class SyntaxTree:
         if type(walk) is Node:
             if type(walk.left) is str:
                 #Check if this is a variable
-                if template.get_parameter(walk.left) == None:
-                    script += walk.left
-                else:
+                if template.get_parameter(walk.left.strip()) != None:
                     script += "self." + walk.left
+                elif template.get_variable_index(walk.left.strip()) != False:
+                    script += "self." + walk.left
+                else:
+                    script += walk.left
             else:
                 script = self.get_conditional_script(walk.left, script, template)
             #check variables
             script += " " + str(walk.value) + " "
             if type(walk.right) is str:
                 #Check if this is a variable
-                if template.get_parameter(walk.right) == None:
-                    script += walk.right
-                else:
+                print("\t" + str(template.get_variable_index((walk.right).strip())))
+                if template.get_parameter(walk.right.strip()) != None:
                     script += "self." + walk.right
+                elif template.get_variable_index(walk.right.strip()) != False:
+                    script += "self." + walk.right
+                else:
+                    script += walk.right
+                
             else:
                 script = self.get_conditional_script(walk.right, script, template)
         elif type(walk) is CharNode: # CharNode type

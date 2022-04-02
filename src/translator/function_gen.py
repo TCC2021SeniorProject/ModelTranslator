@@ -80,7 +80,7 @@ class FunctionScriptGen:
                     script += task_variable_name
                     script += " = loop.create_task(" + str(class_name) + "." + str(target_node.get_name()) + "())\n"
                 #parallel thread tasks Execution script
-                script += "\t\tawait asyncio.wait("
+                script += "\t\tawait asyncio.wait(["
                 for task in task_list:
                     script += task +", "
                 script += "])\n"
@@ -109,7 +109,7 @@ class FunctionScriptGen:
             script += self.make_sync_transtion_script(transition, 3)
             if (len(line) > 1):
                 script += line
-            script += "\t\tawait self." + str(target_node.get_name()) + "()\n"
+            script += "\tawait self." + str(target_node.get_name()) + "()\n"
 
         # Update(Assign), set variable
         if transition.assign != None:

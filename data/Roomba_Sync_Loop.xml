@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Global declarations
+chan connection, initalize, dance, disconnect, dock;
+int request;</declaration>
+	<template>
+		<name x="5" y="5">MCCD</name>
+		<parameter>chan &amp;connection, chan &amp;initalize, chan &amp;dance, chan &amp;dock, chan &amp;disconnect,  int &amp;request</parameter>
+		<declaration>// Local declarations
+int numLoops = 0;</declaration>
+		<location id="id0" x="-1522" y="-1130">
+			<name x="-1532" y="-1164">com_connect</name>
+		</location>
+		<location id="id1" x="-1326" y="-1130">
+			<name x="-1336" y="-1164">com_init</name>
+		</location>
+		<location id="id2" x="-986" y="-1130">
+			<name x="-996" y="-1164">com_dance</name>
+		</location>
+		<location id="id3" x="-986" y="-994">
+			<name x="-994" y="-986">com_dock</name>
+		</location>
+		<location id="id4" x="-1326" y="-994">
+			<name x="-1334" y="-985">com_disconnect</name>
+		</location>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-1326" y="-1088">request == 3</label>
+			<label kind="synchronisation" x="-1326" y="-1071">disconnect!</label>
+			<label kind="assignment" x="-1326" y="-1054">numLoops = numLoops + 1</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id4"/>
+			<label kind="guard" x="-1224" y="-1011">request == 2</label>
+			<label kind="synchronisation" x="-1224" y="-994">dock?</label>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-986" y="-1088">request == 1</label>
+			<label kind="synchronisation" x="-986" y="-1071">dance!</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-1224" y="-1147">request == 0 &amp;&amp; numLoops &lt; 2</label>
+			<label kind="synchronisation" x="-1224" y="-1130">initalize?</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-1462" y="-1130">connection!</label>
+		</transition>
+	</template>
+	<template>
+		<name>RasPi0</name>
+		<parameter>chan &amp;connection, chan &amp;initalize, chan &amp;dance, chan &amp;dock, chan &amp;disconnect, int &amp;request</parameter>
+		<declaration>// Local declarations
+int piNum = 0;</declaration>
+		<location id="id5" x="-3570" y="-3221">
+			<name x="-3580" y="-3255">Idle</name>
+		</location>
+		<location id="id6" x="-3315" y="-3221">
+			<name x="-3325" y="-3255">Initalized</name>
+		</location>
+		<location id="id7" x="-3094" y="-3110">
+			<name x="-3102" y="-3093">Docking</name>
+		</location>
+		<location id="id8" x="-3094" y="-3221">
+			<name x="-3094" y="-3255">Dancing0</name>
+		</location>
+		<location id="id9" x="-3315" y="-3110">
+			<name x="-3332" y="-3093">Disconnecting</name>
+		</location>
+		<init ref="id5"/>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id6"/>
+			<label kind="synchronisation" x="-3315" y="-3182">disconnect?</label>
+			<label kind="assignment" x="-3315" y="-3165">request = 0</label>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id9"/>
+			<label kind="synchronisation" x="-3247" y="-3127">dock!</label>
+			<label kind="assignment" x="-3247" y="-3110">request = 3</label>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id7"/>
+			<label kind="synchronisation" x="-3094" y="-3182">dance?</label>
+			<label kind="assignment" x="-3094" y="-3165">request = 2</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id8"/>
+			<label kind="synchronisation" x="-3255" y="-3238">initalize!</label>
+			<label kind="assignment" x="-3255" y="-3221">request = 1</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id6"/>
+			<label kind="synchronisation" x="-3528" y="-3238">connection?</label>
+			<label kind="assignment" x="-3528" y="-3221">request = 0</label>
+		</transition>
+	</template>
+	<template>
+		<name>RasPi1</name>
+		<parameter>chan &amp;connection, chan &amp;initalize, chan &amp;dance, chan &amp;dock, chan &amp;disconnect, int &amp;request</parameter>
+		<declaration>// Local declarations
+int piNum = 1;</declaration>
+		<location id="id10" x="-3918" y="-3535">
+			<name x="-3935" y="-3518">Disconnecting</name>
+		</location>
+		<location id="id11" x="-3918" y="-3646">
+			<name x="-3928" y="-3680">Initalized</name>
+		</location>
+		<location id="id12" x="-3697" y="-3535">
+			<name x="-3705" y="-3518">Docking</name>
+		</location>
+		<location id="id13" x="-4173" y="-3646">
+			<name x="-4183" y="-3680">Idle</name>
+		</location>
+		<location id="id14" x="-3697" y="-3646">
+			<name x="-3697" y="-3680">Dancing1</name>
+		</location>
+		<init ref="id13"/>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id11"/>
+			<label kind="synchronisation" x="-3918" y="-3607">disconnect?</label>
+			<label kind="assignment" x="-3918" y="-3590">request = 0</label>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id10"/>
+			<label kind="synchronisation" x="-3850" y="-3552">dock!</label>
+			<label kind="assignment" x="-3850" y="-3535">request = 3</label>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id12"/>
+			<label kind="synchronisation" x="-3697" y="-3607">dance?</label>
+			<label kind="assignment" x="-3697" y="-3590">request = 2</label>
+		</transition>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id14"/>
+			<label kind="synchronisation" x="-3858" y="-3663">initalize!</label>
+			<label kind="assignment" x="-3858" y="-3646">request = 1</label>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id11"/>
+			<label kind="synchronisation" x="-4131" y="-3663">connection?</label>
+			<label kind="assignment" x="-4131" y="-3646">request = 0</label>
+		</transition>
+	</template>
+	<system>// Template instantiations
+Pi0 = RasPi0(connection, initalize, dance, dock, disconnect, request);
+Pi1 = RasPi1(connection, initalize, dance, dock, disconnect, request);
+Laptop = MCCD(connection, initalize, dance, dock, disconnect, request);
+
+// System processes
+system Laptop, Pi0, Pi1;</system>
+	<queries>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>

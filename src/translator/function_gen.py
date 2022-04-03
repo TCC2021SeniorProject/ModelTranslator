@@ -115,7 +115,6 @@ class FunctionScriptGen:
 
         # Update(Assign), set variable
         if transition.assign != None:
-            print(transition.assign)
             if guard_present:
                 script += "\t\t\t" + transition.assign + "\n"
             else:

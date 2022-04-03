@@ -162,14 +162,17 @@ class SyntaxTree:
                 return
             #On one operator character match
             elif char in conditional_single_operator:
-                two_operator = line[index] + line[index + 1]
-                if not(two_operator in conditional_operator):
-                    two_operator = line[index]
+                operator = line[index] + line[index + 1]
+
+                #It is script if not in two letter
+                if not(operator in conditional_operator):
+                    #Then single line operator
+                    operator = line[index]
                 #Check two charactor operators first
-                if two_operator in conditional_operator:
+                if operator in conditional_operator:
                     if type(walk) is CharNode:
                         if walk.next == None:
-                            new_node = Node(conditional_operator[two_operator])
+                            new_node = Node(conditional_operator[operator])
                             walk.set_next(new_node)
                             new_node.set_left(remainder.strip())
                             new_node.set_parent(walk)
@@ -177,11 +180,11 @@ class SyntaxTree:
                             return
                         else:
                             if walk.parent == self.root: #Always node
-                                walk.parent.set_operator(conditional_operator[two_operator])
+                                walk.parent.set_operator(conditional_operator[operator])
                                 self.translate(line[(index + 2):].strip(), walk.parent)
                                 return
 
-                            new_node = Node(conditional_operator[two_operator])
+                            new_node = Node(conditional_operator[operator])
                             if type(walk) is CharNode:
                                 walk.set_next(new_node)
                             else:
@@ -193,19 +196,19 @@ class SyntaxTree:
                     else:
                         if walk.left == None: #Normal case
                             walk.set_left(remainder.strip())
-                            walk.set_operator(conditional_operator[two_operator])
+                            walk.set_operator(conditional_operator[operator])
                             self.translate(line[(index + 2):].strip(), walk) #Update parent
                             return
                         elif walk.right == None: #Right is empty
                             #Take right
-                            new_child = Node(conditional_operator[two_operator])
+                            new_child = Node(conditional_operator[operator])
                             new_child.set_left(remainder.strip())
                             new_child.set_parent(walk)
                             walk.set_right(new_child)
                             self.translate(line[(index + 2):].strip(), new_child) #Update parent
                             return
                         else: #Every children field is full
-                            new_parent = Node(conditional_operator[two_operator])
+                            new_parent = Node(conditional_operator[operator])
                             if walk == self.root:
                                 new_parent.set_left(walk)
                                 walk.set_parent(new_parent)
@@ -248,7 +251,7 @@ class SyntaxTree:
                 #Check if this is a variable
                 if template.get_parameter(walk.left.strip()) != None:
                     script += "self." + walk.left
-                elif template.get_variable_index(walk.left.strip()) != False:
+                elif template.variable_exists(walk.left.strip()) != False:
                     script += "self." + walk.left
                 else:
                     script += walk.left
@@ -258,14 +261,12 @@ class SyntaxTree:
             script += " " + str(walk.value) + " "
             if type(walk.right) is str:
                 #Check if this is a variable
-                print("\t" + str(template.get_variable_index((walk.right).strip())))
                 if template.get_parameter(walk.right.strip()) != None:
                     script += "self." + walk.right
-                elif template.get_variable_index(walk.right.strip()) != False:
+                elif template.variable_exists(walk.right.strip()) != False:
                     script += "self." + walk.right
                 else:
                     script += walk.right
-                
             else:
                 script = self.get_conditional_script(walk.right, script, template)
         elif type(walk) is CharNode: # CharNode type

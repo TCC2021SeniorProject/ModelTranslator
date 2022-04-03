@@ -24,7 +24,7 @@ class MCCD:
 			Disconnecting_task_1 = loop.create_task(RasPi1.Disconnecting())
 			await asyncio.wait([Disconnecting_task_0, Disconnecting_task_1, ])
 			await self.com_init()
-			numLoops = numLoops +1
+			self.numLoops = numLoops +1
 		
 
 	async def com_dock(self):
@@ -42,7 +42,7 @@ class MCCD:
 
 	async def com_init(self):
 		await asyncio.sleep(0.01)
-		if self.request == 0 and numLoops < 2:
+		if self.request == 0 and self.numLoops < 2:
 			await self.com_dance()
 
 	async def com_connect(self):

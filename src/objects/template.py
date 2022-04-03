@@ -138,6 +138,17 @@ class Template:
     def get_variables(self):
         return self.variables
 
+    def variable_exists(self, name : str) -> bool:
+        from objects.variable import Variable
+        if (len(self.variables) == 0):
+            return False
+        else:
+            for variable in self.variables:
+                variable : Variable
+                if (variable.get_variable_name() == name):
+                    return True
+            return False
+
     def get_variable_index(self, name : str) -> int:
         from objects.variable import Variable
         if (len(self.variables) == 0):
@@ -145,8 +156,6 @@ class Template:
         else:
             for index, variable in enumerate(self.variables):
                 variable : Variable
-                print("\t\tstored string: " + variable.get_variable_name() + ".")
-                print("\t\tgiven string: " + name + ".")
                 if (variable.get_variable_name() == name):
                     return index
             return False

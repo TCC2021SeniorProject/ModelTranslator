@@ -78,7 +78,7 @@ class FunctionScriptGen:
                     task_variable_name = target_node.get_name() + "_task_" + str(index)
                     task_list.append(task_variable_name)
                     script += task_variable_name
-                    script += " = loop.create_task(" + str(class_name) + "." + str(target_node.get_name()) + "())\n"
+                    script += " = loop.create_task(" + str(class_name) + "()." + str(target_node.get_name()) + "())\n"
                 #parallel thread tasks Execution script
                 if transition.guard == None:
                     for _ in range(depth - 1): #No guard -> one less indentation
@@ -92,33 +92,40 @@ class FunctionScriptGen:
                 script += "])\n"
 
         return script
-
+    '''
+        Order of transition function matters!
+        1. Thread wait
+        2. Sync
+        3. Guard
+        4. Assignment
+        5. Call other transition.
+    '''
     #Transition has guard, assignment, sync, empty transition
     def make_tranision_to_script(self, transition : Transition):
         script = ""
         line = ""
-        guard_present = False
         # Conditional call(Guard) with sync (and/or) def call
         target_node = transition.get_to_node()
+
+        #When there is a guard
         if transition.guard != None:
-            guard_present = True
             script += "\t\tif " + str(transition.guard) +":\n"
+            # Update(Assign), set variable
+            if transition.assign != None:
+                script += "\t\t\t" + transition.assign + "\n"
             script += self.make_sync_transtion_script(transition, 3)
             if (len(line) > 1):
                 script += line
             script += "\t\t\tawait self." + str(target_node.get_name()) + "()\n"
-        else: #No conditional sync (and/or) def call
+
+        else: #No gaurd
+            if transition.assign != None:
+                script += "\t\t" + transition.assign + "\n"
             script += self.make_sync_transtion_script(transition, 3)
             if (len(line) > 1):
                 script += line
             script += "\t\tawait self." + str(target_node.get_name()) + "()\n"
 
-        # Update(Assign), set variable
-        if transition.assign != None:
-            if guard_present:
-                script += "\t\t\t" + transition.assign + "\n"
-            else:
-                script += "\t\t" + transition.assign + "\n"
         return script
 
     def make_function_script(self, node : Node):

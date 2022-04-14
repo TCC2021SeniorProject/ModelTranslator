@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>/* 
+*  Global declarations
+*/ 
+
+// ~~ Roomba ~~
+chan initalize, undock, dock, disconnect;
+chan turn1, turn2, turn3, turn4, turn5;
+chan move1, move2, move3, move4, move5;
+
+// Status of Rasberry pis
+bool rp0On, rp1On;
+//Current state of Rasberry pis
+int rp0State, rp1State;
+
+// Turn angle (degrees) 
+double rp0Angle,rp1Angle;
+
+// Distance (meters)
+double rp0Distance, rp1Distance;
+
+
+// ~~ Lidar ~~
+chan scan1, scan2;
+chan map1, map2;
+// How long lidar scans (seconds)
+double rp0ScanTime, rp1ScanTime;
+
+// IDs for maps
+int map1Rp0, map1Rp1, map2Rp0, map2Rp1;
+
+int test;
+</declaration>
+	<template>
+		<name x="5" y="5">CentralController</name>
+		<declaration>// Local declarations
+
+//Total number of times template has executed
+int numLoops = 0;</declaration>
+		<location id="id0" x="-1997" y="-1580">
+			<name x="-2007" y="-1614">Com_initialized</name>
+		</location>
+		<location id="id1" x="-1802" y="-1580">
+			<name x="-1812" y="-1614">Com_undock</name>
+		</location>
+		<location id="id2" x="-1802" y="-1444">
+			<name x="-1852" y="-1435">Com_dock</name>
+		</location>
+		<location id="id3" x="-1997" y="-1444">
+			<name x="-2005" y="-1435">Com_disconnect</name>
+		</location>
+		<location id="id4" x="-1649" y="-1683">
+			<name x="-1659" y="-1717">Com_turn1</name>
+		</location>
+		<location id="id5" x="-1250" y="-1734">
+			<name x="-1260" y="-1768">Com_turn2</name>
+		</location>
+		<location id="id6" x="-1453" y="-1598">
+			<name x="-1529" y="-1624">Com_turn3</name>
+		</location>
+		<location id="id7" x="-1249" y="-1224">
+			<name x="-1232" y="-1233">Com_turn4</name>
+		</location>
+		<location id="id8" x="-1640" y="-1445">
+			<name x="-1709" y="-1479">Com_turn5</name>
+		</location>
+		<location id="id9" x="-1436" y="-1734">
+			<name x="-1446" y="-1768">Com_move1</name>
+		</location>
+		<location id="id10" x="-1249" y="-1598">
+			<name x="-1241" y="-1624">Com_move2</name>
+		</location>
+		<location id="id11" x="-1249" y="-1334">
+			<name x="-1241" y="-1360">Com_move3</name>
+		</location>
+		<location id="id12" x="-1428" y="-1224">
+			<name x="-1513" y="-1249">Com_move4</name>
+		</location>
+		<location id="id13" x="-1453" y="-1482">
+			<name x="-1538" y="-1499">Com_scan1</name>
+		</location>
+		<location id="id14" x="-1428" y="-1317">
+			<name x="-1513" y="-1343">Com_scan2</name>
+		</location>
+		<location id="id15" x="-1248" y="-1482">
+			<name x="-1258" y="-1516">Com_map1</name>
+		</location>
+		<location id="id16" x="-1428" y="-1411">
+			<name x="-1513" y="-1402">Com_map2</name>
+		</location>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id8"/>
+			<label kind="synchronisation" x="-1615" y="-1462">map2?</label>
+			<label kind="assignment" x="-1615" y="-1445">map2Rp0 = numLoops + 1,
+map2Rp1 = numLoops + 1</label>
+			<nail x="-1428" y="-1445"/>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id16"/>
+			<label kind="synchronisation" x="-1419" y="-1402">scan2!</label>
+			<label kind="assignment" x="-1419" y="-1385">rp0ScanTime = 2.0,
+rp1ScanTime = 2.0</label>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id14"/>
+			<label kind="synchronisation" x="-1428" y="-1292">move5?</label>
+			<label kind="assignment" x="-1428" y="-1275">rp0Distance = 1.0,
+rp1Distance = 1.0</label>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id11"/>
+			<label kind="synchronisation" x="-1249" y="-1462">map1!</label>
+			<label kind="assignment" x="-1249" y="-1445">map1Rp0 = numLoops + 1,
+map1Rp1 = numLoops + 1</label>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id15"/>
+			<label kind="synchronisation" x="-1411" y="-1499">scan1?</label>
+			<label kind="assignment" x="-1409" y="-1482">rp0ScanTime = 1.0,
+rp1ScanTime = 1.0</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id13"/>
+			<label kind="synchronisation" x="-1453" y="-1567">turn3!</label>
+			<label kind="assignment" x="-1453" y="-1555">rp0Angle = 90.0,
+rp1Angle = -90.0</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-1937" y="-1529">disconnect!</label>
+			<label kind="assignment" x="-1937" y="-1512">numLoops = numLoops + 1</label>
+			<nail x="-1997" y="-1512"/>
+			<nail x="-1801" y="-1512"/>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id12"/>
+			<label kind="synchronisation" x="-1385" y="-1224">turn4!</label>
+			<label kind="assignment" x="-1385" y="-1207">rp0Angle = 90.0,
+rp1Angle = -90.0</label>
+		</transition>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id7"/>
+			<label kind="synchronisation" x="-1249" y="-1309">move4?</label>
+			<label kind="assignment" x="-1249" y="-1292">rp0Distance = 1.0,
+rp1Distance = 1.0</label>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id6"/>
+			<label kind="synchronisation" x="-1393" y="-1615">move3?</label>
+			<label kind="assignment" x="-1393" y="-1598">rp0Distance = 1.0,
+rp1Distance = 1.0</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id10"/>
+			<label kind="synchronisation" x="-1293" y="-1684">turn2!</label>
+			<label kind="assignment" x="-1360" y="-1666">rp0Angle = 90.0,
+rp1Angle = -90.0</label>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="-1411" y="-1751">move2?</label>
+			<label kind="assignment" x="-1411" y="-1734">rp0Distance = 1.0,
+rp1Distance = 1.0</label>
+			<nail x="-1342" y="-1734"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id9"/>
+			<label kind="synchronisation" x="-1597" y="-1700">turn1!</label>
+			<label kind="assignment" x="-1598" y="-1683">rp0Angle = 180.0,
+rp1Angle = -180.0</label>
+			<nail x="-1436" y="-1683"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="-1759" y="-1597">move1?</label>
+			<label kind="assignment" x="-1759" y="-1580">rp0Distance = -0.1,
+rp1Distance = -0.1</label>
+			<nail x="-1649" y="-1581"/>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-1759" y="-1461">turn5!</label>
+			<label kind="assignment" x="-1759" y="-1444">rp0Angle = -90.0,
+rp1Angle = 90.0</label>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="-1937" y="-1461">dock?</label>
+			<nail x="-1827" y="-1444"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-1937" y="-1597">initalize!</label>
+		</transition>
+	</template>
+	<template>
+		<name>RaspberryPi0</name>
+		<declaration>// Local declarations
+
+// Raspberry pi unique identification number
+int piNum = 0;</declaration>
+		<location id="id17" x="-3901" y="-3434">
+			<name x="-3911" y="-3468">Initalized</name>
+		</location>
+		<location id="id18" x="-3748" y="-3323">
+			<name x="-3782" y="-3315">Docking</name>
+		</location>
+		<location id="id19" x="-3901" y="-3323">
+			<name x="-3918" y="-3315">Disconnecting</name>
+		</location>
+		<location id="id20" x="-3289" y="-3221">
+			<name x="-3349" y="-3213">Turning4</name>
+		</location>
+		<location id="id21" x="-3400" y="-3221">
+			<name x="-3434" y="-3255">Moving4</name>
+		</location>
+		<location id="id22" x="-3451" y="-3357">
+			<name x="-3519" y="-3383">Scanning1</name>
+		</location>
+		<location id="id23" x="-3451" y="-3451">
+			<name x="-3493" y="-3485">Turning3</name>
+		</location>
+		<location id="id24" x="-3595" y="-3323">
+			<name x="-3663" y="-3315">Turning5</name>
+		</location>
+		<location id="id25" x="-3289" y="-3451">
+			<name x="-3332" y="-3442">Moving2</name>
+		</location>
+		<location id="id26" x="-3289" y="-3527">
+			<name x="-3332" y="-3561">Turning2</name>
+		</location>
+		<location id="id27" x="-3604" y="-3527">
+			<name x="-3614" y="-3561">Moving1</name>
+		</location>
+		<location id="id28" x="-3604" y="-3434">
+			<name x="-3587" y="-3442">Turning1</name>
+		</location>
+		<location id="id29" x="-3748" y="-3433">
+			<name x="-3758" y="-3467">Undock</name>
+		</location>
+		<location id="id30" x="-3289" y="-3281">
+			<name x="-3357" y="-3298">Moving3</name>
+		</location>
+		<location id="id31" x="-3289" y="-3357">
+			<name x="-3340" y="-3391">Mapping1</name>
+		</location>
+		<location id="id32" x="-3502" y="-3323">
+			<name x="-3485" y="-3332">Mapping2</name>
+		</location>
+		<location id="id33" x="-3502" y="-3221">
+			<name x="-3578" y="-3246">Scanning2</name>
+		</location>
+		<init ref="id17"/>
+		<transition>
+			<source ref="id32"/>
+			<target ref="id24"/>
+			<label kind="synchronisation" x="-3561" y="-3340">map2!</label>
+		</transition>
+		<transition>
+			<source ref="id33"/>
+			<target ref="id32"/>
+			<label kind="synchronisation" x="-3502" y="-3281">scan2?</label>
+		</transition>
+		<transition>
+			<source ref="id21"/>
+			<target ref="id33"/>
+			<label kind="synchronisation" x="-3468" y="-3238">move5!</label>
+		</transition>
+		<transition>
+			<source ref="id31"/>
+			<target ref="id30"/>
+			<label kind="synchronisation" x="-3332" y="-3340">map1?</label>
+		</transition>
+		<transition>
+			<source ref="id22"/>
+			<target ref="id31"/>
+			<label kind="synchronisation" x="-3400" y="-3374">scan1!</label>
+		</transition>
+		<transition>
+			<source ref="id30"/>
+			<target ref="id20"/>
+			<label kind="synchronisation" x="-3340" y="-3272">move4!</label>
+		</transition>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id29"/>
+			<label kind="synchronisation" x="-3859" y="-3391">disconnect?</label>
+			<nail x="-3901" y="-3374"/>
+			<nail x="-3748" y="-3374"/>
+		</transition>
+		<transition>
+			<source ref="id29"/>
+			<target ref="id28"/>
+			<label kind="guard" x="-3723" y="-3434">rp0On == true</label>
+			<label kind="synchronisation" x="-3723" y="-3451">move1!</label>
+			<label kind="assignment" x="-3730" y="-3433">test = 99</label>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id29"/>
+			<label kind="synchronisation" x="-3867" y="-3450">initalize?</label>
+			<label kind="assignment" x="-3867" y="-3434">rp0On = true</label>
+		</transition>
+		<transition>
+			<source ref="id24"/>
+			<target ref="id18"/>
+			<label kind="synchronisation" x="-3706" y="-3340">turn5?</label>
+		</transition>
+		<transition>
+			<source ref="id18"/>
+			<target ref="id19"/>
+			<label kind="synchronisation" x="-3859" y="-3340">dock!</label>
+		</transition>
+		<transition>
+			<source ref="id20"/>
+			<target ref="id21"/>
+			<label kind="synchronisation" x="-3366" y="-3238">turn4?</label>
+		</transition>
+		<transition>
+			<source ref="id23"/>
+			<target ref="id22"/>
+			<label kind="synchronisation" x="-3451" y="-3417">turn3?</label>
+		</transition>
+		<transition>
+			<source ref="id25"/>
+			<target ref="id23"/>
+			<label kind="synchronisation" x="-3417" y="-3468">move3!</label>
+		</transition>
+		<transition>
+			<source ref="id26"/>
+			<target ref="id25"/>
+			<label kind="synchronisation" x="-3332" y="-3502">turn2?</label>
+		</transition>
+		<transition>
+			<source ref="id27"/>
+			<target ref="id26"/>
+			<label kind="synchronisation" x="-3485" y="-3544">move2!</label>
+			<nail x="-3348" y="-3527"/>
+		</transition>
+		<transition>
+			<source ref="id28"/>
+			<target ref="id27"/>
+			<label kind="synchronisation" x="-3595" y="-3485">turn1?</label>
+		</transition>
+	</template>
+	<template>
+		<name>RaspberryPi1</name>
+		<declaration>// Local declarations
+
+// Raspberry pi unique identification number
+int piNum = 1;</declaration>
+		<location id="id34" x="-3621" y="-3391">
+			<name x="-3604" y="-3400">Mapping2</name>
+		</location>
+		<location id="id35" x="-3714" y="-3391">
+			<name x="-3782" y="-3383">Turning5</name>
+		</location>
+		<location id="id36" x="-3621" y="-3289">
+			<name x="-3697" y="-3314">Scanning2</name>
+		</location>
+		<location id="id37" x="-3519" y="-3289">
+			<name x="-3553" y="-3323">Moving4</name>
+		</location>
+		<location id="id38" x="-3408" y="-3425">
+			<name x="-3459" y="-3459">Mapping1</name>
+		</location>
+		<location id="id39" x="-3408" y="-3349">
+			<name x="-3476" y="-3366">Moving3</name>
+		</location>
+		<location id="id40" x="-3570" y="-3425">
+			<name x="-3638" y="-3451">Scanning1</name>
+		</location>
+		<location id="id41" x="-3408" y="-3289">
+			<name x="-3468" y="-3281">Turning4</name>
+		</location>
+		<location id="id42" x="-4020" y="-3502">
+			<name x="-4030" y="-3536">Initalized</name>
+		</location>
+		<location id="id43" x="-3867" y="-3391">
+			<name x="-3901" y="-3383">Docking</name>
+		</location>
+		<location id="id44" x="-4020" y="-3391">
+			<name x="-4037" y="-3383">Disconnecting</name>
+		</location>
+		<location id="id45" x="-3570" y="-3519">
+			<name x="-3612" y="-3553">Turning3</name>
+		</location>
+		<location id="id46" x="-3408" y="-3519">
+			<name x="-3451" y="-3510">Moving2</name>
+		</location>
+		<location id="id47" x="-3408" y="-3595">
+			<name x="-3451" y="-3629">Turning2</name>
+		</location>
+		<location id="id48" x="-3723" y="-3595">
+			<name x="-3733" y="-3629">Moving1</name>
+		</location>
+		<location id="id49" x="-3723" y="-3502">
+			<name x="-3706" y="-3510">Turning1</name>
+		</location>
+		<location id="id50" x="-3867" y="-3501">
+			<name x="-3877" y="-3535">Undock</name>
+		</location>
+		<init ref="id42"/>
+		<transition>
+			<source ref="id34"/>
+			<target ref="id35"/>
+			<label kind="synchronisation" x="-3680" y="-3408">map2!</label>
+		</transition>
+		<transition>
+			<source ref="id36"/>
+			<target ref="id34"/>
+			<label kind="synchronisation" x="-3621" y="-3349">scan2?</label>
+		</transition>
+		<transition>
+			<source ref="id37"/>
+			<target ref="id36"/>
+			<label kind="synchronisation" x="-3587" y="-3306">move5!</label>
+		</transition>
+		<transition>
+			<source ref="id38"/>
+			<target ref="id39"/>
+			<label kind="synchronisation" x="-3451" y="-3408">map1?</label>
+		</transition>
+		<transition>
+			<source ref="id40"/>
+			<target ref="id38"/>
+			<label kind="synchronisation" x="-3519" y="-3442">scan1!</label>
+		</transition>
+		<transition>
+			<source ref="id39"/>
+			<target ref="id41"/>
+			<label kind="synchronisation" x="-3459" y="-3340">move4!</label>
+		</transition>
+		<transition>
+			<source ref="id44"/>
+			<target ref="id50"/>
+			<label kind="synchronisation" x="-3978" y="-3459">disconnect?</label>
+			<nail x="-4020" y="-3442"/>
+			<nail x="-3867" y="-3442"/>
+		</transition>
+		<transition>
+			<source ref="id50"/>
+			<target ref="id49"/>
+			<label kind="guard" x="-3842" y="-3502">rp1On == true</label>
+			<label kind="synchronisation" x="-3825" y="-3518">move1!</label>
+			<label kind="assignment" x="-3849" y="-3501">test = 99</label>
+		</transition>
+		<transition>
+			<source ref="id42"/>
+			<target ref="id50"/>
+			<label kind="synchronisation" x="-3986" y="-3518">initalize?</label>
+			<label kind="assignment" x="-3986" y="-3502">rp1On = true</label>
+		</transition>
+		<transition>
+			<source ref="id35"/>
+			<target ref="id43"/>
+			<label kind="synchronisation" x="-3825" y="-3408">turn5?</label>
+		</transition>
+		<transition>
+			<source ref="id43"/>
+			<target ref="id44"/>
+			<label kind="synchronisation" x="-3978" y="-3408">dock!</label>
+		</transition>
+		<transition>
+			<source ref="id41"/>
+			<target ref="id37"/>
+			<label kind="synchronisation" x="-3485" y="-3306">turn4?</label>
+		</transition>
+		<transition>
+			<source ref="id45"/>
+			<target ref="id40"/>
+			<label kind="synchronisation" x="-3570" y="-3485">turn3?</label>
+		</transition>
+		<transition>
+			<source ref="id46"/>
+			<target ref="id45"/>
+			<label kind="synchronisation" x="-3536" y="-3536">move3!</label>
+		</transition>
+		<transition>
+			<source ref="id47"/>
+			<target ref="id46"/>
+			<label kind="synchronisation" x="-3451" y="-3570">turn2?</label>
+		</transition>
+		<transition>
+			<source ref="id48"/>
+			<target ref="id47"/>
+			<label kind="synchronisation" x="-3604" y="-3612">move2!</label>
+			<nail x="-3467" y="-3595"/>
+		</transition>
+		<transition>
+			<source ref="id49"/>
+			<target ref="id48"/>
+			<label kind="synchronisation" x="-3714" y="-3553">turn1?</label>
+		</transition>
+	</template>
+	<system>/* 
+*  Template instantiations
+*/ 
+
+// Raspberry pis integrated with Roombas
+Pi0 = RaspberryPi0();
+Pi1 = RaspberryPi1();
+
+// The computer controlling both of the raspberry pi's
+CC = CentralController();
+
+// System processes
+system CC, Pi0, Pi1;</system>
+	<queries>
+		<query>
+			<formula>A[] not deadlock </formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>

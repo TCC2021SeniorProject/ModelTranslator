@@ -20,12 +20,12 @@ class MCCD:
 	async def com_disconnect(self):
 		await asyncio.sleep(0.01)
 		if self.request == 3:
-			Disconnecting_task_0 = loop.create_task(RasPi0.Disconnecting())
-			Disconnecting_task_1 = loop.create_task(RasPi1.Disconnecting())
+			Disconnecting_task_0 = loop.create_task(RasPi0().Disconnecting())
+			Disconnecting_task_1 = loop.create_task(RasPi1().Disconnecting())
 			await asyncio.wait([Disconnecting_task_0, Disconnecting_task_1, ])
-			await self.com_init()
 			self.numLoops = numLoops +1
 		
+			await self.com_init()
 
 	async def com_dock(self):
 		await asyncio.sleep(0.01)
@@ -35,8 +35,8 @@ class MCCD:
 	async def com_dance(self):
 		await asyncio.sleep(0.01)
 		if self.request == 1:
-			Dancing0_task_0 = loop.create_task(RasPi0.Dancing0())
-			Dancing1_task_1 = loop.create_task(RasPi1.Dancing1())
+			Dancing0_task_0 = loop.create_task(RasPi0().Dancing0())
+			Dancing1_task_1 = loop.create_task(RasPi1().Dancing1())
 			await asyncio.wait([Dancing0_task_0, Dancing1_task_1, ])
 			await self.com_dock()
 
@@ -47,8 +47,8 @@ class MCCD:
 
 	async def com_connect(self):
 		await asyncio.sleep(0.01)
-		Idle_task_0 = loop.create_task(RasPi0.Idle())
-		Idle_task_1 = loop.create_task(RasPi1.Idle())
+		Idle_task_0 = loop.create_task(RasPi0().Idle())
+		Idle_task_1 = loop.create_task(RasPi1().Idle())
 		await asyncio.wait([Idle_task_0, Idle_task_1, ])
 		await self.com_init()
 
@@ -64,37 +64,37 @@ class RasPi0:
 
 	async def Disconnecting(self):
 		await asyncio.sleep(0.01)
-		await self.Initalized()
 		self.request = 0
 		
+		await self.Initalized()
 
 	async def Docking(self):
 		await asyncio.sleep(0.01)
-		com_dock_task_0 = loop.create_task(MCCD.com_dock())
+		com_dock_task_0 = loop.create_task(MCCD().com_dock())
 		await asyncio.wait([com_dock_task_0, ])
-		await self.Disconnecting()
 		self.request = 3
 		
+		await self.Disconnecting()
 
 	async def Dancing0(self):
 		await asyncio.sleep(0.01)
-		await self.Docking()
 		self.request = 2
 		
+		await self.Docking()
 
 	async def Initalized(self):
 		await asyncio.sleep(0.01)
-		com_init_task_0 = loop.create_task(MCCD.com_init())
+		com_init_task_0 = loop.create_task(MCCD().com_init())
 		await asyncio.wait([com_init_task_0, ])
-		await self.Dancing0()
 		self.request = 1
 		
+		await self.Dancing0()
 
 	async def Idle(self):
 		await asyncio.sleep(0.01)
-		await self.Initalized()
 		self.request = 0
 		
+		await self.Initalized()
 
 class RasPi1:
 	def __init__(self, connection, initalize, dance, dock, disconnect, request, ):
@@ -108,37 +108,37 @@ class RasPi1:
 
 	async def Disconnecting(self):
 		await asyncio.sleep(0.01)
-		await self.Initalized()
 		self.request = 0
 		
+		await self.Initalized()
 
 	async def Docking(self):
 		await asyncio.sleep(0.01)
-		com_dock_task_0 = loop.create_task(MCCD.com_dock())
+		com_dock_task_0 = loop.create_task(MCCD().com_dock())
 		await asyncio.wait([com_dock_task_0, ])
-		await self.Disconnecting()
 		self.request = 3
 		
+		await self.Disconnecting()
 
 	async def Dancing1(self):
 		await asyncio.sleep(0.01)
-		await self.Docking()
 		self.request = 2
 		
+		await self.Docking()
 
 	async def Initalized(self):
 		await asyncio.sleep(0.01)
-		com_init_task_0 = loop.create_task(MCCD.com_init())
+		com_init_task_0 = loop.create_task(MCCD().com_init())
 		await asyncio.wait([com_init_task_0, ])
-		await self.Dancing1()
 		self.request = 1
 		
+		await self.Dancing1()
 
 	async def Idle(self):
 		await asyncio.sleep(0.01)
-		await self.Initalized()
 		self.request = 0
 		
+		await self.Initalized()
 
 loop = asyncio.get_event_loop()
 Pi0 = RasPi0(connection, initalize, dance, dock, disconnect, request)

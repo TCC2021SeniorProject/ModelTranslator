@@ -12,7 +12,7 @@
     <img alt="Carthage compatible" src="https://img.shields.io/badge/Stability-Partially functional-orange" />
     <img alt="Carthage compatible" src="https://img.shields.io/badge/Version-web application published-Green" />
     <img alt="Carthage compatible" src="https://img.shields.io/badge/Full documentation-not ready-red" />
-    <img alt="Carthage compatible" src="https://img.shields.io/badge/Update Date-1/28/2022-Green" />
+    <img alt="Carthage compatible" src="https://img.shields.io/badge/Update Date-4/16/2022-Green" />
   </p>
 
   <h3 align="center">MODEL TRANSLATOR</h3>

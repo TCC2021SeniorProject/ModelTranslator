@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>/* 
+*  Global declarations
+*/ 
+
+// ~~ Roomba ~~
+chan initialized;
+// Status of Rasberry pis
+bool rp0On, rp1On;
+//Current state of Rasberry pis
+int rp0State, rp1State;
+
+// Turn angle (degrees) 
+double rp0Angle,rp1Angle;
+
+// Distance (meters)
+double rp0Distance, rp1Distance;
+
+
+// ~~ Lidar ~~
+
+// How long lidar scans (seconds)
+double rp0ScanTime, rp1ScanTime;
+
+// IDs for maps
+int map1Rp0, map1Rp1, map2Rp0, map2Rp1;
+</declaration>
+	<template>
+		<name x="5" y="5">CentralController</name>
+		<declaration>// Local declarations
+
+//Total number of times template has executed
+int numLoops = 0;</declaration>
+		<location id="id0" x="-1989" y="-1547">
+			<name x="-1999" y="-1581">Com_initialized</name>
+		</location>
+		<location id="id1" x="-1743" y="-1546">
+			<name x="-1753" y="-1580">Com_undock</name>
+		</location>
+		<location id="id2" x="-1785" y="-1411">
+			<name x="-1794" y="-1445">Com_dock</name>
+		</location>
+		<location id="id3" x="-1989" y="-1411">
+			<name x="-2091" y="-1402">Com_disconnect</name>
+		</location>
+		<location id="id4" x="-1590" y="-1649">
+			<name x="-1600" y="-1683">Com_turn1</name>
+		</location>
+		<location id="id5" x="-1139" y="-1700">
+			<name x="-1149" y="-1734">Com_turn2</name>
+		</location>
+		<location id="id6" x="-1369" y="-1564">
+			<name x="-1445" y="-1590">Com_turn3</name>
+		</location>
+		<location id="id7" x="-1165" y="-1147">
+			<name x="-1148" y="-1156">Com_turn4</name>
+		</location>
+		<location id="id8" x="-1581" y="-1411">
+			<name x="-1650" y="-1445">Com_turn5</name>
+		</location>
+		<location id="id9" x="-1377" y="-1700">
+			<name x="-1387" y="-1734">Com_move1</name>
+		</location>
+		<location id="id10" x="-1139" y="-1564">
+			<name x="-1131" y="-1590">Com_move2</name>
+		</location>
+		<location id="id11" x="-1165" y="-1283">
+			<name x="-1157" y="-1309">Com_move3</name>
+		</location>
+		<location id="id12" x="-1369" y="-1147">
+			<name x="-1454" y="-1172">Com_move4</name>
+		</location>
+		<location id="id13" x="-1369" y="-1431">
+			<name x="-1454" y="-1448">Com_scan1</name>
+		</location>
+		<location id="id14" x="-1369" y="-1266">
+			<name x="-1454" y="-1292">Com_scan2</name>
+		</location>
+		<location id="id15" x="-1164" y="-1431">
+			<name x="-1174" y="-1465">Com_map1</name>
+		</location>
+		<location id="id16" x="-1369" y="-1368">
+			<name x="-1454" y="-1359">Com_map2</name>
+		</location>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id8"/>
+			<label kind="guard" x="-1556" y="-1411">rp0State &amp;&amp; rp1State == 12</label>
+			<label kind="assignment" x="-1556" y="-1394">map2Rp0 = numLoops + 1,
+map2Rp1 = numLoops + 1</label>
+			<nail x="-1369" y="-1411"/>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id16"/>
+			<label kind="guard" x="-1369" y="-1334">rp0State &amp;&amp; rp1State == 11</label>
+			<label kind="assignment" x="-1369" y="-1317">rp0ScanTime = 2.0,
+rp1ScanTime = 2.0</label>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id14"/>
+			<label kind="guard" x="-1369" y="-1224">rp0State &amp;&amp; rp1State == 10</label>
+			<label kind="assignment" x="-1369" y="-1207">rp0Distance = 1.0,
+rp1Distance = 1.0</label>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id11"/>
+			<label kind="guard" x="-1156" y="-1385">rp0State &amp;&amp; rp1State == 7</label>
+			<label kind="assignment" x="-1156" y="-1368">map1Rp0 = numLoops + 1,
+map1Rp1 = numLoops + 1</label>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id15"/>
+			<label kind="guard" x="-1352" y="-1428">rp0State &amp;&amp; rp1State == 6</label>
+			<label kind="assignment" x="-1352" y="-1411">rp0ScanTime = 1.0,
+rp1ScanTime = 1.0</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id13"/>
+			<label kind="guard" x="-1539" y="-1521">rp0State &amp;&amp; rp1State == 5</label>
+			<label kind="assignment" x="-1479" y="-1504">rp0Angle = 90.0,
+rp1Angle = -90.0</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-1972" y="-1479">rp0State &amp;&amp; rp1State == 15</label>
+			<label kind="assignment" x="-1972" y="-1462">numLoops = numLoops + 1</label>
+			<nail x="-1989" y="-1479"/>
+			<nail x="-1742" y="-1478"/>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id12"/>
+			<label kind="guard" x="-1343" y="-1147">rp0State &amp;&amp; rp1State == 9</label>
+			<label kind="assignment" x="-1343" y="-1130">rp0Angle = 90.0,
+rp1Angle = -90.0</label>
+		</transition>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id7"/>
+			<label kind="guard" x="-1165" y="-1249">rp0State &amp;&amp; rp1State == 8</label>
+			<label kind="assignment" x="-1165" y="-1232">rp0Distance = 1.0,
+rp1Distance = 1.0</label>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id6"/>
+			<label kind="guard" x="-1335" y="-1564">rp0State &amp;&amp; rp1State == 4</label>
+			<label kind="assignment" x="-1335" y="-1547">rp0Distance = 1.0,
+rp1Distance = 1.0</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id10"/>
+			<label kind="guard" x="-1139" y="-1666">rp0State &amp;&amp; rp1State == 3</label>
+			<label kind="assignment" x="-1139" y="-1649">rp0Angle = 90.0,
+rp1Angle = -90.0</label>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id5"/>
+			<label kind="guard" x="-1352" y="-1700">rp0State &amp;&amp; rp1State == 2</label>
+			<label kind="assignment" x="-1352" y="-1683">rp0Distance = 1.0,
+rp1Distance = 1.0</label>
+			<nail x="-1283" y="-1700"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id9"/>
+			<label kind="guard" x="-1539" y="-1649">rp0State &amp;&amp; rp1State == 1</label>
+			<label kind="assignment" x="-1539" y="-1632">rp0Angle = 180.0,
+rp1Angle = -180.0</label>
+			<nail x="-1377" y="-1649"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id4"/>
+			<label kind="guard" x="-1700" y="-1547">rp0On &amp;&amp; rp1On == true</label>
+			<label kind="assignment" x="-1700" y="-1530">rp0Distance = -0.1,
+rp1Distance = -0.1</label>
+			<nail x="-1590" y="-1547"/>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-1768" y="-1411">rp0State &amp;&amp; rp1State == 13</label>
+			<label kind="assignment" x="-1768" y="-1394">rp0Angle = -90.0,
+rp1Angle = 90.0</label>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-1972" y="-1411">rp0State &amp;&amp; rp1State == 14</label>
+			<nail x="-1810" y="-1411"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-1971" y="-1563">initialized!</label>
+		</transition>
+	</template>
+	<template>
+		<name>RaspberryPi0</name>
+		<declaration>// Local declarations
+
+// Raspberry pi unique identification number
+int piNum = 0;</declaration>
+		<location id="id17" x="-3901" y="-3434">
+			<name x="-3911" y="-3468">Initalized</name>
+		</location>
+		<location id="id18" x="-3765" y="-3306">
+			<name x="-3782" y="-3340">Docking</name>
+		</location>
+		<location id="id19" x="-3901" y="-3306">
+			<name x="-3893" y="-3340">Disconnecting</name>
+		</location>
+		<location id="id20" x="-3264" y="-3179">
+			<name x="-3255" y="-3204">Turning4</name>
+		</location>
+		<location id="id21" x="-3400" y="-3179">
+			<name x="-3434" y="-3213">Moving4</name>
+		</location>
+		<location id="id22" x="-3451" y="-3357">
+			<name x="-3527" y="-3383">Scanning1</name>
+		</location>
+		<location id="id23" x="-3451" y="-3451">
+			<name x="-3493" y="-3485">Turning3</name>
+		</location>
+		<location id="id24" x="-3621" y="-3306">
+			<name x="-3663" y="-3340">Turning5</name>
+		</location>
+		<location id="id25" x="-3264" y="-3451">
+			<name x="-3307" y="-3442">Moving2</name>
+		</location>
+		<location id="id26" x="-3264" y="-3553">
+			<name x="-3307" y="-3587">Turning2</name>
+		</location>
+		<location id="id27" x="-3604" y="-3553">
+			<name x="-3614" y="-3587">Moving1</name>
+		</location>
+		<location id="id28" x="-3604" y="-3434">
+			<name x="-3587" y="-3442">Turning1</name>
+		</location>
+		<location id="id29" x="-3748" y="-3433">
+			<name x="-3758" y="-3467">Undock</name>
+		</location>
+		<location id="id30" x="-3264" y="-3255">
+			<name x="-3332" y="-3272">Moving3</name>
+		</location>
+		<location id="id31" x="-3264" y="-3357">
+			<name x="-3315" y="-3391">Mapping1</name>
+		</location>
+		<location id="id32" x="-3502" y="-3306">
+			<name x="-3485" y="-3323">Mapping2</name>
+		</location>
+		<location id="id33" x="-3502" y="-3213">
+			<name x="-3578" y="-3238">Scanning2</name>
+		</location>
+		<init ref="id17"/>
+		<transition>
+			<source ref="id32"/>
+			<target ref="id24"/>
+			<label kind="assignment" x="-3604" y="-3306">rp0State = 13</label>
+		</transition>
+		<transition>
+			<source ref="id33"/>
+			<target ref="id32"/>
+			<label kind="assignment" x="-3502" y="-3268">rp0State = 12</label>
+		</transition>
+		<transition>
+			<source ref="id21"/>
+			<target ref="id33"/>
+			<label kind="assignment" x="-3502" y="-3179">rp0State = 11</label>
+			<nail x="-3502" y="-3179"/>
+		</transition>
+		<transition>
+			<source ref="id31"/>
+			<target ref="id30"/>
+			<label kind="assignment" x="-3349" y="-3306">rp0State = 8</label>
+		</transition>
+		<transition>
+			<source ref="id22"/>
+			<target ref="id31"/>
+			<label kind="assignment" x="-3400" y="-3357">rp0State = 7</label>
+		</transition>
+		<transition>
+			<source ref="id30"/>
+			<target ref="id20"/>
+			<label kind="assignment" x="-3349" y="-3230">rp0State = 9</label>
+		</transition>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id29"/>
+			<label kind="assignment" x="-3859" y="-3374">rp0State = 0</label>
+			<nail x="-3901" y="-3374"/>
+			<nail x="-3748" y="-3374"/>
+		</transition>
+		<transition>
+			<source ref="id29"/>
+			<target ref="id28"/>
+			<label kind="assignment" x="-3723" y="-3434">rp0State = 1</label>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id29"/>
+			<label kind="synchronisation" x="-3883" y="-3450">initialized?</label>
+			<label kind="assignment" x="-3867" y="-3434">rp0On = true</label>
+		</transition>
+		<transition>
+			<source ref="id24"/>
+			<target ref="id18"/>
+			<label kind="assignment" x="-3723" y="-3306">rp0State = 14</label>
+		</transition>
+		<transition>
+			<source ref="id18"/>
+			<target ref="id19"/>
+			<label kind="assignment" x="-3867" y="-3306">rp0State = 15</label>
+		</transition>
+		<transition>
+			<source ref="id20"/>
+			<target ref="id21"/>
+			<label kind="assignment" x="-3366" y="-3179">rp0State = 10</label>
+		</transition>
+		<transition>
+			<source ref="id23"/>
+			<target ref="id22"/>
+			<label kind="assignment" x="-3451" y="-3408">rp0State = 6</label>
+		</transition>
+		<transition>
+			<source ref="id25"/>
+			<target ref="id23"/>
+			<label kind="assignment" x="-3417" y="-3451">rp0State = 5</label>
+		</transition>
+		<transition>
+			<source ref="id26"/>
+			<target ref="id25"/>
+			<label kind="assignment" x="-3349" y="-3510">rp0State = 4</label>
+		</transition>
+		<transition>
+			<source ref="id27"/>
+			<target ref="id26"/>
+			<label kind="assignment" x="-3485" y="-3553">rp0State = 3</label>
+			<nail x="-3348" y="-3553"/>
+		</transition>
+		<transition>
+			<source ref="id28"/>
+			<target ref="id27"/>
+			<label kind="assignment" x="-3604" y="-3493">rp0State = 2</label>
+		</transition>
+	</template>
+	<template>
+		<name>RaspberryPi1</name>
+		<declaration>// Local declarations
+
+// Raspberry pi unique identification number
+int piNum = 1;</declaration>
+		<location id="id34" x="-3579" y="-3391">
+			<name x="-3562" y="-3400">Mapping2</name>
+		</location>
+		<location id="id35" x="-3714" y="-3391">
+			<name x="-3774" y="-3425">Turning5</name>
+		</location>
+		<location id="id36" x="-3579" y="-3255">
+			<name x="-3655" y="-3280">Scanning2</name>
+		</location>
+		<location id="id37" x="-3460" y="-3255">
+			<name x="-3494" y="-3289">Moving4</name>
+		</location>
+		<location id="id38" x="-3332" y="-3425">
+			<name x="-3383" y="-3459">Mapping1</name>
+		</location>
+		<location id="id39" x="-3332" y="-3340">
+			<name x="-3400" y="-3357">Moving3</name>
+		</location>
+		<location id="id40" x="-3511" y="-3425">
+			<name x="-3579" y="-3451">Scanning1</name>
+		</location>
+		<location id="id41" x="-3332" y="-3255">
+			<name x="-3324" y="-3247">Turning4</name>
+		</location>
+		<location id="id42" x="-4020" y="-3502">
+			<name x="-4030" y="-3536">Initalized</name>
+		</location>
+		<location id="id43" x="-3867" y="-3391">
+			<name x="-3901" y="-3425">Docking</name>
+		</location>
+		<location id="id44" x="-4020" y="-3391">
+			<name x="-4012" y="-3425">Disconnecting</name>
+		</location>
+		<location id="id45" x="-3511" y="-3519">
+			<name x="-3553" y="-3553">Turning3</name>
+		</location>
+		<location id="id46" x="-3332" y="-3519">
+			<name x="-3375" y="-3510">Moving2</name>
+		</location>
+		<location id="id47" x="-3332" y="-3595">
+			<name x="-3375" y="-3629">Turning2</name>
+		</location>
+		<location id="id48" x="-3723" y="-3595">
+			<name x="-3733" y="-3629">Moving1</name>
+		</location>
+		<location id="id49" x="-3723" y="-3502">
+			<name x="-3706" y="-3510">Turning1</name>
+		</location>
+		<location id="id50" x="-3867" y="-3501">
+			<name x="-3877" y="-3535">Undock</name>
+		</location>
+		<init ref="id42"/>
+		<transition>
+			<source ref="id34"/>
+			<target ref="id35"/>
+			<label kind="assignment" x="-3680" y="-3391">rp1State = 13</label>
+		</transition>
+		<transition>
+			<source ref="id36"/>
+			<target ref="id34"/>
+			<label kind="assignment" x="-3579" y="-3332">rp1State = 12</label>
+		</transition>
+		<transition>
+			<source ref="id37"/>
+			<target ref="id36"/>
+			<label kind="assignment" x="-3562" y="-3255">rp1State = 11</label>
+		</transition>
+		<transition>
+			<source ref="id38"/>
+			<target ref="id39"/>
+			<label kind="assignment" x="-3332" y="-3391">rp1State = 8</label>
+		</transition>
+		<transition>
+			<source ref="id40"/>
+			<target ref="id38"/>
+			<label kind="assignment" x="-3460" y="-3425">rp1State = 7</label>
+		</transition>
+		<transition>
+			<source ref="id39"/>
+			<target ref="id41"/>
+			<label kind="assignment" x="-3332" y="-3306">rp1State = 9</label>
+		</transition>
+		<transition>
+			<source ref="id44"/>
+			<target ref="id50"/>
+			<label kind="assignment" x="-3978" y="-3451">rp1State = 0</label>
+			<nail x="-4020" y="-3451"/>
+			<nail x="-3867" y="-3451"/>
+		</transition>
+		<transition>
+			<source ref="id50"/>
+			<target ref="id49"/>
+			<label kind="assignment" x="-3833" y="-3502">rp1State = 1</label>
+		</transition>
+		<transition>
+			<source ref="id42"/>
+			<target ref="id50"/>
+			<label kind="synchronisation" x="-4002" y="-3518">initialized?</label>
+			<label kind="assignment" x="-3986" y="-3502">rp1On = true</label>
+		</transition>
+		<transition>
+			<source ref="id35"/>
+			<target ref="id43"/>
+			<label kind="assignment" x="-3833" y="-3391">rp1State = 14</label>
+		</transition>
+		<transition>
+			<source ref="id43"/>
+			<target ref="id44"/>
+			<label kind="assignment" x="-3978" y="-3391">rp1State = 15</label>
+		</transition>
+		<transition>
+			<source ref="id41"/>
+			<target ref="id37"/>
+			<label kind="assignment" x="-3426" y="-3255">rp1State = 10</label>
+		</transition>
+		<transition>
+			<source ref="id45"/>
+			<target ref="id40"/>
+			<label kind="assignment" x="-3511" y="-3476">rp1State = 6</label>
+		</transition>
+		<transition>
+			<source ref="id46"/>
+			<target ref="id45"/>
+			<label kind="assignment" x="-3477" y="-3519">rp1State = 5</label>
+		</transition>
+		<transition>
+			<source ref="id47"/>
+			<target ref="id46"/>
+			<label kind="assignment" x="-3324" y="-3570">rp1State = 4</label>
+		</transition>
+		<transition>
+			<source ref="id48"/>
+			<target ref="id47"/>
+			<label kind="assignment" x="-3562" y="-3595">rp1State = 3</label>
+			<nail x="-3408" y="-3595"/>
+		</transition>
+		<transition>
+			<source ref="id49"/>
+			<target ref="id48"/>
+			<label kind="assignment" x="-3714" y="-3544">rp1State = 2</label>
+		</transition>
+	</template>
+	<system>/* 
+*  Template instantiations
+*/ 
+
+// Raspberry pis integrated with Roombas
+Pi0 = RaspberryPi0();
+Pi1 = RaspberryPi1();
+
+// The computer controlling both of the raspberry pi's
+CC = CentralController(Pi0, Pi1);
+
+// System processes
+system CC, Pi0, Pi1;</system>
+	<queries>
+		<query>
+			<formula>A[] not deadlock </formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>

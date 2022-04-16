@@ -17,8 +17,11 @@ class Syncronization():
     def __init__(self, name : str):
         self.instance_name : str = ""
         self.caller_location : Template = None
+        #Class name where it's being called
         self.caller : Transition = None    #!
+        #Class name where it's calling
         self.responder : Transition = None #?
+        #Sync transition name
         self.name : str = name
 
     def get_instance_name(self):

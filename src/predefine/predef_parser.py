@@ -1,15 +1,16 @@
-from calendar import c
 import re
 
 from predefine.objects.global_obj import PredefGlobalObject
 from predefine.objects.function_obj import PredefFunction
 from predefine.objects.import_obj import PredefImport
+from objects.global_set import GlobalSet
 
 '''
     Current features:
         1. Only captures functions and imports
         2. Global field executions and Assignments are ignored
         3. Any declaration other than function and imports are ignored
+        4. Consider every predefined variable as global
 
     @TODO:
 '''
@@ -43,7 +44,7 @@ class PredefParser():
             index += 1
         return name
 
-    #Main function
+    #Main function - Pass global set for global variable identification
     def processFile(self):
 
         #Reuses(overwrites to a new one) on def keyword
@@ -60,7 +61,6 @@ class PredefParser():
         for line_num, line in enumerate(lines):
 
             if line_num == len(lines) - 1 and def_open:
-                print("End of the line")
                 def_open = False
 
             #Identify comments and ignore them
@@ -84,9 +84,11 @@ class PredefParser():
                 continue
 
             #Remove single line comment
-            if "#" in line:
-                index = line.index("#")
-                line = line[:index].strip()
+            regex = r"(.*?:+)#.*"
+            matches = re.finditer(regex, line)
+            for match in matches:
+                line = match.group(1)
+                break
 
             #Count indentation (just space or tabs in spaces) - but not tabs
             indent_count = re.findall('^([" "]*)', line)
@@ -110,7 +112,6 @@ class PredefParser():
 
 
             if (line[0:3] == "def"): #Function declaration
-                print("Open def")
                 def_open = True
                 index = line.index("(")
                 def_name = line[3:index].strip() #Only name

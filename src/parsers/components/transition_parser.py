@@ -75,7 +75,6 @@ class TransitionParser:
         statement = synt_tree.get_conditional_script(synt_tree.root, "", template)
         return statement
 
-
     def reform_conditional_state(statement : str, template : Template):
         synt_tree = SyntaxTree(statement)
         statement = synt_tree.get_conditional_script(synt_tree.root, "", template)

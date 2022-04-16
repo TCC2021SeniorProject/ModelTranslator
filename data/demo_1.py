@@ -6,7 +6,7 @@ def Connect():
     global roomba
 
     # Serial port
-    port = '/dev/ttyUSB0'
+    port = '/dev/ttyUSB0' #test comment
     print('Port set to \'/dev/ttyUSB0\'.')
 
     # global roomba object

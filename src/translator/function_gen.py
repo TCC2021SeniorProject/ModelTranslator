@@ -1,8 +1,10 @@
+from re import template
 from objects.variable import Variable
 from objects.template import Template
 from objects.node import Node
 from objects.transition import Transition
 from objects.global_set import GlobalSet
+from objects.instance import Instance
 
 from predefine.objects.global_obj import PredefGlobalObject
 from predefine.objects.function_obj import PredefFunction
@@ -33,6 +35,18 @@ class FunctionScriptGen:
             script += str(param) + ", "
         script += "):\n"
 
+        #Declare global on pre-assigned instances on each template
+        templates = self.global_set.get_templates()
+        #For current version it appends every template's instances
+        for template in templates:
+            instances = template.get_instance_list()
+            for instance in instances:
+                #Assign global instance except itself
+                if (template == self.template):
+                    continue
+                script += "\t\tglobal " + instance.get_instance_name() + "\n"
+
+        #Assign and declare parameters
         for param in params:
             param : str
             line = "self." + str(param)
@@ -40,6 +54,7 @@ class FunctionScriptGen:
             script += "\t\t" + line + "\n"
             content_exist = True
 
+        #Declare local variables
         for variable in self.template.get_variables():
             variable : Variable
             line = "self." + str(variable.get_variable_name())
@@ -72,13 +87,18 @@ class FunctionScriptGen:
                             script += "\t"
                     target_node : Node = sync_transition.get_from_node()
                     sync = sync_transition.get_sync()
-                    class_name = sync.get_caller_instance()
-                    #Sync script with create_task
                     #Create threaded task
                     task_variable_name = target_node.get_name() + "_task_" + str(index)
                     task_list.append(task_variable_name)
                     script += task_variable_name
-                    script += " = loop.create_task(" + str(class_name) + "()." + str(target_node.get_name()) + "())\n"
+                    #Check if instance is assigned to local variable
+                    class_name : str = sync.get_caller_instance()
+                    instances = self.global_set.get_instances_by_template_name(class_name)
+                    if (instances is not None):
+                        for instance in instances:
+                            script += " = loop.create_task(" + instance.get_instance_name() + "." + str(target_node.get_name()) + "())\n"
+                    else:
+                        script += " = loop.create_task(" + class_name + "()." + str(target_node.get_name()) + "())\n"
                 #parallel thread tasks Execution script
                 if transition.guard == None:
                     for _ in range(depth - 1): #No guard -> one less indentation
@@ -86,7 +106,7 @@ class FunctionScriptGen:
                 else:
                     for _ in range(depth):
                         script += "\t"
-                script += "await asyncio.wait(["
+                script += "await asyncio.gather(["
                 for task in task_list:
                     script += task +", "
                 script += "])\n"
@@ -103,27 +123,46 @@ class FunctionScriptGen:
     #Transition has guard, assignment, sync, empty transition
     def make_tranision_to_script(self, transition : Transition):
         script = ""
-        line = ""
         # Conditional call(Guard) with sync (and/or) def call
         target_node = transition.get_to_node()
 
         #When there is a guard
         if transition.guard != None:
             script += "\t\tif " + str(transition.guard) +":\n"
-            # Update(Assign), set variable
-            if transition.assign != None:
-                script += "\t\t\t" + transition.assign + "\n"
+            # Update(Assignment)
+            for key in transition.assign:
+                isLocal = False
+                #If that assignment is part of the local variable, don't append global
+                for variable in self.template.variables:
+                    print(variable.var_name , ":" , key)
+                    if (("self." + variable.var_name) == key):
+                        print("Trigger")
+                        isLocal = True
+                        break
+                if isLocal == False:
+                    script += "\t\t\tglobal " + key + "\n"
+                script += "\t\t\t" + key\
+                    + " = " + transition.assign[key] + "\n"
+            script += "\t\t\tawait asyncio.sleep(0.01)\n"
             script += self.make_sync_transtion_script(transition, 3)
-            if (len(line) > 1):
-                script += line
             script += "\t\t\tawait self." + str(target_node.get_name()) + "()\n"
 
         else: #No gaurd
-            if transition.assign != None:
-                script += "\t\t" + transition.assign + "\n"
+            for key in transition.assign:
+                isLocal = False
+                #If that assignment is part of the local variable, don't append global
+                for variable in self.template.variables:
+                    print(variable.var_name , ":" , ("self." + key))
+                    if (("self." + variable.var_name) == key):
+                        print("Trigger")
+                        isLocal = True
+                        break
+                if isLocal == False:
+                    script += "\t\tglobal " + key + "\n"
+                script += "\t\t" + key\
+                    + " = " + transition.assign[key] + "\n"
+            script += "\t\tawait asyncio.sleep(0.01)\n"
             script += self.make_sync_transtion_script(transition, 3)
-            if (len(line) > 1):
-                script += line
             script += "\t\tawait self." + str(target_node.get_name()) + "()\n"
 
         return script
@@ -131,10 +170,7 @@ class FunctionScriptGen:
     def make_function_script(self, node : Node):
         #Create function declaration line
         function_scripts = "\tasync def " + str(node.get_name()) + "(self):\n"
-        function_scripts += "\t\tawait asyncio.sleep(0.01)\n"
 
-        #Append predefined scripts -> Refactor this to kay, value map
-        # -> No need for a loop
         for predef_obj in self.predef_objs:
             predef_function : PredefFunction \
                 = predef_obj.get_function_by_name(node.get_name())

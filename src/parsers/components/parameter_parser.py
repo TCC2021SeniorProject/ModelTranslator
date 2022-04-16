@@ -1,3 +1,5 @@
+import re
+
 import xml.etree.ElementTree as ET
 
 """
@@ -10,25 +12,27 @@ import xml.etree.ElementTree as ET
 
 class ParamParser:
     def parse_param(line : ET):
+        strLine = line.text
+        new_string = ""
+        constraint_opened = False
         #Remove all charaters within the enclosed range - ex) int[0,1] a -> int a
-        new_line = ""
-        open = False
-        for char in line.text:
-            if char == '[':
-                open = True
-            elif char == ']':
-                open = False
-                continue
-            if open == False:
-                new_line += char
-        params = [s.strip() for s in (new_line.split(','))]
+        for char in strLine:
+            if (char  == '[' and constraint_opened == False):
+                constraint_opened = True
+            elif (char  == ']' and constraint_opened == True):
+                constraint_opened = False
+            elif (constraint_opened == False):
+                new_string += char
+
+        params = new_string.split(",")
         params_name = []
+
+        #Matches only charaters from the end until the space/non-charater occurs
+        print(params)
+        regex = r"(\w*)\s*$"
         for param in params:
-            param_name = param.split(' ')
-            if len(param_name) > 0:
-                param_name[1] = param_name[1].replace("&", "")
-                params_name.append(param_name[1])
-            else:
-                param_name[0] = param_name[0].replace("&", "")
-                params_name.append(param_name[0])
+            matches = re.search(regex, param)
+            if matches:
+                params_name.append(matches.group(1))
+
         return params_name

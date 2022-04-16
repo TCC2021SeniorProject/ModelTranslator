@@ -19,7 +19,7 @@ class Transition():
         #stores reformed string
         self.template : Template = None
         self.guard : str  = None
-        self.assign : str = None
+        self.assign : dict[str : str] = {} #key - variable name, value - assignment
         self.transition_from : Node = None
         self.transition_to : Node = None
         self.visited = False
@@ -95,8 +95,18 @@ class Transition():
     def get_assign(self) -> str:
         return self.assign
 
+    #Split with variables and value
+    #Assignment can contain multi-line
     def set_assign(self, assign : str):
-        self.assign = assign
+        assign = assign.replace(":=", "=")
+        assign = assign.replace("\t", "")
+        assignments = [x.strip() for x in assign.split('\n')]
+        for assignment in assignments:
+            #Skip any empty line
+            if (len(assignment) == 0):
+                continue
+            assignment_list = assignment.split("=")
+            self.assign[assignment_list[0].strip()] = assignment_list[1].strip()
 
     def print_info(self):
         print("\t Transition from: " + self.transition_from.id\

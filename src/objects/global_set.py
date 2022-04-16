@@ -18,7 +18,27 @@ class GlobalSet:
         self.global_variables : list[Variable] = []
         #key - channel name, value - list of Transition
         self.sync_transitions : dict[str, list[Transition]] = {}
+        #Only stores instance call sequence
         self.system_object : System = System()
+
+    #Iterate all templates to find instance
+    def get_instance_by_instance_name(self, target_name : str):
+        for template in self.templates:
+            for instance in template.get_instance_list():
+                if instance.get_instance_name() == target_name:
+                    return instance
+        print("Instance not found in global_set.py - get_instance_by_instance_name()")
+
+    def get_template_by_instance_name(self, target_name : str):
+        for template in self.templates:
+            for instance in template.get_instance_list():
+                if instance.get_instance_name() == target_name:
+                    return template
+
+    def get_instances_by_template_name(self, target_name : str):
+        for template in self.templates:
+            if template.get_template_name() == target_name:
+                return template.get_instance_list()
 
     def get_template_by_name(self, name):
         for template in self.templates:
@@ -98,8 +118,6 @@ class GlobalSet:
                     print("\t sync location: " + sync.get_caller_location())
 
     def print_system_info(self):
-        print("----System info----")
         if self.system_object == None:
             print("No system declared\n")
-        else:
-            self.system_object.print_info()
+

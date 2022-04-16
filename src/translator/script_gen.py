@@ -4,6 +4,7 @@ from objects.global_set import GlobalSet
 from objects.template import Template
 from objects.variable import Variable
 from objects.instance import Instance
+from objects.node import Node
 
 from translator.class_gen import ClassScriptGen
 
@@ -23,8 +24,8 @@ class TranslateModel:
     def __init__(self, global_set : GlobalSet, predef_objects : list[PredefGlobalObject]):
         self.stack = []
         self.global_set = global_set
-        self.templates : list[Template] = global_set.templates
-        self.variables : list[Variable] = global_set.global_variables
+        self.templates : list[Template] = global_set.get_templates()
+        self.variables : list[Variable] = global_set.get_global_variables()
         self.predef_objects : list[PredefGlobalObject] = predef_objects
 
         self.start_node = None
@@ -41,35 +42,46 @@ class TranslateModel:
 
     #Call this before get_instance_calls()
     def generate_system_declaration_script(self):
-        system = self.global_set.get_system_obj()
         system_dec_script = ""
-        instance_declarations = system.get_instances()
-        for key in instance_declarations:
-            declaration : Instance = instance_declarations[key]
+        system = self.global_set.get_system_obj()
+        #Get system call queue
+        call : Instance = system.get_next_instance_declaration()
+        while (call is not None):
+            target_template = self.global_set.get_template_by_instance_name(call.get_instance_name())
+            if (target_template is None):
+                print("Error in script_gen.py - generate_system_declaration_script()")
+                print("template is Null")
+                return
+            declared_instances : list[Instance] = target_template.get_instance_list()
             parameter_script = ""
-            parameters = declaration.get_parameters()
-            for i, param in enumerate(parameters):
-                if (i == len(parameters) - 1):
-                    parameter_script += (param)
-                else:
-                    parameter_script += (param + ", ")
-            #Defined instance format: [name] = [class name]([parameters, ...])
-            system_dec_script += declaration.get_instance_name() + " = " +\
-                 declaration.get_template().get_template_name() + "(" +\
-                    parameter_script + ")\n"
+            for instance in declared_instances:
+                parameter_list = instance.get_parameters()
+                for i, param in enumerate(parameter_list):
+                    #If that parameter is the last index.(including size of 1 list)
+                    if (i == len(parameter_list) - 1):
+                        parameter_script += (param)
+                    else:
+                        parameter_script += (param + ", ")
+                #Defined instance format: [name] = [class name]([parameters, ...])
+                system_dec_script += instance.get_instance_name() + " = " +\
+                    target_template.get_template_name() + "(" +\
+                        parameter_script + ")\n"
+            call = system.get_next_instance_declaration()
         return system_dec_script
 
     #Call this after get_instance_delcaration_scripts()
     def generate_system_call_script(self):
         system_call_script = ""
         system = self.global_set.get_system_obj()
-        instances = system.get_instances()
-        calls = system.get_instance_calls()
-        for call in calls:
-            target_instance = instances[call]
+        #Get system call queue
+        call : str = system.get_next_instance_call()
+        while (call is not None):
+            target_template = self.global_set.get_template_by_instance_name(call)
+            start_node : Node = target_template.get_start()
             system_call_script += "loop.run_until_complete(" + call +\
-                "." + target_instance.get_init_function() + \
+                "." + start_node.get_name() + \
                 "())\n"
+            call = system.get_next_instance_call()
         return system_call_script
 
     def make_full_scripts(self):

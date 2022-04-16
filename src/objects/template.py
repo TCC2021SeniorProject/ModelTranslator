@@ -1,5 +1,6 @@
 from objects.node import Node
 from objects.transition import Transition
+from objects.instance import Instance
 
 """
     Stores each UPPAAL template into an object form.
@@ -22,9 +23,9 @@ class Template:
         self.end_state : list[Node] = []
         self.nodes : list[Node] = []
         self.transitions : list[Transition] = []
-        #unimplented
         self.variables : list[Variable] = []
         self.parameters : list[Variable] = []
+        self.instances : list[Instance] = []
         self.valid_graph = False
 
     def get_template_name(self):
@@ -35,6 +36,12 @@ class Template:
             self.name = ""
         else:
             self.name = name
+
+    def get_instance_list(self) -> list[Instance]:
+        return self.instances
+
+    def add_instance(self, instance_name : str, instance : Instance):
+        self.instances.append(instance)
 
     def get_nodes(self) -> list[Node]:
         return self.nodes

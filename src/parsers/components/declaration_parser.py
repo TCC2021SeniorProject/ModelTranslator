@@ -138,8 +138,6 @@ class DeclarationParser:
             
             #Remove constraints -> Refactor this
             line = re.sub("\[[^]]*\]", "", line) #Remove content surrounded with '[' and ']'
-
-            print("declaration: " + line)
             variables = DeclarationParser.parse_attribute(line)
             if variables == -1:
                 continue

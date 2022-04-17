@@ -4,7 +4,6 @@ from objects.template import Template
 from objects.node import Node
 from objects.transition import Transition
 from objects.global_set import GlobalSet
-from objects.instance import Instance
 
 from predefine.objects.global_obj import PredefGlobalObject
 from predefine.objects.function_obj import PredefFunction
@@ -79,26 +78,16 @@ class FunctionScriptGen:
             if sync_transitions != None:
                 task_list = []
                 for index, sync_transition in enumerate(sync_transitions):
-                    if transition.guard == None:
-                        for _ in range(depth - 1): #No guard -> one less indentation
-                            script += "\t"
-                    else:
-                        for _ in range(depth):
-                            script += "\t"
                     target_node : Node = sync_transition.get_from_node()
                     sync = sync_transition.get_sync()
-                    #Create threaded task
-                    task_variable_name = target_node.get_name() + "_task_" + str(index)
-                    task_list.append(task_variable_name)
-                    script += task_variable_name
                     #Check if instance is assigned to local variable
                     class_name : str = sync.get_caller_instance()
                     instances = self.global_set.get_instances_by_template_name(class_name)
                     if (instances is not None):
                         for instance in instances:
-                            script += " = loop.create_task(" + instance.get_instance_name() + "." + str(target_node.get_name()) + "())\n"
+                            task_list.append(instance.get_instance_name() + "." + str(target_node.get_name()) + "()")
                     else:
-                        script += " = loop.create_task(" + class_name + "()." + str(target_node.get_name()) + "())\n"
+                        task_list.append(class_name + "()." + str(target_node.get_name()) + "()")
                 #parallel thread tasks Execution script
                 if transition.guard == None:
                     for _ in range(depth - 1): #No guard -> one less indentation
@@ -106,10 +95,10 @@ class FunctionScriptGen:
                 else:
                     for _ in range(depth):
                         script += "\t"
-                script += "await asyncio.gather(["
+                script += "await asyncio.gather("
                 for task in task_list:
                     script += task +", "
-                script += "])\n"
+                script += ")\n"
 
         return script
     '''
@@ -187,5 +176,5 @@ class FunctionScriptGen:
             function_scripts += self.make_tranision_to_script(transition)
 
         if self.template.is_end(node):
-            function_scripts += "\t\texit()\n"
+            function_scripts += "\t\tpass\n"
         return function_scripts

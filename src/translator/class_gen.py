@@ -26,23 +26,27 @@ class ClassScriptGen:
 
     #BFS search - store a node to the stack of each visit
     def traverse_template(self):
-        queue = []
         stack = []
-        queue.append(self.template.get_start())
-        while (len(queue) > 0):
-            #Remove first and stack up the element
-            node : Node = queue[0]
-            queue.pop(0)
-            node.set_visited()
-            stack.append(node)
-            #Stack up next nodes by exisiting transitions
-            transitions = node.get_transitions()
-            for transition in transitions:
-                transition : Transition
-                to_node = transition.get_to_node()
-                if not (to_node.is_visited()):
-                    queue.append(to_node)
-                    to_node.set_visited()
+        for node in self.template.get_nodes():
+            queue = []
+            if (node.is_visited()):
+                continue
+            else:
+                queue.append(node)
+            while (len(queue) > 0):
+                #Remove first and stack up the element
+                node : Node = queue[0]
+                queue.pop(0)
+                node.set_visited()
+                stack.append(node)
+                #Stack up next nodes by exisiting transitions
+                transitions = node.get_transitions()
+                for transition in transitions:
+                    transition : Transition
+                    to_node = transition.get_to_node()
+                    if not (to_node.is_visited()):
+                        queue.append(to_node)
+                        to_node.set_visited()
         return stack
 
     def append_function_script(self):

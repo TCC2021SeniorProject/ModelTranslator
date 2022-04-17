@@ -74,7 +74,7 @@ class PredefParser():
                     index = line.index("'''")
                     line = line[index + 3:].strip() #Takes script after the end of the comment
                 #Multiline comment end
-                else: 
+                else:
                     multiline_comment_started = True
                     index = line.index("'''")
                     line = line[:index].strip()
@@ -84,8 +84,8 @@ class PredefParser():
                 continue
 
             #Remove single line comment
-            regex = r"(.*?:+)#.*"
-            matches = re.finditer(regex, line)
+            comment_regex = r"(.*?:+)#.*"
+            matches = re.finditer(comment_regex, line)
             for match in matches:
                 line = match.group(1)
                 break
@@ -100,26 +100,28 @@ class PredefParser():
 
             #Remove all trailing and preceding spaces(including indentation)
             line = line.strip()
-            
-            #store into if def is opend 
+
+            #store into if def is opend
             if def_open == True:
                 #Check if indentation level is not reduced
                 if indent_count < def_indent_count: #end def repeat a same line
                     def_open = False
-                else: #Take entire line as instruction of a function 
+                else: #Take entire line as instruction of a function
                     function_object.append_line(line, indent_count)
                     continue
 
-
-            if (line[0:3] == "def"): #Function declaration
+            def_regex = r"(?:def){1}\s+(.*)\s*\(.*:"
+            matches = re.finditer(def_regex, line)
+            for match in matches:
+                def_name = match.group(1)
+                print("def Name! ", def_name)
                 def_open = True
-                index = line.index("(")
-                def_name = line[3:index].strip() #Only name
-                function_object = PredefFunction(line, def_name, line[3:].strip())
+                function_object = PredefFunction(line, def_name, indent_count)
                 self.predef_global_object.add_function(def_name, function_object)
                 def_indent_count = indent_count + 1 # def contents have one more indentation
-        
-            elif (line[0:4] == "from"): #Import
+                break;
+
+            if (line[0:4] == "from"): #Import
                 self.predef_global_object.add_import(PredefImport(line))
 
             elif (line[0:6] == "import"): #Import

@@ -1,3 +1,7 @@
+'''
+    comment
+'''
+
 from pycreate2 import Create2
 import time
 
@@ -19,12 +23,12 @@ def Connect():
     roomba.safe()
     print('global roomba set to safe mode.')
 
-    
+
 
 # Ensure global roomba 25% charged
 def Ready():
     global roomba
-    
+
     sensor = roomba.get_sensors()
     print("global roomba {sensor.battery_charge} / {sensor.battery_capacity} charged")
 
@@ -42,11 +46,11 @@ def Dance():
         # Left
         # global roomba.drive_direct(0, 200)
         # time.sleep(1)
-        
+
         # Forward
         roomba.drive_direct(190, 190)
         time.sleep(2)
-        
+
     # Forward
     roomba.drive_direct(190, 190)
     time.sleep(2)

@@ -69,7 +69,7 @@ class PredefParser():
 
             if "'''" in line:
                 #Multiline comment start
-                if multiline_comment_started == True:
+                if multiline_comment_started == False:
                     multiline_comment_started = False
                     index = line.index("'''")
                     line = line[index + 3:].strip() #Takes script after the end of the comment

@@ -16,7 +16,8 @@ from predefine.objects.function_obj import PredefFunction
                  Must be called before any await execution.
 
     @TODO: Implement auto indentation.
-            Implement predef class append
+            Refactor required.
+            - Currently violates one function does one thing.
 
     @AUTHOR: Marco-Backman
 """
@@ -132,6 +133,8 @@ class FunctionScriptGen:
                     script += "\t\t\tglobal " + key + "\n"
                 script += "\t\t\t" + key\
                     + " = " + transition.assign[key] + "\n"
+
+
             script += "\t\t\tawait asyncio.sleep(0.01)\n"
             script += self.make_sync_transtion_script(transition, 3)
             script += "\t\t\tawait self." + str(target_node.get_name()) + "()\n"

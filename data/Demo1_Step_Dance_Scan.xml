@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>/* 
+*  Global declarations
+*/ 
+
+// ~~ Central Controller ~~
+
+//Total number of times CC template has executed
+int numLoops = 0;
+
+// ~~ Roomba ~~
+
+// Roomba functions
+chan initalize, undock, dock, move, scan, disconnect;
+
+// Pi specific Roomba functions
+chan rp0Turn, rp1Turn;
+
+// Turn angle (degrees) 
+double rp0Angle,rp1Angle;
+
+// Distance (meters)
+double rp0Distance, rp1Distance;
+
+// ~~ Lidar ~~
+
+// Number of scans
+int rp0ScanNum, rp1ScanNum;
+
+// Unique number for each map
+int mapRp0, mapRp1;</declaration>
+	<template>
+		<name x="5" y="5">CentralController</name>
+		<declaration>// Local declarations
+
+int numTurns = 0;
+int numLoops = 0;</declaration>
+		<location id="id0" x="-2423" y="-1759">
+			<name x="-2433" y="-1793">Com_initialized</name>
+		</location>
+		<location id="id1" x="-2201" y="-1564">
+			<name x="-2210" y="-1598">Com_disconnect</name>
+		</location>
+		<location id="id2" x="-2244" y="-1759">
+			<name x="-2295" y="-1801">Com_turn1</name>
+		</location>
+		<location id="id3" x="-2422" y="-1564">
+			<name x="-2432" y="-1598">Com_finished</name>
+		</location>
+		<location id="id4" x="-1921" y="-1759">
+			<name x="-1904" y="-1793">Com_move1</name>
+		</location>
+		<location id="id5" x="-1487" y="-1564">
+			<name x="-1478" y="-1598">Com_turn2</name>
+		</location>
+		<location id="id6" x="-1972" y="-1564">
+			<name x="-2040" y="-1598">Com_move2</name>
+		</location>
+		<location id="id7" x="-1487" y="-1759">
+			<name x="-1497" y="-1793">Com_scan1</name>
+		</location>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="-1487" y="-1725">scan!</label>
+			<label kind="assignment" x="-1487" y="-1708">rp0ScanNum = 25,
+rp1ScanNum = 25,
+mapRp0 = numLoops + 1,
+mapRp1 = numLoops + 1</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id7"/>
+			<label kind="guard" x="-1895" y="-1759">numTurns &gt;= 36</label>
+			<label kind="synchronisation" x="-1895" y="-1776">move!</label>
+			<label kind="assignment" x="-1895" y="-1742">numTurns = 0,
+rp0Distance = 1.0,
+rp1Distance = 1.0</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-2406" y="-1776">initalize!</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id5"/>
+			<label kind="guard" x="-1929" y="-1623">(numTurns % 2 == false) &amp;&amp; numTurns &lt; 36</label>
+			<label kind="synchronisation" x="-1921" y="-1606">rp0Turn!</label>
+			<label kind="assignment" x="-1921" y="-1589">rp0Angle = 10.0</label>
+			<nail x="-1946" y="-1606"/>
+			<nail x="-1521" y="-1606"/>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id5"/>
+			<label kind="guard" x="-1929" y="-1530">(numTurns % 2 == true) &amp;&amp; numTurns &lt; 36</label>
+			<label kind="synchronisation" x="-1921" y="-1513">rp1Turn!</label>
+			<label kind="assignment" x="-1921" y="-1496">rp1Angle = -10.0</label>
+			<nail x="-1946" y="-1513"/>
+			<nail x="-1504" y="-1513"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="-2346" y="-1581">disconnect!</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-2133" y="-1581">numTurns &gt;= 36</label>
+			<label kind="synchronisation" x="-2133" y="-1564">move!</label>
+			<label kind="assignment" x="-2133" y="-1547">numTurns = 0,
+rp0Distance = 1.0,
+rp1Distance = 1.0</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id6"/>
+			<label kind="assignment" x="-1742" y="-1564">numTurns = numTurns + 1</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-2210" y="-1818">(numTurns % 2 == false) &amp;&amp; numTurns &lt; 36</label>
+			<label kind="synchronisation" x="-2210" y="-1801">rp0Turn!</label>
+			<label kind="assignment" x="-2210" y="-1784">rp0Angle = -10.0</label>
+			<nail x="-1964" y="-1801"/>
+			<nail x="-2218" y="-1801"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-2201" y="-1725">(numTurns % 2 == true) &amp;&amp; numTurns &lt; 36</label>
+			<label kind="synchronisation" x="-2201" y="-1708">rp1Turn!</label>
+			<label kind="assignment" x="-2201" y="-1691">rp1Angle = 10.0</label>
+			<nail x="-1964" y="-1708"/>
+			<nail x="-2210" y="-1708"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id4"/>
+			<label kind="assignment" x="-2210" y="-1759">numTurns = numTurns + 1</label>
+		</transition>
+	</template>
+	<template>
+		<name>RaspberryPi0</name>
+		<declaration>// Local declarations
+
+// Raspberry pi unique identification number
+int piNum = 0;</declaration>
+		<location id="id8" x="-4140" y="-3443">
+			<name x="-4148" y="-3476">Turning</name>
+		</location>
+		<location id="id9" x="-4012" y="-3442">
+			<name x="-4022" y="-3476">Turned</name>
+		</location>
+		<location id="id10" x="-4139" y="-3391">
+			<name x="-4156" y="-3425">Scanning</name>
+		</location>
+		<location id="id11" x="-4012" y="-3391">
+			<name x="-4022" y="-3425">Scanned</name>
+		</location>
+		<location id="id12" x="-4139" y="-3340">
+			<name x="-4148" y="-3374">Disconnecting</name>
+		</location>
+		<location id="id13" x="-4012" y="-3340">
+			<name x="-4022" y="-3374">Disconnected</name>
+		</location>
+		<location id="id14" x="-4139" y="-3493">
+			<name x="-4149" y="-3527">Moving</name>
+		</location>
+		<location id="id15" x="-4012" y="-3493">
+			<name x="-4022" y="-3527">Moved</name>
+		</location>
+		<location id="id16" x="-4139" y="-3544">
+			<name x="-4149" y="-3578">Initializing</name>
+		</location>
+		<location id="id17" x="-4012" y="-3544">
+			<name x="-4022" y="-3578">Initialized</name>
+		</location>
+		<init ref="id16"/>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id9"/>
+			<label kind="synchronisation" x="-4114" y="-3459">rp0Turn?</label>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id11"/>
+			<label kind="synchronisation" x="-4114" y="-3408">scan?</label>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id13"/>
+			<label kind="synchronisation" x="-4122" y="-3357">disconnect?</label>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id15"/>
+			<label kind="synchronisation" x="-4114" y="-3510">move?</label>
+		</transition>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id17"/>
+			<label kind="synchronisation" x="-4114" y="-3561">initalize?</label>
+		</transition>
+	</template>
+	<template>
+		<name>RaspberryPi1</name>
+		<declaration>// Local declarations
+
+// Raspberry pi unique identification number
+int piNum = 1;</declaration>
+		<location id="id18" x="-4140" y="-3443">
+			<name x="-4148" y="-3476">Turning</name>
+		</location>
+		<location id="id19" x="-4012" y="-3442">
+			<name x="-4022" y="-3476">Turned</name>
+		</location>
+		<location id="id20" x="-4139" y="-3391">
+			<name x="-4156" y="-3425">Scanning</name>
+		</location>
+		<location id="id21" x="-4012" y="-3391">
+			<name x="-4022" y="-3425">Scanned</name>
+		</location>
+		<location id="id22" x="-4139" y="-3340">
+			<name x="-4148" y="-3374">Disconnecting</name>
+		</location>
+		<location id="id23" x="-4012" y="-3340">
+			<name x="-4022" y="-3374">Disconnected</name>
+		</location>
+		<location id="id24" x="-4139" y="-3493">
+			<name x="-4149" y="-3527">Moving</name>
+		</location>
+		<location id="id25" x="-4012" y="-3493">
+			<name x="-4022" y="-3527">Moved</name>
+		</location>
+		<location id="id26" x="-4139" y="-3544">
+			<name x="-4149" y="-3578">Initializing</name>
+		</location>
+		<location id="id27" x="-4012" y="-3544">
+			<name x="-4022" y="-3578">Initialized</name>
+		</location>
+		<init ref="id26"/>
+		<transition>
+			<source ref="id18"/>
+			<target ref="id19"/>
+			<label kind="synchronisation" x="-4114" y="-3459">rp1Turn?</label>
+		</transition>
+		<transition>
+			<source ref="id20"/>
+			<target ref="id21"/>
+			<label kind="synchronisation" x="-4114" y="-3408">scan?</label>
+		</transition>
+		<transition>
+			<source ref="id22"/>
+			<target ref="id23"/>
+			<label kind="synchronisation" x="-4122" y="-3357">disconnect?</label>
+		</transition>
+		<transition>
+			<source ref="id24"/>
+			<target ref="id25"/>
+			<label kind="synchronisation" x="-4114" y="-3510">move?</label>
+		</transition>
+		<transition>
+			<source ref="id26"/>
+			<target ref="id27"/>
+			<label kind="synchronisation" x="-4114" y="-3561">initalize?</label>
+		</transition>
+	</template>
+	<system>/* 
+*  Template instantiations
+*/ 
+
+// Raspberry pis integrated with Roombas
+Pi0 = RaspberryPi0();
+Pi1 = RaspberryPi1();
+
+// The computer controlling both of the raspberry pi's
+CC = CentralController();
+
+// System processes
+system CC, Pi0, Pi1;</system>
+	<queries>
+		<query>
+			<formula>A[] not deadlock </formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>

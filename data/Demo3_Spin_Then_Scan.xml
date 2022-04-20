@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>/* 
+*  Global declarations
+*/ 
+
+// ~~ Central Controller ~~
+
+//Total number of times CC template has executed
+int numLoops = 0;
+
+// ~~ Roomba ~~
+
+// Roomba functions
+chan initalize, turn, move, scan, finish, disconnect;
+
+// Turn angle (degrees) 
+double rp0Angle,rp1Angle;
+
+// Distance (meters)
+double rp0Distance, rp1Distance;
+
+// ~~ Lidar ~~
+
+// Number of scans
+int rp0ScanNum, rp1ScanNum;
+
+// Unique number for each map
+int mapRp0, mapRp1;</declaration>
+	<template>
+		<name x="5" y="5">CentralController</name>
+		<declaration>// Local declarations
+
+int numTurns = 0;
+int numLoops = 0;</declaration>
+		<location id="id0" x="-2363" y="-1759">
+			<name x="-2373" y="-1793">Com_initialized</name>
+		</location>
+		<location id="id1" x="-2193" y="-1759">
+			<name x="-2244" y="-1801">Com_turn1</name>
+		</location>
+		<location id="id2" x="-1454" y="-1759">
+			<name x="-1464" y="-1793">Com_disconnect</name>
+		</location>
+		<location id="id3" x="-1921" y="-1759">
+			<name x="-1904" y="-1793">Com_scan1</name>
+		</location>
+		<location id="id4" x="-1632" y="-1759">
+			<name x="-1642" y="-1793">Com_finished</name>
+		</location>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-1598" y="-1776">numLoops == 4</label>
+			<label kind="synchronisation" x="-1598" y="-1759">disconnect!</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id0"/>
+			<label kind="guard" x="-1989" y="-1649">numLoops &lt; 4</label>
+			<label kind="synchronisation" x="-1955" y="-1632">finish!</label>
+			<label kind="assignment" x="-2006" y="-1623">numLoops = numLoops + 1</label>
+			<nail x="-1725" y="-1632"/>
+			<nail x="-2210" y="-1632"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="-1903" y="-1776">scan!</label>
+			<label kind="assignment" x="-1903" y="-1759">rp0ScanNum = 5,
+rp1ScanNum = 5,
+mapRp0 = numLoops + 1,
+mapRp1 = numLoops + 1</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-2346" y="-1776">initalize!</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="-2150" y="-1776">turn!</label>
+			<label kind="assignment" x="-2150" y="-1759">rp0Angle = 90.0,
+rp1Angle = 90.0</label>
+		</transition>
+	</template>
+	<template>
+		<name>RaspberryPi0</name>
+		<declaration>// Local declarations
+
+// Raspberry pi unique identification number
+int piNum = 0;</declaration>
+		<location id="id5" x="-4140" y="-3443">
+			<name x="-4148" y="-3476">Turning</name>
+		</location>
+		<location id="id6" x="-4012" y="-3442">
+			<name x="-4022" y="-3476">Turned</name>
+		</location>
+		<location id="id7" x="-4139" y="-3391">
+			<name x="-4156" y="-3425">Scanning</name>
+		</location>
+		<location id="id8" x="-4012" y="-3391">
+			<name x="-4022" y="-3425">Scanned</name>
+		</location>
+		<location id="id9" x="-4139" y="-3340">
+			<name x="-4148" y="-3374">Disconnecting</name>
+		</location>
+		<location id="id10" x="-4012" y="-3340">
+			<name x="-4022" y="-3374">Disconnected</name>
+		</location>
+		<location id="id11" x="-4139" y="-3493">
+			<name x="-4149" y="-3527">Initializing</name>
+		</location>
+		<location id="id12" x="-4012" y="-3493">
+			<name x="-4022" y="-3527">Initialized</name>
+		</location>
+		<init ref="id11"/>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id6"/>
+			<label kind="synchronisation" x="-4114" y="-3459">turn?</label>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id8"/>
+			<label kind="synchronisation" x="-4114" y="-3408">scan?</label>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id10"/>
+			<label kind="synchronisation" x="-4122" y="-3357">disconnect?</label>
+		</transition>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id12"/>
+			<label kind="synchronisation" x="-4114" y="-3510">initalize?</label>
+		</transition>
+	</template>
+	<template>
+		<name>RaspberryPi1</name>
+		<declaration>// Local declarations
+
+// Raspberry pi unique identification number
+int piNum = 1;</declaration>
+		<location id="id13" x="-4140" y="-3443">
+			<name x="-4148" y="-3476">Turning</name>
+		</location>
+		<location id="id14" x="-4012" y="-3442">
+			<name x="-4022" y="-3476">Turned</name>
+		</location>
+		<location id="id15" x="-4139" y="-3391">
+			<name x="-4156" y="-3425">Scanning</name>
+		</location>
+		<location id="id16" x="-4012" y="-3391">
+			<name x="-4022" y="-3425">Scanned</name>
+		</location>
+		<location id="id17" x="-4139" y="-3340">
+			<name x="-4148" y="-3374">Disconnecting</name>
+		</location>
+		<location id="id18" x="-4012" y="-3340">
+			<name x="-4022" y="-3374">Disconnected</name>
+		</location>
+		<location id="id19" x="-4139" y="-3493">
+			<name x="-4149" y="-3527">Initializing</name>
+		</location>
+		<location id="id20" x="-4012" y="-3493">
+			<name x="-4022" y="-3527">Initialized</name>
+		</location>
+		<init ref="id19"/>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id14"/>
+			<label kind="synchronisation" x="-4114" y="-3459">turn?</label>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id16"/>
+			<label kind="synchronisation" x="-4114" y="-3408">scan?</label>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id18"/>
+			<label kind="synchronisation" x="-4122" y="-3357">disconnect?</label>
+		</transition>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id20"/>
+			<label kind="synchronisation" x="-4114" y="-3510">initalize?</label>
+		</transition>
+	</template>
+	<system>/* 
+*  Template instantiations
+*/ 
+
+// Raspberry pis integrated with Roombas
+Pi0 = RaspberryPi0();
+Pi1 = RaspberryPi1();
+
+// The computer controlling both of the raspberry pi's
+CC = CentralController();
+
+// System processes
+system CC, Pi0, Pi1;</system>
+	<queries>
+		<query>
+			<formula>A[] not deadlock </formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>

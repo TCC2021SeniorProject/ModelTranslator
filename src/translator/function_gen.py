@@ -118,6 +118,10 @@ class FunctionScriptGen:
 
         #When there is a guard
         if transition.guard != None:
+            #Check if guard uses global variable
+            for global_variable in self.global_set.global_variables:
+                if (global_variable.get_variable_name() in transition.guard):
+                    script += "\t\tglobal " + global_variable.get_variable_name() +"\n"
             script += "\t\tif " + str(transition.guard) +":\n"
             # Update(Assignment)
             for key in transition.assign:

@@ -1,4 +1,5 @@
 import asyncio
+import time
 
 initialized = None #Channel variable
 rp0On = False
@@ -23,17 +24,23 @@ class CentralController:
 		self.numLoops = 0
 
 	async def Com_disconnect(self):
+		global rp0State
+		global rp1State
 		if rp0State and rp1State == 15:
 			self.numLoops = self.numLoops + 1
 			await asyncio.sleep(0.01)
 			await self.Com_undock()
 
 	async def Com_dock(self):
+		global rp0State
+		global rp1State
 		if rp0State and rp1State == 14:
 			await asyncio.sleep(0.01)
 			await self.Com_disconnect()
 
 	async def Com_turn5(self):
+		global rp0State
+		global rp1State
 		if rp0State and rp1State == 13:
 			global rp0Angle
 			rp0Angle = - 90.0
@@ -43,6 +50,8 @@ class CentralController:
 			await self.Com_dock()
 
 	async def Com_map2(self):
+		global rp0State
+		global rp1State
 		if rp0State and rp1State == 12:
 			global map2Rp0
 			map2Rp0 = self.numLoops + 1
@@ -52,6 +61,8 @@ class CentralController:
 			await self.Com_turn5()
 
 	async def Com_scan2(self):
+		global rp0State
+		global rp1State
 		if rp0State and rp1State == 11:
 			global rp0ScanTime
 			rp0ScanTime = 2.0
@@ -61,6 +72,8 @@ class CentralController:
 			await self.Com_map2()
 
 	async def Com_move4(self):
+		global rp0State
+		global rp1State
 		if rp0State and rp1State == 10:
 			global rp0Distance
 			rp0Distance = 1.0
@@ -70,6 +83,8 @@ class CentralController:
 			await self.Com_scan2()
 
 	async def Com_turn4(self):
+		global rp0State
+		global rp1State
 		if rp0State and rp1State == 9:
 			global rp0Angle
 			rp0Angle = 90.0
@@ -79,6 +94,8 @@ class CentralController:
 			await self.Com_move4()
 
 	async def Com_move3(self):
+		global rp0State
+		global rp1State
 		if rp0State and rp1State == 8:
 			global rp0Distance
 			rp0Distance = 1.0
@@ -88,6 +105,8 @@ class CentralController:
 			await self.Com_turn4()
 
 	async def Com_map1(self):
+		global rp0State
+		global rp1State
 		if rp0State and rp1State == 7:
 			global map1Rp0
 			map1Rp0 = self.numLoops + 1
@@ -97,6 +116,8 @@ class CentralController:
 			await self.Com_move3()
 
 	async def Com_scan1(self):
+		global rp0State
+		global rp1State
 		if rp0State and rp1State == 6:
 			global rp0ScanTime
 			rp0ScanTime = 1.0
@@ -106,6 +127,8 @@ class CentralController:
 			await self.Com_map1()
 
 	async def Com_turn3(self):
+		global rp0State
+		global rp1State
 		if rp0State and rp1State == 5:
 			global rp0Angle
 			rp0Angle = 90.0
@@ -115,6 +138,8 @@ class CentralController:
 			await self.Com_scan1()
 
 	async def Com_move2(self):
+		global rp0State
+		global rp1State
 		if rp0State and rp1State == 4:
 			global rp0Distance
 			rp0Distance = 1.0
@@ -124,6 +149,8 @@ class CentralController:
 			await self.Com_turn3()
 
 	async def Com_turn2(self):
+		global rp0State
+		global rp1State
 		if rp0State and rp1State == 3:
 			global rp0Angle
 			rp0Angle = 90.0
@@ -133,6 +160,8 @@ class CentralController:
 			await self.Com_move2()
 
 	async def Com_move1(self):
+		global rp0State
+		global rp1State
 		if rp0State and rp1State == 2:
 			global rp0Distance
 			rp0Distance = 1.0
@@ -142,6 +171,8 @@ class CentralController:
 			await self.Com_turn2()
 
 	async def Com_turn1(self):
+		global rp0State
+		global rp1State
 		if rp0State and rp1State == 1:
 			global rp0Angle
 			rp0Angle = 180.0
@@ -151,6 +182,8 @@ class CentralController:
 			await self.Com_move1()
 
 	async def Com_undock(self):
+		global rp0On
+		global rp1On
 		if rp0On and rp1On == True:
 			global rp0Distance
 			rp0Distance = - 0.1
@@ -161,9 +194,7 @@ class CentralController:
 
 	async def Com_initialized(self):
 		await asyncio.sleep(0.01)
-		Initalized_task_0 = loop.create_task(Pi0.Initalized())
-		Initalized_task_1 = loop.create_task(Pi1.Initalized())
-		await asyncio.gather([Initalized_task_0, Initalized_task_1, ])
+		await asyncio.gather(Pi0.Initalized(), Pi1.Initalized(), )
 		await self.Com_undock()
 
 class RaspberryPi0:
@@ -280,29 +311,11 @@ class RaspberryPi1:
 		global Pi0
 		self.piNum = 1
 
-	async def Disconnecting(self):
-		global rp1State
-		rp1State = 0
+	async def Initalized(self):
+		global rp1On
+		rp1On = True
 		await asyncio.sleep(0.01)
 		await self.Undock()
-
-	async def Docking(self):
-		global rp1State
-		rp1State = 15
-		await asyncio.sleep(0.01)
-		await self.Disconnecting()
-
-	async def Turning5(self):
-		global rp1State
-		rp1State = 14
-		await asyncio.sleep(0.01)
-		await self.Docking()
-
-	async def Mapping2(self):
-		global rp1State
-		rp1State = 13
-		await asyncio.sleep(0.01)
-		await self.Turning5()
 
 	async def Scanning2(self):
 		global rp1State
@@ -376,11 +389,29 @@ class RaspberryPi1:
 		await asyncio.sleep(0.01)
 		await self.Turning1()
 
-	async def Initalized(self):
-		global rp1On
-		rp1On = True
+	async def Disconnecting(self):
+		global rp1State
+		rp1State = 0
 		await asyncio.sleep(0.01)
 		await self.Undock()
+
+	async def Docking(self):
+		global rp1State
+		rp1State = 15
+		await asyncio.sleep(0.01)
+		await self.Disconnecting()
+
+	async def Turning5(self):
+		global rp1State
+		rp1State = 14
+		await asyncio.sleep(0.01)
+		await self.Docking()
+
+	async def Mapping2(self):
+		global rp1State
+		rp1State = 13
+		await asyncio.sleep(0.01)
+		await self.Turning5()
 
 loop = asyncio.get_event_loop()
 Pi0 = RaspberryPi0()

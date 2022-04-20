@@ -1,7 +1,4 @@
 import asyncio
-import time
-import piInterface as piI
-import asyncio
 
 initialized = None #Channel variable
 rp0On = False
@@ -26,17 +23,8 @@ class CentralController:
 		self.numLoops = 0
 
 	async def Com_disconnect(self):
-		pi0, pi1 = piI.ShellBoth('disconnect')
-		while 'disconnected' not in pi0:
-			time.sleep(.1)
-			pi0 = piI.Shell('', 0)
-		while 'disconnected' not in pi1:
-			time.sleep(.1)
-			pi1 = piI.Shell('', 1)
-		piI.Disconnect()
-
 		if rp0State and rp1State == 15:
-			self.numLoops = numLoops +1
+			self.numLoops = self.numLoops + 1
 			await asyncio.sleep(0.01)
 			await self.Com_undock()
 
@@ -48,7 +36,7 @@ class CentralController:
 	async def Com_turn5(self):
 		if rp0State and rp1State == 13:
 			global rp0Angle
-			rp0Angle = -90.0
+			rp0Angle = - 90.0
 			global rp1Angle
 			rp1Angle = 90.0
 			await asyncio.sleep(0.01)
@@ -57,9 +45,9 @@ class CentralController:
 	async def Com_map2(self):
 		if rp0State and rp1State == 12:
 			global map2Rp0
-			map2Rp0 = numLoops +1
+			map2Rp0 = self.numLoops + 1
 			global map2Rp1
-			map2Rp1 = numLoops +1
+			map2Rp1 = self.numLoops + 1
 			await asyncio.sleep(0.01)
 			await self.Com_turn5()
 
@@ -86,7 +74,7 @@ class CentralController:
 			global rp0Angle
 			rp0Angle = 90.0
 			global rp1Angle
-			rp1Angle = -90.0
+			rp1Angle = - 90.0
 			await asyncio.sleep(0.01)
 			await self.Com_move4()
 
@@ -102,9 +90,9 @@ class CentralController:
 	async def Com_map1(self):
 		if rp0State and rp1State == 7:
 			global map1Rp0
-			map1Rp0 = numLoops +1
+			map1Rp0 = self.numLoops + 1
 			global map1Rp1
-			map1Rp1 = numLoops +1
+			map1Rp1 = self.numLoops + 1
 			await asyncio.sleep(0.01)
 			await self.Com_move3()
 
@@ -122,7 +110,7 @@ class CentralController:
 			global rp0Angle
 			rp0Angle = 90.0
 			global rp1Angle
-			rp1Angle = -90.0
+			rp1Angle = - 90.0
 			await asyncio.sleep(0.01)
 			await self.Com_scan1()
 
@@ -140,7 +128,7 @@ class CentralController:
 			global rp0Angle
 			rp0Angle = 90.0
 			global rp1Angle
-			rp1Angle = -90.0
+			rp1Angle = - 90.0
 			await asyncio.sleep(0.01)
 			await self.Com_move2()
 
@@ -158,32 +146,20 @@ class CentralController:
 			global rp0Angle
 			rp0Angle = 180.0
 			global rp1Angle
-			rp1Angle = -180.0
+			rp1Angle = - 180.0
 			await asyncio.sleep(0.01)
 			await self.Com_move1()
 
 	async def Com_undock(self):
 		if rp0On and rp1On == True:
 			global rp0Distance
-			rp0Distance = -0.1
+			rp0Distance = - 0.1
 			global rp1Distance
-			rp1Distance = -0.1
+			rp1Distance = - 0.1
 			await asyncio.sleep(0.01)
 			await self.Com_turn1()
 
 	async def Com_initialized(self):
-		piI.Connect()
-		pi0, pi1 = piI.ShellBoth('python3 -i predefined2.py\n')
-		print(str(pi0) + '\n' + str(pi1))
-		while 'connected' not in pi0:
-			time.sleep(.1)
-			pi0 = piI.Shell('', 0)
-			print(pi0)
-		while 'connected' not in pi1:
-			time.sleep(.1)
-			pi1 = piI.Shell('', 1)
-			print(pi1)
-
 		await asyncio.sleep(0.01)
 		Initalized_task_0 = loop.create_task(Pi0.Initalized())
 		Initalized_task_1 = loop.create_task(Pi1.Initalized())

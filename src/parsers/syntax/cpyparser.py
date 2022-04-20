@@ -16,18 +16,18 @@
 from objects.template import Template
 
 
-conditional_single_operator = { "&" : 1,
-                                "|" : 1,
-                                ">" : 3,
-                                "<" : 3,
-                                "=" : 3,
-                                ">" : 3,
-                                "<" : 3,
-                                "!" : 4,
-                                ":" : 5,
-                                "+" : 5,
-                                "-" : 5,
-                                "*" : 6,}
+conditional_single_operator = { "&" : "&",
+                                "|" : "|",
+                                ">" : ">",
+                                "<" : "<",
+                                "=" : "=",
+                                ">" : ">",
+                                "<" : "<",
+                                "!" : "!",
+                                ":" : ":",
+                                "+" : "+",
+                                "-" : "-",
+                                "*" : "*",}
 
 conditional_operator = {"&&" : "and",
                         "||" : "or",
@@ -38,7 +38,6 @@ conditional_operator = {"&&" : "and",
                         "<" : "<",
                         "!=" : "!=",
                         "=" : "=",
-                        "<=" : "=",
                         ":=" : "=",
                         "//=" : "//=",
                         "//=" : "//=",
@@ -225,7 +224,63 @@ class SyntaxTree:
                                 walk.set_parent(new_parent)
                                 self.translate(line[(index + 2):].strip(), new_parent) #Update parent
                                 return
+                elif operator not in expression: #Single charater operator
+                    operator = line[index]
+                    if type(walk) is CharNode:
+                        if walk.next == None:
+                            new_node = Node(conditional_single_operator[operator])
+                            walk.set_next(new_node)
+                            new_node.set_left(remainder.strip())
+                            new_node.set_parent(walk)
+                            self.translate(line[(index + 1):].strip(), new_node)
+                            return
+                        else:
+                            if walk.parent == self.root: #Always node
+                                walk.parent.set_operator(conditional_single_operator[operator])
+                                self.translate(line[(index + 1):].strip(), walk.parent)
+                                return
 
+                            new_node = Node(conditional_single_operator[operator])
+                            if type(walk) is CharNode:
+                                walk.set_next(new_node)
+                            else:
+                                walk.set_left(new_node)
+                            new_node.set_parent(walk)
+                            new_node.set_left(remainder.strip())
+                            self.translate(line[(index + 1):].strip(), new_node)
+                            return
+                    else:
+                        if walk.left == None: #Normal case
+                            walk.set_left(remainder.strip())
+                            walk.set_operator(conditional_single_operator[operator])
+                            self.translate(line[(index + 1):].strip(), walk) #Update parent
+                            return
+                        elif walk.right == None: #Right is empty
+                            #Take right
+                            new_child = Node(conditional_single_operator[operator])
+                            new_child.set_left(remainder.strip())
+                            new_child.set_parent(walk)
+                            walk.set_right(new_child)
+                            self.translate(line[(index + 1):].strip(), new_child) #Update parent
+                            return
+                        else: #Every children field is full
+                            new_parent = Node(conditional_single_operator[operator])
+                            if walk == self.root:
+                                new_parent.set_left(walk)
+                                walk.set_parent(new_parent)
+                                self.root = new_parent
+                                self.translate(line[(index + 1):].strip(), new_parent) #Update parent
+                                return
+                            else:
+                                if type(walk.parent) is CharNode:
+                                    walk.parent.set_next(new_parent)
+                                else:
+                                    walk.parent.set_left(new_parent)
+                                new_parent.set_parent(walk.parent)
+                                new_parent.set_left(walk)
+                                walk.set_parent(new_parent)
+                                self.translate(line[(index + 1):].strip(), new_parent) #Update parent
+                                return
             if char in expression: #Detects '(', '!'
                 if type(walk) is CharNode:
                     char_node = CharNode(expression[char], walk)

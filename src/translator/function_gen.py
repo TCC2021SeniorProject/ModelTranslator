@@ -4,7 +4,6 @@ from objects.template import Template
 from objects.node import Node
 from objects.transition import Transition
 from objects.global_set import GlobalSet
-from objects.instance import Instance
 
 from predefine.objects.global_obj import PredefGlobalObject
 from predefine.objects.function_obj import PredefFunction

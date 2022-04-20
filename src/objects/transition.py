@@ -25,6 +25,7 @@ class Transition():
         self.visited = False
         self.sync : Syncronization = None
         self.sync_caller = False # True: !, False: ?
+        self.self_iterating = False
 
     def get_from_id(self):
         return self.transition_from.get_id()
@@ -107,6 +108,12 @@ class Transition():
                 continue
             assignment_list = assignment.split("=")
             self.assign[assignment_list[0].strip()] = assignment_list[1].strip()
+
+    def set_self_iteration(self):
+        self.self_iterating = True
+
+    def is_self_iterating(self):
+        return self.self_iterating
 
     def print_info(self):
         print("\t Transition from: " + self.transition_from.id\

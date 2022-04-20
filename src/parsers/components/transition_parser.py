@@ -47,6 +47,9 @@ class TransitionParser:
                 #Changing value of existing variable
                 elif sub_tag.attrib.get('kind')  == "assignment":
                     assignment = sub_tag.text
+        #If source and target are the same, the it is a while
+        if (source == target):
+            temp_transition.set_self_iteration()
         temp_transition.set_from(source)
         temp_transition.set_to(target)
         temp_transition.set_name(select)

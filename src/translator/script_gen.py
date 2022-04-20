@@ -31,7 +31,7 @@ class TranslateModel:
         self.start_node = None
 
         self.global_var_script = ""
-        self.entire_script = "import asyncio\n"
+        self.entire_script = "import asyncio\nimport time\n"
 
     #Holds entire single class scripts - class, init(), def().
     def make_class_script(self, template : Template):

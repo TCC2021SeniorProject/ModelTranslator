@@ -111,30 +111,41 @@ class FunctionScriptGen:
         5. Call other transition.
     '''
     #Transition has guard, assignment, sync, empty transition
-    def make_tranision_to_script(self, transition : Transition):
+    def make_tranision_to_script(self,
+        transition : Transition,
+        delcared_global : dict[str, str]):
         script = ""
         # Conditional call(Guard) with sync (and/or) def call
         target_node = transition.get_to_node()
 
         #When there is a guard
         if transition.guard != None:
+
             #Check if guard uses global variable
             for global_variable in self.global_set.global_variables:
-                if (global_variable.get_variable_name() in transition.guard):
-                    script += "\t\tglobal " + global_variable.get_variable_name() +"\n"
+                #if there is no global variable being used
+                if (transition.find_variable(global_variable.get_variable_name())):
+                    global_variable_name = global_variable.get_variable_name()
+                    #If this is already declared
+                    if global_variable_name not in delcared_global.keys():
+                        delcared_global[global_variable_name] = global_variable_name
+                        script += "\t\tglobal " + global_variable_name+"\n"
             script += "\t\tif " + str(transition.guard) +":\n"
+            
             # Update(Assignment)
             for key in transition.assign:
                 isLocal = False
                 #If that assignment is part of the local variable, don't append global
                 for variable in self.template.variables:
-                    print(variable.var_name , ":" , key)
-                    if (("self." + variable.var_name) == key):
-                        print("Trigger")
+                    if (("self." + variable.get_variable_name()) == key):
                         isLocal = True
                         break
-                if isLocal == False:
-                    script += "\t\t\tglobal " + key + "\n"
+                #Not declared as global
+                if key not in delcared_global.keys():
+                    #or it is not local
+                    if isLocal == False:
+                        script += "\t\t\tglobal " + key + "\n"
+                #then it is local
                 script += "\t\t\t" + key\
                     + " = " + transition.assign[key] + "\n"
 
@@ -148,13 +159,16 @@ class FunctionScriptGen:
                 isLocal = False
                 #If that assignment is part of the local variable, don't append global
                 for variable in self.template.variables:
-                    print(variable.var_name , ":" , ("self." + key))
-                    if (("self." + variable.var_name) == key):
+                    print("Variable name: ", variable.get_variable_name() , " assginment :" , key)
+                    if (("self." + variable.get_variable_name()) == key):
                         print("Trigger")
                         isLocal = True
                         break
-                if isLocal == False:
-                    script += "\t\tglobal " + key + "\n"
+                #Not declared as global
+                if key not in delcared_global.keys():
+                    #or it is not local
+                    if isLocal == False:
+                        script += "\t\tglobal " + key + "\n"
                 script += "\t\t" + key\
                     + " = " + transition.assign[key] + "\n"
             script += "\t\tawait asyncio.sleep(0.01)\n"
@@ -166,7 +180,8 @@ class FunctionScriptGen:
     def make_function_script(self, node : Node):
         #Create function declaration line
         function_scripts = "\tasync def " + str(node.get_name()) + "(self):\n"
-
+        #Eliminates duplicate global variables
+        delcared_global : dict[str, str] = {}
         for predef_obj in self.predef_objs:
             predef_function : PredefFunction \
                 = predef_obj.get_function_by_name(node.get_name())
@@ -180,7 +195,7 @@ class FunctionScriptGen:
         transition_list = node.get_transitions()
         for transition in transition_list:
             transition : Transition
-            function_scripts += self.make_tranision_to_script(transition)
+            function_scripts += self.make_tranision_to_script(transition, delcared_global)
 
         if self.template.is_end(node):
             function_scripts += "\t\tpass\n"

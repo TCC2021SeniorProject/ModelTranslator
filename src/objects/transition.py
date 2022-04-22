@@ -63,6 +63,15 @@ class Transition():
     def set_guard(self, guard : str):
         self.guard = guard
 
+    def find_variable(self, target_variable) -> bool:
+        from parsers.syntax.cpyparser import SyntaxTree
+        parse_syntax = SyntaxTree(self.guard)
+        parse_syntax.has_variable_name(parse_syntax.root, target_variable)
+        if parse_syntax.found:
+            return True
+        else:
+            return False
+
     def get_sync(self):
         return self.sync
 

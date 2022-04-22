@@ -120,6 +120,7 @@ class SyntaxTree:
         self.root = Node(None) #Root is always a node
         self.raw_string = self.to_python_keywords(raw_string)
         self.convert()
+        self.found = False
 
     def to_python_keywords(self, line : str):
         line = line.replace("true", "True")
@@ -330,3 +331,19 @@ class SyntaxTree:
             script = self.get_conditional_script(walk.next, script, template)
             return script + ")" if walk.value == "(" else script
         return script
+
+    def has_variable_name(self, walk, target_variable : str) -> bool:
+        if type(walk) is Node:
+            if type(walk.left) is str:
+                if (walk.left == target_variable):
+                    self.found = True
+            else:
+                self.get_conditional_script(walk.left, target_variable)
+
+            if type(walk.right) is str:
+                if (walk.right == target_variable):
+                    self.found = True
+            else:
+                self.get_conditional_script(walk.right, target_variable)
+            return 
+        return

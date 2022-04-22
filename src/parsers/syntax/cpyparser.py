@@ -338,12 +338,12 @@ class SyntaxTree:
                 if (walk.left == target_variable):
                     self.found = True
             else:
-                self.get_conditional_script(walk.left, target_variable)
+                self.has_variable_name(walk.left, target_variable)
 
             if type(walk.right) is str:
                 if (walk.right == target_variable):
                     self.found = True
             else:
-                self.get_conditional_script(walk.right, target_variable)
-            return 
+                self.has_variable_name(walk.right, target_variable)
+            return
         return
